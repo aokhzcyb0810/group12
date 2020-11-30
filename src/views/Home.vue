@@ -1,15 +1,16 @@
 <template>
     <div>
-<el-container>
-  <el-header >Header</el-header>
-  <el-main>Main</el-main>
-</el-container>
+        <NavBar>
+
+        </NavBar>
     </div>
 </template>
 
 <script>
+    import NavBar from "../homepage/NavBar";
     export default {
-        name:"home"
+        name:"home",
+        components: {NavBar}
     }
 </script>
 
