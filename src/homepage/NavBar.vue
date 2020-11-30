@@ -36,7 +36,9 @@
                             </div>
                         </el-col>
                         <el-col :span="6">
-                            忘记密码？
+                            <div @click="openFindPass">
+                                忘记密码？
+                            </div>
                         </el-col>
                     </el-row>
                 </div>
@@ -58,7 +60,7 @@
                     <el-form-item label="输入验证码" style="margin-bottom: 15px" prop="verification">
                         <el-row>
                             <el-col :span="20">
-                                <el-input placeholder="VERIFICATION CODE" v-model="reForm.userName" autocomplete="off" clearable></el-input>
+                                <el-input placeholder="VERIFICATION CODE" v-model="reForm.verification" autocomplete="off" clearable></el-input>
                             </el-col>
                             <el-col :span="4">
                                 <div class="timer">
@@ -70,7 +72,7 @@
                     </el-form-item>
                     <el-form-item label="输入用户名" style="margin-bottom: 15px" prop="name">
                         <el-col span=24>
-                            <el-input placeholder="USERNAME" v-model="reForm.userName" autocomplete="off" clearable></el-input>
+                            <el-input placeholder="USERNAME" v-model="reForm.name" autocomplete="off" clearable></el-input>
                         </el-col>
                     </el-form-item>
                     <el-form-item label="输入密码" style="margin-bottom: 20px" prop="password">
@@ -89,7 +91,71 @@
                 </div>
                 <div style="margin-left: 25%">
                     <el-button @click="registerFormVisible = false">取 消</el-button>
-                    <el-button type="primary" style="margin-left: 50px">确 定</el-button>
+                    <el-button type="primary" style="margin-left: 50px">注册并登录</el-button>
+                </div>
+            </div>
+        </el-dialog>
+
+        <el-dialog title="找回密码" :visible.sync="findPassVisible" width="35%" center>
+            <div class="login-body">
+                <div v-if="page === 'A'">
+                    <el-steps :space="200" :active="1" finish-status="success" align-center style="margin-bottom: 20px">
+                        <el-step title="进行中"></el-step>
+                        <el-step title="步骤二"></el-step>
+                        <el-step title="步骤三"></el-step>
+                    </el-steps>
+                    <el-form :model="findForm" :label-position="labelPos" :rules="findRules">
+                        <el-form-item label="请输入注册邮箱" style="margin-bottom: 30px" prop="email">
+                            <el-col span=24>
+                                <el-input placeholder="EMAIL" v-model="findForm.email" autocomplete="off" clearable></el-input>
+                            </el-col>
+                        </el-form-item>
+                    </el-form>
+                    <div class="button-row">
+                        <el-button @click="returnLogin">取 消</el-button>
+                        <el-button type="primary" style="margin-left: 30px" @click="page = 'B'">下一步</el-button>
+                    </div>
+                </div>
+                <div v-if="page === 'B'">
+                    <el-steps :space="200" :active="2" finish-status="success" align-center style="margin-bottom: 20px">
+                        <el-step title="已完成"></el-step>
+                        <el-step title="进行中"></el-step>
+                        <el-step title="步骤三"></el-step>
+                    </el-steps>
+                    <el-form :model="findForm" :label-position="labelPos" :rules="findRules">
+                        <el-form-item label="请输入系统发送到邮箱的验证码" style="margin-bottom: 30px" prop="verification">
+                            <el-col span=24>
+                                <el-input placeholder="VERIFICATION" v-model="findForm.verification" autocomplete="off" clearable></el-input>
+                            </el-col>
+                        </el-form-item>
+                    </el-form>
+                    <div class="button-row">
+                        <el-button @click="returnLogin">取 消</el-button>
+                        <el-button type="primary" style="margin-left: 30px" @click="page = 'C'">下一步</el-button>
+                    </div>
+                </div>
+                <div v-if="page === 'C'">
+                    <el-steps :space="200" :active="3" finish-status="success" align-center style="margin-bottom: 20px">
+                        <el-step title="已完成"></el-step>
+                        <el-step title="已完成"></el-step>
+                        <el-step title="进行中"></el-step>
+                    </el-steps>
+                    <el-form :model="findForm" :label-position="labelPos" :rules="findRules">
+                        <el-form-item label="请输入新密码" style="margin-bottom: 30px" prop="password">
+                            <el-col span=24>
+                                <el-input placeholder="PASSWORD" v-model="findForm.password" autocomplete="off" show-password></el-input>
+                            </el-col>
+                        </el-form-item>
+                        <el-form-item label="请确认密码" style="margin-bottom: 30px" prop="confirm">
+                            <el-col span=24>
+                                <el-input placeholder="PASSWORD" v-model="findForm.confirm" autocomplete="off" show-password></el-input>
+                            </el-col>
+                        </el-form-item>
+                    </el-form>
+                    <div class="button-row">
+                        <el-button @click="returnLogin">取 消</el-button>
+                        <el-button type="primary" style="margin-left: 30px" @click="submitFindPassword">完成</el-button>
+                    </div>
                 </div>
             </div>
         </el-dialog>
@@ -103,11 +169,13 @@
             return{
                 activeIndex: '1',
                 loginFormVisible: false,
-                registerFormVisible: true,
+                registerFormVisible: false,
+                findPassVisible: false,
                 labelPos: 'right',
                 show: true,
                 count: '',
                 timer: null,
+                page: 'A',
                 form: {
                     userName: '',
                     password: ''
@@ -118,6 +186,12 @@
                     name: '',
                     password: '',
                     passwordConfirm: ''
+                },
+                findForm:{
+                    email: '',
+                    verification: '',
+                    password: '',
+                    confirm: ''
                 },
                 rules: {
                     userName:[
@@ -143,7 +217,21 @@
                     passwordConfirm:[
                         { required: true, message: '请再次输入密码', trigger: 'blur' },
                     ]
-                }
+                },
+                findRules: {
+                    email:[
+                        { required: true, message: '请输入邮箱', trigger: 'blur' },
+                    ],
+                    verification:[
+                        { required: true, message: '请输入验证码', trigger: 'blur' },
+                    ],
+                    password:[
+                        { required: true, message: '请输入密码', trigger: 'blur' },
+                    ],
+                    confirm:[
+                        { required: true, message: '请输入密码', trigger: 'blur' },
+                    ]
+                },
             }
         },
         methods: {
@@ -170,6 +258,19 @@
             openLogin(){
                 this.loginFormVisible = true;
                 this.registerFormVisible = false;
+            },
+            openFindPass(){
+                this.loginFormVisible = false;
+                this.findPassVisible = true;
+            },
+            returnLogin(){
+                this.loginFormVisible = true;
+                this.findPassVisible = false;
+            },
+            submitFindPassword(){
+                this.findPassVisible = false;
+                this.page = 'A';
+                this.loginFormVisible = true;
             }
         }
     }
