@@ -5,7 +5,8 @@
                 mode="horizontal"
                 background-color="#3D4246"
                 text-color="#fff"
-                active-text-color="#ffd04b">
+                active-text-color="#ffd04b"
+                style="border: 0">
             <div class="logo-div">
                 logo
             </div>
