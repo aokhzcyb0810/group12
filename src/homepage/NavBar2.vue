@@ -14,14 +14,39 @@
                 <el-submenu index="1">
                     <template slot="title"><img :src="this.profileUrl" class="userhead"/></template>
                     <el-menu-item index="1-1">个人空间</el-menu-item>
-                    <el-menu-item index="1-2">更改密码</el-menu-item>
+                    <el-menu-item index="1-2" @click="changePasswordVisible = true">更改密码</el-menu-item>
                     <el-menu-item index="1-3">退出登录</el-menu-item>
                 </el-submenu>
             </div>
             <div class="username">
-                lzmshh
+                欢迎，lzmshh
             </div>
         </el-menu>
+        <el-dialog title="更改密码" :visible.sync="changePasswordVisible" width="35%" center>
+            <div class="login-body">
+                <el-form :model="form" :label-position="labelPos" :rules="rules">
+                    <el-form-item label="输入原密码" style="margin-bottom: 15px" prop="password1">
+                        <el-col span=24>
+                            <el-input placeholder="PASSWORD" v-model="form.password1" autocomplete="off" show-password></el-input>
+                        </el-col>
+                    </el-form-item>
+                    <el-form-item label="输入新密码" style="margin-bottom: 20px" prop="password2">
+                        <el-col span="24">
+                            <el-input placeholder="PASSWORD" v-model="form.password2" autocomplete="off" show-password></el-input>
+                        </el-col>
+                    </el-form-item>
+                    <el-form-item label="确认新密码" style="margin-bottom: 20px" prop="password3">
+                        <el-col span="24">
+                            <el-input placeholder="PASSWORD" v-model="form.password3" autocomplete="off" show-password></el-input>
+                        </el-col>
+                    </el-form-item>
+                </el-form>
+                <div class="button-row">
+                    <el-button @click="changePasswordVisible = false">取 消</el-button>
+                    <el-button type="primary" style="margin-left: 30px">更 改</el-button>
+                </div>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -30,7 +55,25 @@
         name: "NavBar2",
         data(){
             return{
-                profileUrl: require('@/assets/logo.png')
+                profileUrl: require('@/assets/logo.png'),
+                changePasswordVisible: false,
+                labelPos: 'right',
+                form: {
+                    password1: '',
+                    password2: '',
+                    password3: ''
+                },
+                rules: {
+                    password1:[
+                        { required: true, message: '请输入原密码', trigger: 'blur' },
+                    ],
+                    password2:[
+                        { required: true, message: '请输入新密码', trigger: 'blur' },
+                    ],
+                    password3:[
+                        { required: true, message: '请再次输入新密码', trigger: 'blur' },
+                    ],
+                },
             }
         }
     }
@@ -50,7 +93,7 @@
         margin-right: 30px;
         text-align: center;
         color: #fff;
-        position: relative;
+        margin-top: 20px;
 
     }
     .userhead {
@@ -62,5 +105,12 @@
         text-align: center;
         margin-top: 7px;
         margin-right: 20px;
+    }
+    .login-body{
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+    .button-row{
+        text-align: center;
     }
 </style>
