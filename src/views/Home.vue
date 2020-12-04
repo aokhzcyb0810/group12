@@ -1,6 +1,6 @@
 <template>
     <div>
-        <NavBar></NavBar>
+        <NavBar2></NavBar2>
         <div class="body-top">
             <h1>May the force be with you.</h1>
             <h2>愿原力与你同在</h2>
@@ -70,9 +70,10 @@
 
 <script>
     import NavBar from "../homepage/NavBar";
+    import NavBar2 from "../homepage/NavBar2";
     export default {
         name:"home",
-        components: {NavBar},
+        components: {NavBar, NavBar2},
         data(){
             return{
                 searchForm:{
