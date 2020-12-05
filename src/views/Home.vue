@@ -36,6 +36,38 @@
                 </el-form>
             </div>
         </div>
+        <div style="width: 100%; margin-top: 20px;">
+            <el-row>
+                <el-col span="12">
+                    <div class="hotArticle">
+                        <h1 style="text-align: center;">热点论文</h1>
+                        <ul style="list-style: none;margin: 0; padding: 0;">
+                            <li v-for="(item, index) in hotArticle" :key="index">
+                                <el-row>
+                                    <el-col span="2">
+                                        <i class="el-icon-edit-outline" style="font-size: 30px; color: gray;"></i>
+                                    </el-col>
+                                    <el-col span="22">
+                                        <h2 style="margin-top: 12px;">{{item.title}}</h2>
+                                        <span class="detail">
+                                            {{item.date}} by {{item.author}}
+                                        </span>
+                                        <span class="temperature">
+                                            <i class="el-icon-trophy"></i>
+                                            {{item.heat}}
+                                        </span>
+                                        <el-divider></el-divider>
+                                    </el-col>
+                                </el-row>
+                            </li>
+                        </ul>
+                    </div>
+                </el-col>
+                <el-col span="12">
+                    <h1 style="text-align: center;">热点领域</h1>
+                </el-col>
+            </el-row>
+        </div>
         <el-dialog :visible.sync="formVisible" width="35%" center>
             <div class="login-body">
                 <el-form :model="searchForm" label-position="right">
@@ -84,6 +116,26 @@
                     time: ''
                 },
                 formVisible: false,
+                hotArticle: [
+                    {
+                        title: '我是文章标题',
+                        author: '我是文章作者',
+                        date: '我是创作时间',
+                        heat: '111'
+                    },
+                    {
+                        title: '我是大笨笨',
+                        author: 'nzm',
+                        date: '2020-12-5',
+                        heat: '222'
+                    },
+                    {
+                        title: '如何学习OS',
+                        author: 'YuanCZ',
+                        date: '2020-9-4',
+                        heat: '10086'
+                    },
+                ]
             }
         },
         methods:{
@@ -119,6 +171,22 @@
     }
     .button-row{
         text-align: center;
+    }
+    .hotArticle{
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+    .title{
+        font-size: 25px;
+    }
+    .detail{
+        color: gray;
+        font-size: 15px;
+    }
+    .temperature{
+        float:right;
+        color: gray;
+        font-size: 15px;
     }
 </style>
 

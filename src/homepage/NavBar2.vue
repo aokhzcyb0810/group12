@@ -82,11 +82,11 @@
 <style scoped>
     .logo-div{
         float: left;
-        margin-left: 10%;
+        margin-left: 5%;
     }
     .menu{
         float: right;
-        margin-right: 10%;
+        margin-right: 5%;
     }
     .username{
         float: right;
