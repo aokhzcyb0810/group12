@@ -10,14 +10,15 @@
             <div class="logo-div">
                 logo
             </div>
-            <div class="menu">
-                <el-submenu index="1">
-                    <template slot="title"><img :src="this.profileUrl" class="userhead"/></template>
-                    <el-menu-item index="1-1">个人空间</el-menu-item>
-                    <el-menu-item index="1-2" @click="changePasswordVisible = true">更改密码</el-menu-item>
-                    <el-menu-item index="1-3">退出登录</el-menu-item>
-                </el-submenu>
-            </div>
+            <el-submenu index="1" style="float: right;margin-right: 5%">
+                <template slot="title"><img :src="this.profileUrl" class="userhead"/></template>
+                <el-menu-item index="1-1">个人空间</el-menu-item>
+                <el-menu-item index="1-2" @click="changePasswordVisible = true">更改密码</el-menu-item>
+                <el-menu-item index="1-3">退出登录</el-menu-item>
+            </el-submenu>
+            <el-menu-item index="2" style="float: right;">
+                <i class="el-icon-chat-line-square" style="font-size: 25px;color: #ddd"></i>
+            </el-menu-item>
             <div class="username">
                 欢迎，lzmshh
             </div>
@@ -84,17 +85,12 @@
         float: left;
         margin-left: 5%;
     }
-    .menu{
-        float: right;
-        margin-right: 5%;
-    }
     .username{
         float: right;
         margin-right: 30px;
         text-align: center;
-        color: #fff;
-        margin-top: 20px;
-
+        color: #ddd;
+        margin-top: 23px;
     }
     .userhead {
         width: 40px;
@@ -104,7 +100,7 @@
         float: right;
         text-align: center;
         margin-top: 7px;
-        margin-right: 20px;
+        margin-left: 10px;
     }
     .login-body{
         margin-left: 10%;

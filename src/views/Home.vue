@@ -65,6 +65,13 @@
                 </el-col>
                 <el-col span="12">
                     <h1 style="text-align: center;">热点领域</h1>
+                    <div style="margin-left: 10%; margin-right: 10%">
+                        <ul style="list-style: none;margin: 0; padding: 0;">
+                            <li v-for="(item, index) in hotSpot" :key="index" class="hotSpot-li">
+                                <a>{{item}}</a>
+                            </li>
+                        </ul>
+                    </div>
                 </el-col>
             </el-row>
         </div>
@@ -109,7 +116,7 @@
         data(){
             return{
                 searchForm:{
-                    radio: '',
+                    radio: '1',
                     text: '',
                     name: '',
                     key: '',
@@ -135,6 +142,16 @@
                         date: '2020-9-4',
                         heat: '10086'
                     },
+                ],
+                hotSpot: [
+                    "闪耀暖暖",
+                    "原力",
+                    "奥利给",
+                    "武德",
+                    "摸鱼",
+                    "JackeyLove",
+                    "凑数tag",
+                    "试试换行效果"
                 ]
             }
         },
@@ -187,6 +204,23 @@
         float:right;
         color: gray;
         font-size: 15px;
+    }
+    .hotSpot-li{
+        margin-bottom: 10px;
+    }
+    .hotSpot-li a{
+        background-color: RGB(244,244,245);
+        color: #606266;
+        float: left;
+        margin-left: 3px;
+        margin-right: 3px;
+        border-radius: 3px;
+        padding: 6px 6px 6px 6px;
+        margin-bottom: 10px;
+    }
+    .hotSpot-li a:hover{
+        background-color: #C0C4CC;
+        transition-duration: 0.3s;
     }
 </style>
 
