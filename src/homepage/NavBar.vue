@@ -253,7 +253,7 @@
             }
         },
         updated() {
-            this.user = !!sessionStorage.getItem('token')
+            this.user = !!sessionStorage.getItem('userL')
         },
         methods: {
             openRegister(){
@@ -302,7 +302,6 @@
                     })
                         .then(function (response) {
                             if(response.data.status === 200){
-                                sessionStorage.setItem('token', JSON.stringify(response.data.data.token));
                                 sessionStorage.setItem('userL', JSON.stringify(response.data.data.user));
                                 _this.loginFormVisible = false;
                                 _this.user = true;
@@ -330,7 +329,6 @@
                     })
                         .then(function (response) {
                             if(response.data.status === 200){
-                                sessionStorage.setItem('token', JSON.stringify(response.data.data.token));
                                 sessionStorage.setItem('userL', JSON.stringify(response.data.data.user));
                                 _this.registerFormVisible = false;
                                 _this.user = true;
