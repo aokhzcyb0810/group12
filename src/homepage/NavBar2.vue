@@ -11,7 +11,7 @@
                 logo
             </div>
             <el-submenu index="1" style="float: right;margin-right: 5%">
-                <template slot="title"><img :src="this.profileUrl" class="userhead"/></template>
+                <template slot="title"><img :src="showAvatar" class="userhead"/></template>
                 <el-menu-item index="1-1">个人空间</el-menu-item>
                 <el-menu-item index="1-2" @click="changePasswordVisible = true">更改密码</el-menu-item>
                 <el-menu-item index="1-3">退出登录</el-menu-item>
@@ -20,12 +20,12 @@
                 <i class="el-icon-chat-line-square" style="font-size: 25px;color: #ddd"></i>
             </el-menu-item>
             <div class="username">
-                欢迎，lzmshh
+                欢迎，{{showUserName}}
             </div>
         </el-menu>
         <el-dialog title="更改密码" :visible.sync="changePasswordVisible" width="35%" center>
             <div class="login-body">
-                <el-form :model="form" :label-position="labelPos" :rules="rules">
+                <el-form :model="form" :label-position="labelPos" :rules="rules" ref="form">
                     <el-form-item label="输入原密码" style="margin-bottom: 15px" prop="password1">
                         <el-col span=24>
                             <el-input placeholder="PASSWORD" v-model="form.password1" autocomplete="off" show-password></el-input>
@@ -44,7 +44,7 @@
                 </el-form>
                 <div class="button-row">
                     <el-button @click="changePasswordVisible = false">取 消</el-button>
-                    <el-button type="primary" style="margin-left: 30px">更 改</el-button>
+                    <el-button type="primary" style="margin-left: 30px" @click="changePass('form')">更 改</el-button>
                 </div>
             </div>
         </el-dialog>
@@ -52,11 +52,21 @@
 </template>
 
 <script>
+    import axios from "axios";
+
     export default {
         name: "NavBar2",
         data(){
+            var validatePass = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请再次输入密码'));
+                } else if (value !== this.form.password2) {
+                    callback(new Error('两次输入密码不一致!'));
+                } else {
+                    callback();
+                }
+            };
             return{
-                profileUrl: require('@/assets/logo.png'),
                 changePasswordVisible: false,
                 labelPos: 'right',
                 form: {
@@ -72,9 +82,47 @@
                         { required: true, message: '请输入新密码', trigger: 'blur' },
                     ],
                     password3:[
-                        { required: true, message: '请再次输入新密码', trigger: 'blur' },
+                        { validator: validatePass, trigger: 'blur' },
                     ],
                 },
+            }
+        },
+        computed: {
+            showUserName(){
+                return JSON.parse(sessionStorage.getItem("userL")).name
+            },
+            showAvatar(){
+                return JSON.parse(sessionStorage.getItem("userL")).avatar
+            }
+        },
+        methods: {
+            changePass(formName){
+                this.$refs[formName].validate((valid) => {
+                    var _this=this;
+                    axios.post("localhost:8080/user/changePassword",{
+                        user: JSON.parse(sessionStorage.getItem("userL")),
+                        password1:_this.form.password1, //原密码
+                        password2: _this.form.password2  //新密码
+                    })
+                        .then(function (response) {
+                            if(response.data.status === 200){
+                                _this.changePasswordVisible = false;
+                                _this.$message({
+                                    message: '修改密码成功',
+                                    type: 'success'
+                                })
+                            }
+                            else {
+                                _this.$message({
+                                    message: '原密码错误',
+                                    type: 'error'
+                                })
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error)
+                        })
+                });
             }
         }
     }

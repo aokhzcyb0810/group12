@@ -1,6 +1,6 @@
 <template>
     <div>
-        <NavBar2></NavBar2>
+        <NavBar></NavBar>
         <div class="body-top">
             <h1>May the force be with you.</h1>
             <h2>愿原力与你同在</h2>
@@ -110,6 +110,7 @@
 <script>
     import NavBar from "../homepage/NavBar";
     import NavBar2 from "../homepage/NavBar2";
+    import axios from "axios";
     export default {
         name:"home",
         components: {NavBar, NavBar2},
@@ -149,13 +150,41 @@
                     "奥利给",
                     "武德",
                     "摸鱼",
-                    "JackeyLove",
+                    "乌兹永远滴神",
                     "凑数tag",
                     "试试换行效果"
                 ]
             }
         },
         methods:{
+            getHotArticle(){
+                var _this=this;
+                axios.post("localhost:8080/hot/paper")
+                    .then(function (response) {
+                        if(response.data.status === 200){
+                            _this.hotArticle = response.data.data;
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+            },
+            getHotSpot(){
+                var _this=this;
+                axios.post("localhost:8080/hot/field")
+                    .then(function (response) {
+                        if(response.data.status === 200){
+                            _this.hotSpot = response.data.data;
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+            }
+        },
+        created() {
+            this.getHotArticle();
+            this.getHotSpot();
         }
     }
 </script>

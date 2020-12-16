@@ -1,23 +1,27 @@
 <template>
     <div>
-        <el-menu
-                class="el-menu-demo"
-                mode="horizontal"
-                background-color="#3D4246"
-                text-color="#fff"
-                active-text-color="#ffd04b"
-                style="border: 0">
-            <div class="logo-div">
-                logo
-            </div>
-            <div class="menu">
-                <el-menu-item index="1" @click="loginFormVisible = true">登录/注册</el-menu-item>
-            </div>
-        </el-menu>
-
+        <div v-if="user">
+            <NavBar2></NavBar2>
+        </div>
+        <div v-else>
+            <el-menu
+                    class="el-menu-demo"
+                    mode="horizontal"
+                    background-color="#3D4246"
+                    text-color="#fff"
+                    active-text-color="#ffd04b"
+                    style="border: 0">
+                <div class="logo-div">
+                    logo
+                </div>
+                <div class="menu">
+                    <el-menu-item index="1" @click="loginFormVisible = true">登录/注册</el-menu-item>
+                </div>
+            </el-menu>
+        </div>
         <el-dialog title="登录" :visible.sync="loginFormVisible" width="35%" center>
             <div class="login-body">
-                <el-form :model="form" :label-position="labelPos" :rules="rules">
+                <el-form :model="form" :label-position="labelPos" :rules="rules" ref="form">
                     <el-form-item label="输入邮箱" style="margin-bottom: 15px" prop="userName">
                         <el-col span=24>
                             <el-input placeholder="EMAIL" v-model="form.userName" autocomplete="off" clearable></el-input>
@@ -45,14 +49,14 @@
                 </div>
                 <div class="button-row">
                     <el-button @click="loginFormVisible = false">取 消</el-button>
-                    <el-button type="primary" style="margin-left: 30px">登 录</el-button>
+                    <el-button type="primary" style="margin-left: 30px" @click="login('form')">登 录</el-button>
                 </div>
             </div>
         </el-dialog>
 
         <el-dialog title="注册" :visible.sync="registerFormVisible" width="40%" center top="10px">
             <div class="login-body">
-                <el-form :model="reForm" :label-position="labelPos" :rules="reRules">
+                <el-form :model="reForm" :label-position="labelPos" :rules="reRules" ref="reForm">
                     <el-form-item label="输入邮箱" style="margin-bottom: 15px" prop="userName">
                         <el-col span=24>
                             <el-input placeholder="EMAIL" v-model="reForm.userName" autocomplete="off" clearable></el-input>
@@ -83,7 +87,7 @@
                     </el-form-item>
                     <el-form-item label="确认密码" style="margin-bottom: 20px" prop="passwordConfirm">
                         <el-col span="24">
-                            <el-input placeholder="PASSWORD" v-model="reForm.password" autocomplete="off" show-password></el-input>
+                            <el-input placeholder="PASSWORD" v-model="reForm.passwordConfirm" autocomplete="off" show-password></el-input>
                         </el-col>
                     </el-form-item>
                 </el-form>
@@ -92,7 +96,7 @@
                 </div>
                 <div style="margin-left: 25%">
                     <el-button @click="registerFormVisible = false">取 消</el-button>
-                    <el-button type="primary" style="margin-left: 50px">注册并登录</el-button>
+                    <el-button type="primary" style="margin-left: 50px" @click="register('reForm')">注册并登录</el-button>
                 </div>
             </div>
         </el-dialog>
@@ -164,10 +168,23 @@
 </template>
 
 <script>
+    import axios from "axios";
+    import NavBar2 from "./NavBar2";
     export default {
         name: "NavBar",
+        components: {NavBar2},
         data(){
+            var validatePass = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请再次输入密码'));
+                } else if (value !== this.reForm.password) {
+                    callback(new Error('两次输入密码不一致!'));
+                } else {
+                    callback();
+                }
+            };
             return{
+                user: false,
                 activeIndex: '1',
                 loginFormVisible: false,
                 registerFormVisible: false,
@@ -216,7 +233,7 @@
                         { required: true, message: '请输入密码', trigger: 'blur' },
                     ],
                     passwordConfirm:[
-                        { required: true, message: '请再次输入密码', trigger: 'blur' },
+                        { validator: validatePass, trigger: 'blur' },
                     ]
                 },
                 findRules: {
@@ -234,6 +251,9 @@
                     ]
                 },
             }
+        },
+        updated() {
+            this.user = !!sessionStorage.getItem('token')
         },
         methods: {
             openRegister(){
@@ -272,7 +292,68 @@
                 this.findPassVisible = false;
                 this.page = 'A';
                 this.loginFormVisible = true;
-            }
+            },
+            login(formName){
+                this.$refs[formName].validate((valid) => {
+                    var _this=this;
+                    axios.post("localhost:8080/user/login",{
+                        email:_this.form.userName,
+                        password:_this.form.password,
+                    })
+                        .then(function (response) {
+                            if(response.data.status === 200){
+                                sessionStorage.setItem('token', JSON.stringify(response.data.data.token));
+                                sessionStorage.setItem('userL', JSON.stringify(response.data.data.user));
+                                _this.loginFormVisible = false;
+                                _this.user = true;
+                            }
+                            else {
+                                _this.$message({
+                                    message: '用户名或密码错误',
+                                    type: 'error'
+                                })
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error)
+                        })
+                });
+            },
+            register(formName){
+                this.$refs[formName].validate((valid) => {
+                    var _this=this
+                    axios.post("localhost:8080/user/register/" + _this.reForm.verification,{
+                        email:_this.reForm.userName,
+                        name:_this.reForm.name,
+                        password:_this.reForm.password,
+                        confirm:_this.reForm.passwordConfirm
+                    })
+                        .then(function (response) {
+                            if(response.data.status === 200){
+                                sessionStorage.setItem('token', JSON.stringify(response.data.data.token));
+                                sessionStorage.setItem('userL', JSON.stringify(response.data.data.user));
+                                _this.registerFormVisible = false;
+                                _this.user = true;
+                            }
+                            else if(response.data.status===500){
+                                _this.$message({
+                                    message: '该邮箱已注册，请更换一个',
+                                    type: 'error'
+                                })
+                            }
+                            else {
+                                _this.$message({
+                                    message: '验证码错误',
+                                    type: 'error'
+                                })
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error)
+                        })
+                });
+            },
+
         }
     }
 </script>
