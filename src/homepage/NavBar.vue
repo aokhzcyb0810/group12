@@ -22,9 +22,9 @@
         <el-dialog title="登录" :visible.sync="loginFormVisible" width="35%" center>
             <div class="login-body">
                 <el-form :model="form" :label-position="labelPos" :rules="rules" ref="form">
-                    <el-form-item label="输入邮箱" style="margin-bottom: 15px" prop="userName">
+                    <el-form-item label="输入用户名" style="margin-bottom: 15px" prop="userName">
                         <el-col span=24>
-                            <el-input placeholder="EMAIL" v-model="form.userName" autocomplete="off" clearable></el-input>
+                            <el-input placeholder="USERNAME" v-model="form.userName" autocomplete="off" clearable></el-input>
                         </el-col>
                     </el-form-item>
                     <el-form-item label="输入密码" style="margin-bottom: 20px" prop="password">
@@ -213,7 +213,7 @@
                 },
                 rules: {
                     userName:[
-                        { required: true, message: '请输入邮箱', trigger: 'blur' },
+                        { required: true, message: '请输入用户名', trigger: 'blur' },
                     ],
                     password:[
                         { required: true, message: '请输入密码', trigger: 'blur' },
@@ -297,7 +297,7 @@
                 this.$refs[formName].validate((valid) => {
                     var _this=this;
                     axios.post("localhost:8080/user/login",{
-                        email:_this.form.userName,
+                        name:_this.form.userName,
                         password:_this.form.password,
                     })
                         .then(function (response) {
@@ -336,6 +336,12 @@
                             else if(response.data.status===500){
                                 _this.$message({
                                     message: '该邮箱已注册，请更换一个',
+                                    type: 'error'
+                                })
+                            }
+                            else if(response.data.status===400){
+                                _this.$message({
+                                    message: '用户名已存在，请更换一个',
                                     type: 'error'
                                 })
                             }
