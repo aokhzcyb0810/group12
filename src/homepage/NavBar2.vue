@@ -99,8 +99,7 @@
             changePass(formName){
                 this.$refs[formName].validate((valid) => {
                     var _this=this;
-                    axios.post("localhost:8080/user/changePassword",{
-                        user: JSON.parse(sessionStorage.getItem("userL")),
+                    axios.post("localhost:8080/user/changePassword/" + JSON.parse(sessionStorage.getItem("userL")).email,{
                         password1:_this.form.password1, //原密码
                         password2: _this.form.password2  //新密码
                     })
