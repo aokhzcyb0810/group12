@@ -99,10 +99,7 @@
             changePass(formName){
                 this.$refs[formName].validate((valid) => {
                     var _this=this;
-                    axios.post("http://127.0.0.1:8081/user/changePassword/" + JSON.parse(sessionStorage.getItem("userL")).id,{
-                        password1:_this.form.password1, //原密码
-                        password2: _this.form.password2  //新密码
-                    })
+                    axios.post("http://127.0.0.1:8081/user/changePassword?id=" + JSON.parse(sessionStorage.getItem("userL")).id + "&string1=" + _this.form.password1 + "&string2=" + _this.form.password2)
                         .then(function (response) {
                             if(response.data.status === 200){
                                 _this.changePasswordVisible = false;
@@ -128,7 +125,13 @@
                 axios.post("http://127.0.0.1:8081/user/logout")
                     .then(function (response) {
                         sessionStorage.removeItem("userL");
-                        //_this.$router.go(0);
+                        console.log(_this.$route.path);
+                        if(_this.$route.path === '/'){
+                            _this.$router.go(0);
+                        }
+                        else{
+                            _this.$router.push("/");
+                        }
                         _this.$message({
                             message: '已退出',
                             type: 'success'

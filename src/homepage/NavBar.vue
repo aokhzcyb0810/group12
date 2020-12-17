@@ -1,9 +1,9 @@
 <template>
     <div>
-        <div v-if="user">
+        <div v-show="user">
             <NavBar2></NavBar2>
         </div>
-        <div v-else>
+        <div v-show="user === false">
             <el-menu
                     class="el-menu-demo"
                     mode="horizontal"
@@ -173,6 +173,7 @@
     export default {
         name: "NavBar",
         components: {NavBar2},
+        inject: ['reload'],
         data(){
             var validatePass = (rule, value, callback) => {
                 if (value === '') {
@@ -193,7 +194,7 @@
                 }
             };
             return{
-                user: false,
+                user: !!sessionStorage.getItem('userL'),
                 activeIndex: '1',
                 loginFormVisible: false,
                 registerFormVisible: false,
@@ -263,9 +264,6 @@
                 },
             }
         },
-        updated() {
-            this.user = !!sessionStorage.getItem('userL')
-        },
         methods: {
             openRegister(){
                 this.loginFormVisible = false;
@@ -329,7 +327,7 @@
                                 sessionStorage.setItem('userL', JSON.stringify(response.data.data));
                                 console.log(JSON.stringify(response.data.data));
                                 _this.loginFormVisible = false;
-                                _this.user = true;
+                                _this.$router.go(0);
                             }
                             else {
                                 console.log(response.data.msg);
@@ -358,7 +356,7 @@
                                 sessionStorage.setItem('userL', JSON.stringify(response.data.data));
                                 console.log(JSON.stringify(response.data.data));
                                 _this.registerFormVisible = false;
-                                _this.user = true;
+                                _this.$router.go(0);
                             }
                             else if(response.data.status===500){
                                 console.log(response.data.msg);
@@ -448,6 +446,14 @@
                         console.log(error)
                     });
             },
+        },
+        created() {
+            if(sessionStorage.getItem("userL") === null){
+                this.user = false;
+            }
+            else{
+                this.user = true;
+            }
         }
     }
 </script>
