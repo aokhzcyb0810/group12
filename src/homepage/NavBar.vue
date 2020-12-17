@@ -273,7 +273,7 @@
             },
             getCode() {
                 var _this=this;
-                axios.post("http://127.0.0.1:8081/send", _this.reForm.userName)
+                axios.post("http://127.0.0.1:8081/send?email=" +  _this.reForm.userName)
                     .then(function (response) {
                         if(response.data.status === 200){
                             console.log("接口没有问题！！！！！！！！！！！！");
@@ -283,7 +283,8 @@
                         else{
                             console.log("接口看起来有问题！！！！！！！！！！！！");
                             console.log(response.data.data);
-                            console.log(response.data.status)
+                            console.log(response.data.status);
+                            console.log(response.data.msg);
                         }
                     })
                     .catch(function (error) {
@@ -321,15 +322,18 @@
                     var _this=this;
                     axios.post("http://127.0.0.1:8081/user/login",{
                         name:_this.form.userName,
-                        password:_this.form.password,
+                        pwd:_this.form.password,
                     })
                         .then(function (response) {
                             if(response.data.status === 200){
-                                sessionStorage.setItem('userL', JSON.stringify(response.data.data.user));
+                                sessionStorage.setItem('userL', JSON.stringify(response.data.data));
+                                console.log(JSON.stringify(response.data.data));
                                 _this.loginFormVisible = false;
                                 _this.user = true;
                             }
                             else {
+                                console.log(response.data.msg);
+                                console.log(response.data.status);
                                 _this.$message({
                                     message: '用户名或密码错误',
                                     type: 'error'
@@ -347,27 +351,31 @@
                     axios.post("http://127.0.0.1:8081/user/register?string1=" + _this.reForm.verification + "&string2=" + _this.reForm.code,{
                         email:_this.reForm.userName,
                         name:_this.reForm.name,
-                        password:_this.reForm.password,
+                        pwd:_this.reForm.password,
                     })
                         .then(function (response) {
                             if(response.data.status === 200){
-                                sessionStorage.setItem('userL', JSON.stringify(response.data.data.user));
+                                sessionStorage.setItem('userL', JSON.stringify(response.data.data));
+                                console.log(JSON.stringify(response.data.data));
                                 _this.registerFormVisible = false;
                                 _this.user = true;
                             }
                             else if(response.data.status===500){
+                                console.log(response.data.msg);
                                 _this.$message({
                                     message: '该邮箱已注册，请更换一个',
                                     type: 'error'
                                 })
                             }
                             else if(response.data.status===400){
+                                console.log(response.data.msg);
                                 _this.$message({
                                     message: '用户名已存在，请更换一个',
                                     type: 'error'
                                 })
                             }
                             else {
+                                console.log(response.data.msg);
                                 _this.$message({
                                     message: '验证码错误',
                                     type: 'error'
@@ -381,13 +389,16 @@
             },
             findPass1(){
                 var _this=this;
-                axios.post("http://127.0.0.1:8081/send2", _this.findForm.email)
+                axios.post("http://127.0.0.1:8081/user/send2?email=" + _this.findForm.email)
                     .then(function (response) {
                         if(response.data.status === 200){
+                            console.log(response.data.data);
                             _this.findForm.code = response.data.data;
                             _this.page = 'B';
                         }
                         else{
+                            console.log(response.data.status);
+                            console.log(response.data.msg);
                             _this.$message({
                                 message: '邮箱不存在',
                                 type: 'error'
@@ -400,15 +411,14 @@
             },
             findPass2(){
                 var _this=this;
-                axios.post("http://127.0.0.1:8081/send2", {
-                    string1: _this.findForm.verification,
-                    string2: _this.findForm.code
-                })
+                axios.post("http://127.0.0.1:8081/user/verify?string1=" +  _this.findForm.verification + "&string2=" + _this.findForm.code)
                     .then(function (response) {
                         if(response.data.status === 200){
                             _this.page = 'C';
                         }
                         else{
+                            console.log(response.data.status);
+                            console.log(response.data.msg);
                             _this.$message({
                                 message: '验证码错误',
                                 type: 'error'
@@ -421,12 +431,17 @@
             },
             submitFindPassword(){
                 var _this=this;
-                axios.post("http://127.0.0.1:8081/send2", _this.findForm.password)
+                axios.post("http://127.0.0.1:8081/user/reset?pwd=" + _this.findForm.password + "&email=" + _this.findForm.email)
                     .then(function (response) {
                         if(response.data.status === 200){
-                            this.findPassVisible = false;
-                            this.page = 'A';
-                            this.loginFormVisible = true;
+                            console.log(response.data.status);
+                            _this.findPassVisible = false;
+                            _this.page = 'A';
+                            _this.loginFormVisible = true;
+                        }
+                        else{
+                            console.log(response.data.status);
+                            console.log(response.data.msg);
                         }
                     })
                     .catch(function (error) {

@@ -92,7 +92,7 @@
                 return JSON.parse(sessionStorage.getItem("userL")).name
             },
             showAvatar(){
-                return JSON.parse(sessionStorage.getItem("userL")).avatar
+                return "http://10.251.253.212" + JSON.parse(sessionStorage.getItem("userL")).avatar
             }
         },
         methods: {
@@ -127,19 +127,12 @@
                 var _this=this;
                 axios.post("http://127.0.0.1:8081/user/logout")
                     .then(function (response) {
-                        if(response.data.status === 200){
-                            sessionStorage.removeItem("userL");
-                            _this.$message({
-                                message: '已退出',
-                                type: 'success'
-                            })
-                        }
-                        else {
-                            _this.$message({
-                                message: '退出失败',
-                                type: 'error'
-                            })
-                        }
+                        sessionStorage.removeItem("userL");
+                        //_this.$router.go(0);
+                        _this.$message({
+                            message: '已退出',
+                            type: 'success'
+                        })
                     })
                     .catch(function (error) {
                         console.log(error)
