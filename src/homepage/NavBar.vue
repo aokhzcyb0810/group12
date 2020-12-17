@@ -23,12 +23,12 @@
             <div class="login-body">
                 <el-form :model="form" :label-position="labelPos" :rules="rules" ref="form">
                     <el-form-item label="输入用户名" style="margin-bottom: 15px" prop="userName">
-                        <el-col span=24>
+                        <el-col :span="24">
                             <el-input placeholder="USERNAME" v-model="form.userName" autocomplete="off" clearable></el-input>
                         </el-col>
                     </el-form-item>
                     <el-form-item label="输入密码" style="margin-bottom: 20px" prop="password">
-                        <el-col span="24">
+                        <el-col :span="24">
                             <el-input placeholder="PASSWORD" v-model="form.password" autocomplete="off" show-password></el-input>
                         </el-col>
                     </el-form-item>
@@ -58,7 +58,7 @@
             <div class="login-body">
                 <el-form :model="reForm" :label-position="labelPos" :rules="reRules" ref="reForm">
                     <el-form-item label="输入邮箱" style="margin-bottom: 15px" prop="userName">
-                        <el-col span=24>
+                        <el-col :span="24">
                             <el-input placeholder="EMAIL" v-model="reForm.userName" autocomplete="off" clearable></el-input>
                         </el-col>
                     </el-form-item>
@@ -76,17 +76,17 @@
                         </el-row>
                     </el-form-item>
                     <el-form-item label="输入用户名" style="margin-bottom: 15px" prop="name">
-                        <el-col span=24>
+                        <el-col :span="24">
                             <el-input placeholder="USERNAME" v-model="reForm.name" autocomplete="off" clearable></el-input>
                         </el-col>
                     </el-form-item>
                     <el-form-item label="输入密码" style="margin-bottom: 20px" prop="password">
-                        <el-col span="24">
+                        <el-col :span="24">
                             <el-input placeholder="PASSWORD" v-model="reForm.password" autocomplete="off" show-password></el-input>
                         </el-col>
                     </el-form-item>
                     <el-form-item label="确认密码" style="margin-bottom: 20px" prop="passwordConfirm">
-                        <el-col span="24">
+                        <el-col :span="24">
                             <el-input placeholder="PASSWORD" v-model="reForm.passwordConfirm" autocomplete="off" show-password></el-input>
                         </el-col>
                     </el-form-item>
@@ -109,16 +109,16 @@
                         <el-step title="步骤二"></el-step>
                         <el-step title="步骤三"></el-step>
                     </el-steps>
-                    <el-form :model="findForm" :label-position="labelPos" :rules="findRules">
+                    <el-form :model="findForm" :label-position="labelPos" :rules="findRules" ref="findForm">
                         <el-form-item label="请输入注册邮箱" style="margin-bottom: 30px" prop="email">
-                            <el-col span=24>
+                            <el-col :span="24">
                                 <el-input placeholder="EMAIL" v-model="findForm.email" autocomplete="off" clearable></el-input>
                             </el-col>
                         </el-form-item>
                     </el-form>
                     <div class="button-row">
                         <el-button @click="returnLogin">取 消</el-button>
-                        <el-button type="primary" style="margin-left: 30px" @click="page = 'B'">下一步</el-button>
+                        <el-button type="primary" style="margin-left: 30px" @click="findPass1">下一步</el-button>
                     </div>
                 </div>
                 <div v-if="page === 'B'">
@@ -127,16 +127,16 @@
                         <el-step title="进行中"></el-step>
                         <el-step title="步骤三"></el-step>
                     </el-steps>
-                    <el-form :model="findForm" :label-position="labelPos" :rules="findRules">
+                    <el-form :model="findForm" :label-position="labelPos" :rules="findRules" ref="findForm">
                         <el-form-item label="请输入系统发送到邮箱的验证码" style="margin-bottom: 30px" prop="verification">
-                            <el-col span=24>
+                            <el-col :span="24">
                                 <el-input placeholder="VERIFICATION" v-model="findForm.verification" autocomplete="off" clearable></el-input>
                             </el-col>
                         </el-form-item>
                     </el-form>
                     <div class="button-row">
                         <el-button @click="returnLogin">取 消</el-button>
-                        <el-button type="primary" style="margin-left: 30px" @click="page = 'C'">下一步</el-button>
+                        <el-button type="primary" style="margin-left: 30px" @click="findPass2">下一步</el-button>
                     </div>
                 </div>
                 <div v-if="page === 'C'">
@@ -145,14 +145,14 @@
                         <el-step title="已完成"></el-step>
                         <el-step title="进行中"></el-step>
                     </el-steps>
-                    <el-form :model="findForm" :label-position="labelPos" :rules="findRules">
+                    <el-form :model="findForm" :label-position="labelPos" :rules="findRules" ref="findForm">
                         <el-form-item label="请输入新密码" style="margin-bottom: 30px" prop="password">
-                            <el-col span=24>
+                            <el-col :span="24">
                                 <el-input placeholder="PASSWORD" v-model="findForm.password" autocomplete="off" show-password></el-input>
                             </el-col>
                         </el-form-item>
                         <el-form-item label="请确认密码" style="margin-bottom: 30px" prop="confirm">
-                            <el-col span=24>
+                            <el-col :span="24">
                                 <el-input placeholder="PASSWORD" v-model="findForm.confirm" autocomplete="off" show-password></el-input>
                             </el-col>
                         </el-form-item>
@@ -183,6 +183,15 @@
                     callback();
                 }
             };
+            var validatePass2 = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请再次输入密码'));
+                } else if (value !== this.findForm.password) {
+                    callback(new Error('两次输入密码不一致!'));
+                } else {
+                    callback();
+                }
+            };
             return{
                 user: false,
                 activeIndex: '1',
@@ -203,13 +212,15 @@
                     verification: '',
                     name: '',
                     password: '',
-                    passwordConfirm: ''
+                    passwordConfirm: '',
+                    code:''
                 },
                 findForm:{
                     email: '',
                     verification: '',
                     password: '',
-                    confirm: ''
+                    confirm: '',
+                    code: ''
                 },
                 rules: {
                     userName:[
@@ -247,7 +258,7 @@
                         { required: true, message: '请输入密码', trigger: 'blur' },
                     ],
                     confirm:[
-                        { required: true, message: '请输入密码', trigger: 'blur' },
+                        { validator: validatePass2, trigger: 'blur' },
                     ]
                 },
             }
@@ -261,6 +272,23 @@
                 this.registerFormVisible = true;
             },
             getCode() {
+                var _this=this;
+                axios.post("http://127.0.0.1:8081/send", _this.reForm.userName)
+                    .then(function (response) {
+                        if(response.data.status === 200){
+                            console.log("接口没有问题！！！！！！！！！！！！");
+                            console.log(response.data.data);
+                            _this.reForm.code = response.data.data;
+                        }
+                        else{
+                            console.log("接口看起来有问题！！！！！！！！！！！！");
+                            console.log(response.data.data);
+                            console.log(response.data.status)
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    });
                 const TIME_COUNT = 60;
                 if (!this.timer) {
                     this.count = TIME_COUNT;
@@ -288,15 +316,10 @@
                 this.loginFormVisible = true;
                 this.findPassVisible = false;
             },
-            submitFindPassword(){
-                this.findPassVisible = false;
-                this.page = 'A';
-                this.loginFormVisible = true;
-            },
             login(formName){
                 this.$refs[formName].validate((valid) => {
                     var _this=this;
-                    axios.post("localhost:8080/user/login",{
+                    axios.post("http://127.0.0.1:8081/user/login",{
                         name:_this.form.userName,
                         password:_this.form.password,
                     })
@@ -321,11 +344,10 @@
             register(formName){
                 this.$refs[formName].validate((valid) => {
                     var _this=this
-                    axios.post("localhost:8080/user/register/" + _this.reForm.verification,{
+                    axios.post("http://127.0.0.1:8081/user/register?string1=" + _this.reForm.verification + "&string2=" + _this.reForm.code,{
                         email:_this.reForm.userName,
                         name:_this.reForm.name,
                         password:_this.reForm.password,
-                        confirm:_this.reForm.passwordConfirm
                     })
                         .then(function (response) {
                             if(response.data.status === 200){
@@ -357,7 +379,60 @@
                         })
                 });
             },
-
+            findPass1(){
+                var _this=this;
+                axios.post("http://127.0.0.1:8081/send2", _this.findForm.email)
+                    .then(function (response) {
+                        if(response.data.status === 200){
+                            _this.findForm.code = response.data.data;
+                            _this.page = 'B';
+                        }
+                        else{
+                            _this.$message({
+                                message: '邮箱不存在',
+                                type: 'error'
+                            })
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    });
+            },
+            findPass2(){
+                var _this=this;
+                axios.post("http://127.0.0.1:8081/send2", {
+                    string1: _this.findForm.verification,
+                    string2: _this.findForm.code
+                })
+                    .then(function (response) {
+                        if(response.data.status === 200){
+                            _this.page = 'C';
+                        }
+                        else{
+                            _this.$message({
+                                message: '验证码错误',
+                                type: 'error'
+                            })
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    });
+            },
+            submitFindPassword(){
+                var _this=this;
+                axios.post("http://127.0.0.1:8081/send2", _this.findForm.password)
+                    .then(function (response) {
+                        if(response.data.status === 200){
+                            this.findPassVisible = false;
+                            this.page = 'A';
+                            this.loginFormVisible = true;
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    });
+            },
         }
     }
 </script>

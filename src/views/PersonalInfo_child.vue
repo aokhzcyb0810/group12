@@ -2,7 +2,7 @@
     <div>
         <div>
             <el-row>
-                <el-col :span="8">
+                <el-col span=8>
                     <div><span style="margin-left: 5%"><i class="el-icon-info"> 个人信息</i></span></div>
                 </el-col>
                 <el-col :span="12">

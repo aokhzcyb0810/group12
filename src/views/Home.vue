@@ -38,16 +38,16 @@
         </div>
         <div style="width: 100%; margin-top: 20px;">
             <el-row>
-                <el-col span="12">
+                <el-col :span="12">
                     <div class="hotArticle">
                         <h1 style="text-align: center;">热点论文</h1>
                         <ul style="list-style: none;margin: 0; padding: 0;">
                             <li v-for="(item, index) in hotArticle" :key="index">
                                 <el-row>
-                                    <el-col span="2">
+                                    <el-col :span="2">
                                         <i class="el-icon-edit-outline" style="font-size: 30px; color: gray;"></i>
                                     </el-col>
-                                    <el-col span="22">
+                                    <el-col :span="22">
                                         <h2 style="margin-top: 12px;">{{item.title}}</h2>
                                         <span class="detail">
                                             {{item.date}} by {{item.author}}
@@ -63,7 +63,7 @@
                         </ul>
                     </div>
                 </el-col>
-                <el-col span="12">
+                <el-col :span="12">
                     <h1 style="text-align: center;">热点领域</h1>
                     <div style="margin-left: 10%; margin-right: 10%">
                         <ul style="list-style: none;margin: 0; padding: 0;">
@@ -79,17 +79,17 @@
             <div class="login-body">
                 <el-form :model="searchForm" label-position="right">
                     <el-form-item label="学者名" style="margin-bottom: 15px" prop="name">
-                        <el-col span=24>
+                        <el-col :span="24">
                             <el-input placeholder="NAME" v-model="searchForm.name" autocomplete="off" clearable></el-input>
                         </el-col>
                     </el-form-item>
                     <el-form-item label="关键词" style="margin-bottom: 15px" prop="key">
-                        <el-col span=24>
+                        <el-col :span="24">
                             <el-input placeholder="KEY" v-model="searchForm.key" autocomplete="off" clearable></el-input>
                         </el-col>
                     </el-form-item>
                     <el-form-item label="发表时间" style="margin-bottom: 30px" prop="time">
-                        <el-col span=24>
+                        <el-col :span="24">
                             <el-date-picker
                                     v-model="searchForm.time"
                                     type="date"
@@ -159,7 +159,7 @@
         methods:{
             getHotArticle(){
                 var _this=this;
-                axios.post("localhost:8080/hot/paper")
+                axios.post("http://127.0.0.1:8081/hot/paper")
                     .then(function (response) {
                         if(response.data.status === 200){
                             _this.hotArticle = response.data.data;
@@ -171,7 +171,7 @@
             },
             getHotSpot(){
                 var _this=this;
-                axios.post("localhost:8080/hot/field")
+                axios.post("http://127.0.0.1:8081/hot/field")
                     .then(function (response) {
                         if(response.data.status === 200){
                             _this.hotSpot = response.data.data;

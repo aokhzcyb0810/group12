@@ -14,7 +14,7 @@
                 <template slot="title"><img :src="showAvatar" class="userhead"/></template>
                 <el-menu-item index="1-1">个人空间</el-menu-item>
                 <el-menu-item index="1-2" @click="changePasswordVisible = true">更改密码</el-menu-item>
-                <el-menu-item index="1-3">退出登录</el-menu-item>
+                <el-menu-item index="1-3" @click="quit">退出登录</el-menu-item>
             </el-submenu>
             <el-menu-item index="2" style="float: right;">
                 <i class="el-icon-chat-line-square" style="font-size: 25px;color: #ddd"></i>
@@ -27,17 +27,17 @@
             <div class="login-body">
                 <el-form :model="form" :label-position="labelPos" :rules="rules" ref="form">
                     <el-form-item label="输入原密码" style="margin-bottom: 15px" prop="password1">
-                        <el-col span=24>
+                        <el-col :span="24">
                             <el-input placeholder="PASSWORD" v-model="form.password1" autocomplete="off" show-password></el-input>
                         </el-col>
                     </el-form-item>
                     <el-form-item label="输入新密码" style="margin-bottom: 20px" prop="password2">
-                        <el-col span="24">
+                        <el-col :span="24">
                             <el-input placeholder="PASSWORD" v-model="form.password2" autocomplete="off" show-password></el-input>
                         </el-col>
                     </el-form-item>
                     <el-form-item label="确认新密码" style="margin-bottom: 20px" prop="password3">
-                        <el-col span="24">
+                        <el-col :span="24">
                             <el-input placeholder="PASSWORD" v-model="form.password3" autocomplete="off" show-password></el-input>
                         </el-col>
                     </el-form-item>
@@ -99,7 +99,7 @@
             changePass(formName){
                 this.$refs[formName].validate((valid) => {
                     var _this=this;
-                    axios.post("localhost:8080/user/changePassword/" + JSON.parse(sessionStorage.getItem("userL")).id,{
+                    axios.post("http://127.0.0.1:8081/user/changePassword/" + JSON.parse(sessionStorage.getItem("userL")).id,{
                         password1:_this.form.password1, //原密码
                         password2: _this.form.password2  //新密码
                     })
@@ -122,6 +122,28 @@
                             console.log(error)
                         })
                 });
+            },
+            quit(){
+                var _this=this;
+                axios.post("http://127.0.0.1:8081/user/logout")
+                    .then(function (response) {
+                        if(response.data.status === 200){
+                            sessionStorage.removeItem("userL");
+                            _this.$message({
+                                message: '已退出',
+                                type: 'success'
+                            })
+                        }
+                        else {
+                            _this.$message({
+                                message: '退出失败',
+                                type: 'error'
+                            })
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
             }
         }
     }
