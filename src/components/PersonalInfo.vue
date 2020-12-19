@@ -31,7 +31,7 @@
                                 <i class="el-icon-info" style="color: white"></i>
                                 <span slot="title">  个人信息</span>
                             </el-menu-item>
-                            <el-menu-item index="/home/recycle" @click="itemClicks2" >
+                            <el-menu-item index="/home/recycle" @click="itemClicks_academ" >
                                 <i class="el-icon-trophy" style="color: white"></i>
                                 <span slot="title">  学者信息</span>
                             </el-menu-item>
@@ -91,6 +91,18 @@
                         }
                     })
             },
+            itemClicks_academ()
+            {
+                this.$router.replace(
+                    {
+                        path:"/personalinfo/personalinfo_academ",
+                        query:
+                        {
+                            
+                        }
+                    }
+                )
+            }
 
         },
         data(){

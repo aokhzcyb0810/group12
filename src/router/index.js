@@ -11,7 +11,7 @@ import PersonalInfo_collection from  '../components/PersonalInfo_collection.vue'
 import PaperCollection from  '../components/PaperCollection.vue'
 import ManagerInfo from '../components/ManagerInfo.vue'
 import ManagerInfo_manager from '../components/ManagerInfo_manager.vue'
-
+import PersonalInfo_academ from '../components/PersonalInfo_academ.vue'
 const originalPush = VueRouter.prototype.push
 
 VueRouter.prototype.push = function push(location) {
@@ -46,6 +46,10 @@ const routes = [
             {
                 path:'personalinfo_collection',
                 component:PersonalInfo_collection
+            },
+            {
+                path:'personalinfo_academ',
+                component:PersonalInfo_academ
             }
         ]
     },
