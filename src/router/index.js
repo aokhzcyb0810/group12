@@ -11,7 +11,7 @@ import PersonalInfo_collection from  '../components/PersonalInfo_collection.vue'
 import PaperCollection from  '../components/PaperCollection.vue'
 import ManagerInfo from '../components/ManagerInfo.vue'
 import ManagerInfo_manager from '../components/ManagerInfo_manager.vue'
- 
+
 const originalPush = VueRouter.prototype.push
 
 VueRouter.prototype.push = function push(location) {
@@ -20,11 +20,11 @@ VueRouter.prototype.push = function push(location) {
 
 
 Vue.use(VueRouter)
- 
+
 
 const routes = [
     {
-        path:'/home',
+        path:'/',
         component:Home
     },
     {
@@ -87,7 +87,8 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  routes
-})
+    routes,
+    mode: 'history'
+});
 
 export default router
