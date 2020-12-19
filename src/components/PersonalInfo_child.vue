@@ -10,7 +10,7 @@
                 </el-col>
                 <el-col :span="8">
                     <div>
-                        <span style="margin-left: 45%"><i class="el-icon-message"> 消息</i></span>
+                        <span style="margin-left: 48%"><i class="el-icon-message"> 消息</i></span>
                     </div>
                 </el-col>
                 <el-col :span="3">
@@ -136,6 +136,21 @@
                 </div>
             </el-dialog>
 
+            <el-dialog title="学者认证" :visible.sync="dialogFormVisible3"><!--发送私信-->
+                <el-form :model="identifyinfo">
+                    <el-form-item label="申请用户id">
+                        <el-input style="width: 45%; margin-left: 2%" v-model="identifyinfo.id" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="身份认证信息">
+                        <el-input type="email" style="width: 65%" v-model="identifyinfo.identifyemail" autocomplete="off" placeholder="请填写邮箱"></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible3 = false">取 消</el-button>
+                    <el-button type="primary" @click="submitIdentify">确 定</el-button>
+                </div>
+            </el-dialog>
+
         </div>
     </div>
 
@@ -161,10 +176,11 @@
             return {
                 imageUrl: '',//头像
                 isuser:false,
-                isScholar:true,//是否是认证学者，是则为true
+                isScholar:false,//是否是认证学者，是则为true
                 activeIndex: '1',
                 dialogFormVisible: false,//回复私信的dialog
                 dialogFormVisible2: false,//发送私信的dialog
+                dialogFormVisible3: false,//学者认证的dialog
                 formLabelWidth: '120px',
                 select:0,//选择查看哪一个消息
                 reply:'',//回复内容
@@ -175,10 +191,14 @@
                     info: ''
                 },
                 //message数组看实际情况加载内容，比如在“系统通知”则加载系统通知，切换其它目录时清空后重新加载
-                message:[],
+                message:[{},{}],
                 send_message:{
                     to: '',
                     text: ''
+                },
+                identifyinfo:{
+                    id:'',//用户id
+                    identifyemail: ''//认证邮箱
                 }
             }
         },
@@ -240,12 +260,8 @@
                 return isJPG && isLt2M;
             },
             toIdentify(){
-                this.$router.replace(
-                    {path:"",
-                        query:{
-                            //       id:this.$route.query.id
-                        }
-                    })
+                this.dialogFormVisible3 = true
+
             },
             sendMessage() {
                 this.dialogFormVisible2 = true
@@ -296,6 +312,16 @@
                     }
                 }).catch(err=>{console.log(err)})
                 this.dialogFormVisible2 = false;
+            },
+            submitIdentify() {
+                this.$axios({//将发送内容返回
+                    method:'post',
+                    url:'',
+                    data:{
+
+                    }
+                }).catch(err=>{console.log(err)})
+                this.dialogFormVisible3 = false;
             },
             Submit(){
                 let postData = {
