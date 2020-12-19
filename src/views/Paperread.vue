@@ -5,7 +5,9 @@
         <div>
           <span>
             <h1 class="titlestyle">{{ papertitle }}</h1>
-            <el-button class="star_button" icon="el-icon-star-off" round>收藏</el-button>
+            <el-button class="star_button" icon="el-icon-star-off" round
+              >收藏</el-button
+            >
           </span>
           <p>关键词：{{ keywords }}</p>
           <p>简介：{{ paperintro }}</p>
@@ -48,33 +50,49 @@
         <div slot="header" class="clearfix">
           <span style="font-weight: bold">评论</span>
         </div>
-        <div v-for= "item in papercomments" v-bind:key = "item.id">
+        <div v-for="item in papercomments" v-bind:key="item.id">
           <el-avatar :size="60" src="https://empty" @error="errorHandler">
             <img
               src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
             />
           </el-avatar>
           <span class="name">
-            {{ item.username }} {{item.commentsdate}}
+            {{ item.username }} {{ item.commentsdate }}
           </span>
           <div>
-            <el-input v-model="item.usercomments" type="textarea" readonly="true"  class="ocinput2"></el-input>
-            <br>
-            <br>
-            <el-input v-model="item.othercomments" type="textarea" readonly="true" class="ocinput2"></el-input>
-      </div>
-
+            <el-input
+              v-model="item.usercomments"
+              type="textarea"
+              readonly="true"
+              class="ocinput2"
+            ></el-input>
+            <br />
+            <br />
+            <el-input
+              v-model="item.othercomments"
+              type="textarea"
+              readonly="true"
+              class="ocinput2"
+            ></el-input>
+          </div>
         </div>
       </el-card>
     </div>
-  </div>
 
+    <div id="some">
+      <owncomments></owncomments>
+    </div>
+  </div>
 </template>
 
 <script>
+import Owncomments from "../components/Owncomments.vue";
+
 export default {
+  components: { Owncomments },
   name: "paperread",
   data() {
+    Owncomments
     return {
       papertitle: "文章标题",
       keywords: "BFS",
@@ -143,11 +161,11 @@ export default {
   font-weight: bold;
   margin-left: 15px;
 }
-.owncomments{
+.owncomments {
   position: fixed;
   bottom: 0;
 }
-.ocinput{
+.ocinput {
   width: 300px;
   height: 100px;
   margin-left: 550px;
@@ -155,7 +173,7 @@ export default {
   border: 1px solid lightgray;
   font-size: 14px;
 }
-.ocinput2{
+.ocinput2 {
   font-family: "Microsoft YaHei";
   font-weight: bold;
 }
