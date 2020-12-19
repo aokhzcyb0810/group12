@@ -18,7 +18,8 @@
                 </el-col>
                 <el-col :span="4">
                     <div>
-                        <el-button type="primary" v-show="isScholar" size="mini" style="float: right" @click="sendMessage">发送私信</el-button>
+                                                <el-button type="primary" v-show="isScholar" size="mini" style="float: right" @click="sendMessage">发送私信</el-button>
+                                     
                     </div>
                 </el-col>
 
@@ -33,20 +34,21 @@
                                     <el-input v-model="form.id" disabled style="width: 300px" size="small"></el-input>
                                 </el-form-item>
                                 <el-form-item label="姓名">
-                                    <el-input v-model="form.name" style="width: 300px" size="small"></el-input>
+                                    <el-input v-model="form.name" :disabled="!editing" style="width: 300px" size="small"></el-input>
                                 </el-form-item>
                                 <el-form-item
                                         prop="email"
                                         label="邮箱"
                                 >
-                                    <el-input v-model="form.email" style="width: 300px" size="small"></el-input>
+                                    <el-input v-model="form.email" :disabled="!editing" style="width: 300px" size="small"></el-input>
                                 </el-form-item>
                                 <el-form-item label="简介">
-                                    <el-input type="textarea" v-model="form.info" style="width: 300px" size="small"></el-input>
+                                    <el-input type="textarea" v-model="form.info" :disabled="!editing" style="width: 300px" size="small"></el-input>
                                 </el-form-item>
                                 <el-form-item>
-                                    <el-button type="primary" @click="Submit" size="small">完成修改</el-button>
-                                    <el-button style="margin-left: 160px" size="small">取消</el-button>
+                                    <el-button v-if="!editing" type="primary" style="margin-left:80px" @click="editing=true" size="small">修改</el-button>
+                                    <el-button v-if="editing" type="primary" @click="Submit" size="small">完成修改</el-button>
+                                    <el-button v-if="editing" style="margin-left: 160px" @click="editing=false" size="small">取消</el-button>
                                 </el-form-item>
                             </el-form>
                             <span style="margin-left: 5%">编辑头像</span>
@@ -174,6 +176,7 @@
         },
         data() {
             return {
+                editing:false,
                 imageUrl: '',//头像
                 isuser:false,
                 isScholar:false,//是否是认证学者，是则为true
@@ -324,6 +327,7 @@
                 this.dialogFormVisible3 = false;
             },
             Submit(){
+                                this.editing=false;
                 let postData = {
                     'id': parseInt(this.$store.state.userID),
                     'name': this.form.name,
