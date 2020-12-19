@@ -124,11 +124,9 @@
                 let postData = {
                     'id': parseInt(this.$store.state.userID)
                 }
-                const res = this.$axios.post('/user/getUser', postData).catch(err=>{console.log(err)})
-                this.form.name=res.data.name
-                this.form.email=res.data.email
-                this.form.info=res.data.info
-                return 0
+                this.$axios.post('/follow/getList', postData).then((response) => {
+                    this.scholar_list = response.data
+                })
             },
             toIdentify(){
                 this.$router.replace(
@@ -144,12 +142,14 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.scholar_list.splice(index, 1);
+                    //this.scholar_list.splice(index, 1);
                     //从scholar_list里删除该学者
                     let postData = {
                         'id': this.scholar_list[index].id
                     }
-                    this.$axios.post('/follow/delete', postData).catch(err=>{console.log(err)})
+                    this.$axios.post('/follow/delete', postData).then((response) => {
+                        this.showfollowinfo()
+                    })
                     this.$message({
                         type: 'success',
                         message: '取关成功!'
