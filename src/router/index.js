@@ -84,9 +84,8 @@ const routes = [
 
         ]
     },
-    { path: "/paper", compone: () => import('../views/Paper.vue') },
-    { path: "/paperread", compone: () => import("../views/Paperread.vue") },
-    { path: "/owncomments", compone: () => import("../views/Owncomments.vue") }
+    { path: "/paper", component: () => import('../views/Paper.vue') },
+    { path: "/paperread", component: () => import("../views/Paperread.vue") },
 ]
 
 const router = new VueRouter({
