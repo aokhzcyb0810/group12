@@ -11,6 +11,8 @@ import PersonalInfo_collection from '../components/PersonalInfo_collection.vue'
 import PaperCollection from '../components/PaperCollection.vue'
 import ManagerInfo from '../components/ManagerInfo.vue'
 import ManagerInfo_manager from '../components/ManagerInfo_manager.vue'
+import Search from '../views/Search'
+import Scholar from '../views/Scholar.vue'
 
 const originalPush = VueRouter.prototype.push
 
@@ -26,6 +28,14 @@ const routes = [
     {
         path: '/',
         component: Home
+    },
+    {
+        path:"/search",
+        component:Search
+    },
+    {
+        path:"/scholar",
+        component:Scholar
     },
     {
         path: '/personalinfo',
