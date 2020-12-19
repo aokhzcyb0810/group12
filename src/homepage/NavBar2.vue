@@ -12,7 +12,7 @@
             </div>
             <el-submenu index="1" style="float: right;margin-right: 5%">
                 <template slot="title"><img :src="showAvatar" class="userhead"/></template>
-                <el-menu-item index="1-1">个人空间</el-menu-item>
+                <el-menu-item index="1-1" @click="personalSpace">个人空间</el-menu-item>
                 <el-menu-item index="1-2" @click="changePasswordVisible = true">更改密码</el-menu-item>
                 <el-menu-item index="1-3" @click="quit">退出登录</el-menu-item>
             </el-submenu>
@@ -140,6 +140,15 @@
                     .catch(function (error) {
                         console.log(error)
                     })
+            },
+            personalSpace(){
+                var userL = JSON.parse(sessionStorage.getItem("userL"));
+                if (userL.role === 0){
+                    this.$router.push('/managerInfo');
+                }
+                else {
+                    this.$router.push('/personalInfo');
+                }
             }
         }
     }

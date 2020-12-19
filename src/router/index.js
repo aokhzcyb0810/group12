@@ -84,7 +84,7 @@ const routes = [
 
         ]
     },
-    { path: "/paper", component: () => import('../views/Paper.vue') },
+    { path: "/paper/:id", component: () => import('../views/Paper.vue') },
     { path: "/paperread", component: () => import("../views/Paperread.vue") },
 ]
 
