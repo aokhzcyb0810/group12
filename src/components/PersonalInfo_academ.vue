@@ -3,14 +3,14 @@
         <div>
             <el-row>
                 <el-col :span="8">
-                    <div><span style="margin-left: 5%"><i class="el-icon-info"> 个人信息</i></span></div>
+                    <div><span style="margin-left: 5%"><i class="el-icon-info"> 学者信息</i></span></div>
                 </el-col>
                 <el-col :span="12">
                     <div> </div>
                 </el-col>
                 <el-col :span="8">
                     <div>
-                        <span style="margin-left: 48%"><i class="el-icon-message"> 消息</i></span>
+                        <span style="margin-left: 48%"><i class="el-icon-view"> 学者关系</i></span>
                     </div>
                 </el-col>
                 <el-col :span="3">
@@ -18,8 +18,7 @@
                 </el-col>
                 <el-col :span="4">
                     <div>
-                                                <el-button type="primary" v-show="isScholar" size="mini" style="float: right" @click="sendMessage">发送私信</el-button>
-                                     
+                        <el-button type="primary" v-show="isScholar" size="mini" style="float: right" @click="sendMessage">发送私信</el-button>
                     </div>
                 </el-col>
 
@@ -28,7 +27,8 @@
             <table style="width: 100%">
                 <tr>
                     <td style="width: 48%">
-                        <div style="height: 700px;margin-top: 0%">
+                        <div style="margin-top:-20%" >
+                            <!--
                             <el-form ref="form" :model="form" label-width="70px" :disabled="isuser" style="margin-left: 5%">
                                 <el-form-item label="用户id">
                                     <el-input v-model="form.id" disabled style="width: 300px" size="small"></el-input>
@@ -48,10 +48,23 @@
                                 <el-form-item>
                                     <el-button v-if="!editing" type="primary" style="margin-left:80px" @click="editing=true" size="small">修改</el-button>
                                     <el-button v-if="editing" type="primary" @click="Submit" size="small">完成修改</el-button>
-                                    <el-button v-if="editing" style="margin-left: 160px" @click="editing=false" size="small">取消</el-button>
+                                    <el-button v-if="editing" style="margin-left: 160px"@click="editing=false" size="small">取消</el-button>
                                 </el-form-item>
                             </el-form>
-                            <span style="margin-left: 5%">编辑头像</span>
+                            -->
+                        <div>
+                            <p >ID:  {{researcher.id}}</p>
+                            <p style="margin-top:3%">姓名： {{researcher.truename}}</p>
+                            <p style="margin-top:3%">研究领域：  {{researcher.field1}},{{researcher.field2}},{{researcher.field3}}</p>
+                            <p style="margin-top:3%">合作机构：  {{researcher.organization}}</p>
+                            <p style="margin-top:3%">论文数量：  {{researcher.paperCount}}篇</p>
+                            <p style="margin-top:3%">Hindex  ：{{researcher.index}}</p>
+
+                        </div>
+                        <div style="margin-left: 5%;margin-top: 10%">
+                                <span>上传头像</span>
+                        </div>
+
                             <div>
                                 <el-upload
                                         class="avatar-uploader"
@@ -71,6 +84,7 @@
                     </td>
                     <el-divider direction="vertical"></el-divider>
                     <td style="width: 48%">
+                        <!--
                         <div style="margin-top: 0%;height: 700px">
                             <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" style="margin-top: 0px">
                                 <el-menu-item index="1" @click="showSysMessagelist">系统通知</el-menu-item>
@@ -97,46 +111,36 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <el-divider></el-divider>
+
                             </div>
                         </div>
+                        -->
                     </td>
                 </tr>
             </table>
+                        <el-divider></el-divider>
+            <span style="font-size:25px;">学者文献</span>
+            <el-button type="primary" @click="add_file" style="margin-left:90% ; ">
+                <i class="el-icon-document" ></i><span>添加文献</span>
+            </el-button>
+            <el-main>
+                <el-table :data="doc_table" style="width:100%" :row-style="{height:'30px'}">
+                    <el-table-column prop="title" label="题目" @contextmenu.prevent=""></el-table-column>
+                    <el-table-column prop="paperTime" label="发表时间" width="240px"></el-table-column>
+                    <el-table-column prop="field" label="领域" width="120px"></el-table-column>
+                    <el-table-column prop="citation" label="被引用量" width="120px"></el-table-column>
+                           <el-table-column fixed="right" width="50">
+              <template slot-scope="scope">
+                <el-tooltip  effect="dark" content="删除" placement="bottom-end">
+                  <el-button @click.native="delFile(scope.row.id)" type="text" style="color: #999" size="mini">
+                    <i class="el-icon-delete-solid"></i>
+                  </el-button>
+                </el-tooltip>
+              </template>
+            </el-table-column>
+                </el-table>
+            </el-main>
 
-
-            <el-dialog title="发送私信" :visible.sync="dialogFormVisible2"><!--发送私信-->
-                <el-form :model="send_message">
-                    <el-form-item label="收件人">
-                        <el-input style="width: 45%; margin-left: 2%" v-model="send_message.to" autocomplete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="私信内容">
-                        <el-input type="textarea" style="width: 85%" v-model="send_message.text" autocomplete="off"></el-input>
-                    </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogFormVisible2 = false">取 消</el-button>
-                    <el-button type="primary" @click="submitSend">确 定</el-button>
-                </div>
-            </el-dialog>
-
-            <el-dialog title="回复私信" :visible.sync="dialogFormVisible"><!--回复私信-->
-                <el-form :model="message[select]">
-                    <el-form-item label="寄件人">
-                        {{message[select].from}}
-                    </el-form-item>
-                    <el-form-item label="私信内容">
-                        {{message[select].text}}
-                    </el-form-item>
-                    <el-form-item label="回复内容">
-                        <el-input type="textarea" v-model="this.reply"></el-input>
-                    </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogFormVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="submitReply">确 定</el-button>
-                </div>
-            </el-dialog>
 
             <el-dialog title="学者认证" :visible.sync="dialogFormVisible3"><!--发送私信-->
                 <el-form :model="identifyinfo">
@@ -170,13 +174,12 @@
             ElButton,
             ElAvatar,
             ElDivider},
-        name: 'PersonalInfo_child',
+        name: 'PersonalInfo_academ',
         props: {
             msg: String
         },
         data() {
             return {
-                editing:false,
                 imageUrl: '',//头像
                 isuser:false,
                 isScholar:false,//是否是认证学者，是则为true
@@ -187,11 +190,16 @@
                 formLabelWidth: '120px',
                 select:0,//选择查看哪一个消息
                 reply:'',//回复内容
+                editing:false,//信息是否处于可编辑状态
                 form: {
                     id: this.$store.state.userid,
                     name: '',
                     email: '',
                     info: ''
+                },
+                researcher:
+                {
+
                 },
                 //message数组看实际情况加载内容，比如在“系统通知”则加载系统通知，切换其它目录时清空后重新加载
                 message:[{},{}],
@@ -327,7 +335,7 @@
                 this.dialogFormVisible3 = false;
             },
             Submit(){
-                                this.editing=false;
+                this.editing=false;
                 let postData = {
                     'id': parseInt(this.$store.state.userID),
                     'name': this.form.name,
