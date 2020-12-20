@@ -228,7 +228,7 @@ export default {
   methods: {
     getDoc() {
       var _this = this;
-      axios.get("http://127.0.0.1:8081/paper/" + _this.$route.params.id)
+      axios.get("http://10.251.253.212:8081/paper/get/" + _this.$route.params.id)
               .then(function (response) {
                 if (response.data.status === 200) {
                   while (_this.paperdata.length > 0) {
@@ -236,9 +236,9 @@ export default {
                   }
                   _this.papertitle = response.data.data.title;
                   _this.paperdata.push({key: '摘要', value: response.data.data.abstract});
-                  _this.paperdata.push({key: '作者', value: response.data.data.autohr});
-                  _this.paperdata.push({key: '关键词', value: response.data.data.keyword});
-                  _this.paperdata.push({key: '发表时间', value: response.data.data.papertime});
+                  _this.paperdata.push({key: '作者', value: response.data.data.authorshow});
+                  _this.paperdata.push({key: '关键词', value: response.data.data.keywordshow});
+                  _this.paperdata.push({key: '发表时间', value: response.data.data.year});
                 }
               })
               .catch(function (error) {
@@ -251,7 +251,7 @@ export default {
         this.canCancel = false;
       } else {
         var _this = this;
-        axios.get("http://127.0.0.1:8081/collection/status?paper=" + _this.$route.params.id )
+        axios.get("http://10.251.253.212:8081/collection/status?paper=" + _this.$route.params.id + "&user=" + JSON.parse(sessionStorage.getItem("userL")).id)
                 .then(function (response) {
                   if (response.data.status === 200) {
                     if (response.data.data === 0) {
@@ -274,7 +274,7 @@ export default {
           var _this = this;
           var userL = JSON.parse(sessionStorage.getItem("userL"));
           axios
-                  .post("http://127.0.0.1:8081/comment/" + userL.id, {
+                  .post("http://10.251.253.212:8081/comment/" + userL.id, {
                     content: _this.Form.content,
                     paperid: _this.$route.params.id
                   })
@@ -298,7 +298,7 @@ export default {
     },
     collect(){
       var _this = this;
-      axios.get("http://127.0.0.1:8081/collection?Did=" + _this.collectForm.collect+ "&paper=" + _this.$route.params.id)
+      axios.get("http://10.251.253.212:8081/collection?Did=" + _this.collectForm.collect+ "&paper=" + _this.$route.params.id)
               .then(function (response) {
                 if (response.data.status === 200) {
                   _this.$message({
@@ -315,7 +315,7 @@ export default {
     },
     getCollection(){
       var _this = this;
-      axios.post("http://127.0.0.1:8081/getCollection/id" + _this.$route.params.id)
+      axios.post("http://10.251.253.212:8081/getCollection?id=" + _this.$route.params.id + "&user=" + JSON.parse(sessionStorage.getItem("userL")).id)
               .then(function (response) {
                 if (response.data.status === 200) {
                   _this.option = response.data.data;
@@ -327,7 +327,7 @@ export default {
     },
     cancelCollect(){
       var _this = this;
-      axios.post("http://127.0.0.1:8081//collection/cancelinpaper?paper=" + _this.$route.params.id)
+      axios.post("http://10.251.253.212:8081//collection/cancelinpaper?paper=" + _this.$route.params.id)
               .then(function (response) {
                 if (response.data.status === 200) {
                   _this.$message({
@@ -340,12 +340,25 @@ export default {
               .catch(function (error) {
                 console.log(error)
               })
+    },
+    getComment(){
+      var _this = this;
+      axios.post("http://10.251.253.212:8081/paper/comment/" + _this.$route.params.id)
+              .then(function (response) {
+                if (response.data.status === 200) {
+                  _this.commentItem = response.data.data;
+                }
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
     }
   },
     created() {
-      this.getDoc();
-      this.getCollect();
-      this.getCollection();
+      //this.getDoc();
+      //this.getCollect();
+      //this.getCollection();
+      this.getComment();
     }
 }
 </script>

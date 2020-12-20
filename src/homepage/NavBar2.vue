@@ -99,7 +99,7 @@
             changePass(formName){
                 this.$refs[formName].validate((valid) => {
                     var _this=this;
-                    axios.post("http://127.0.0.1:8081/user/changePassword?id=" + JSON.parse(sessionStorage.getItem("userL")).id + "&string1=" + _this.form.password1 + "&string2=" + _this.form.password2)
+                    axios.post("http://10.251.253.212:8081/user/changePassword?id=" + JSON.parse(sessionStorage.getItem("userL")).id + "&string1=" + _this.form.password1 + "&string2=" + _this.form.password2)
                         .then(function (response) {
                             if(response.data.status === 200){
                                 _this.changePasswordVisible = false;
@@ -122,7 +122,7 @@
             },
             quit(){
                 var _this=this;
-                axios.post("http://127.0.0.1:8081/user/logout")
+                axios.post("http://10.251.253.212/user/logout")
                     .then(function (response) {
                         sessionStorage.removeItem("userL");
                         console.log(_this.$route.path);

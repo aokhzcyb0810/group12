@@ -271,7 +271,7 @@
             },
             getCode() {
                 var _this=this;
-                axios.post("http://127.0.0.1:8081/send?email=" +  _this.reForm.userName)
+                axios.post("http://10.251.253.212:8081/send?email=" +  _this.reForm.userName)
                     .then(function (response) {
                         if(response.data.status === 200){
                             console.log("接口没有问题！！！！！！！！！！！！");
@@ -318,7 +318,7 @@
             login(formName){
                 this.$refs[formName].validate((valid) => {
                     var _this=this;
-                    axios.post("http://127.0.0.1:8081/user/login",{
+                    axios.post("http://10.251.253.212:8081/user/login",{
                         name:_this.form.userName,
                         pwd:_this.form.password,
                     })
@@ -346,7 +346,7 @@
             register(formName){
                 this.$refs[formName].validate((valid) => {
                     var _this=this
-                    axios.post("http://127.0.0.1:8081/user/register?string1=" + _this.reForm.verification + "&string2=" + _this.reForm.code,{
+                    axios.post("http://10.251.253.212:8081/user/register?string1=" + _this.reForm.verification + "&string2=" + _this.reForm.code,{
                         email:_this.reForm.userName,
                         name:_this.reForm.name,
                         pwd:_this.reForm.password,
@@ -387,7 +387,7 @@
             },
             findPass1(){
                 var _this=this;
-                axios.post("http://127.0.0.1:8081/user/send2?email=" + _this.findForm.email)
+                axios.post("http://10.251.253.212:8081/user/send2?email=" + _this.findForm.email)
                     .then(function (response) {
                         if(response.data.status === 200){
                             console.log(response.data.data);
@@ -409,7 +409,7 @@
             },
             findPass2(){
                 var _this=this;
-                axios.post("http://127.0.0.1:8081/user/verify?string1=" +  _this.findForm.verification + "&string2=" + _this.findForm.code)
+                axios.post("http://10.251.253.212:8081/user/verify?string1=" +  _this.findForm.verification + "&string2=" + _this.findForm.code)
                     .then(function (response) {
                         if(response.data.status === 200){
                             _this.page = 'C';
@@ -429,7 +429,7 @@
             },
             submitFindPassword(){
                 var _this=this;
-                axios.post("http://127.0.0.1:8081/user/reset?pwd=" + _this.findForm.password + "&email=" + _this.findForm.email)
+                axios.post("http://10.251.253.212:8081/user/reset?pwd=" + _this.findForm.password + "&email=" + _this.findForm.email)
                     .then(function (response) {
                         if(response.data.status === 200){
                             console.log(response.data.status);

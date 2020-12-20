@@ -159,7 +159,7 @@
         methods:{
             getHotArticle(){
                 var _this=this;
-                axios.post("http://127.0.0.1:8081/hot/paper")
+                axios.post("http://10.251.253.212:8081/hot/paper")
                     .then(function (response) {
                         if(response.data.status === 200){
                             _this.hotArticle = response.data.data;
@@ -171,7 +171,7 @@
             },
             getHotSpot(){
                 var _this=this;
-                axios.post("http://127.0.0.1:8081/hot/field")
+                axios.post("http://10.251.253.212:8081/hot/field")
                     .then(function (response) {
                         if(response.data.status === 200){
                             _this.hotSpot = response.data.data;
