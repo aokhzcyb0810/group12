@@ -22,7 +22,7 @@
                         style="width: 800px">
                     <el-table-column
                             fixed
-                            prop="photo"
+                            prop="avatar"
                             label=""
                             width="70">
                         <el-avatar :size="35"></el-avatar>
@@ -164,12 +164,12 @@
             viewScholar(index){
 
                 this.$router.replace(
-                    {path:'/scholar_home',
+                    {path:'/scholar',
                         query:{
-                            id:this.$route.query.id
+                            id:this.scholar_list[index].id
                         }
                     })
-                //跳转到学者主页,这部分还没写好，因为不知道学者主页的路由方式，可以最后整合时加上
+                
             }
 
 

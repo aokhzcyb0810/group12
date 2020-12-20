@@ -63,8 +63,8 @@
                 activeIndex: '1',
                 select:0,//选择删除哪一个文件夹
 
-                collection_list:[],
-                paper_list:[]
+                collection_list:[{}],
+                paper_list:[{}]
             }
         },
         created(){
@@ -97,7 +97,7 @@
                     //this.collection_list.splice(index, 1);
                     //从collection_list里删除该文件夹
                     let postData = {
-                        'Did': this.collection_list[index].Did
+                        'Did': this.collection_list[index].id
                     }
                     this.$axios.post('/dir/delete', postData).then((response) => {
                         this.showCollection()

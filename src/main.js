@@ -7,8 +7,9 @@ import router from './router'
 import store from './store'
 import './plugins/element.js'
 import axios from 'axios'
+import * as echarts from 'echarts'
 
-
+Vue.prototype.$echarts=echarts
 
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios

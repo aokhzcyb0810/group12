@@ -22,28 +22,27 @@
                         style="width: 800px">
                     <el-table-column
                             fixed
-                            prop="paper.title"
+                            prop=""
                             label=""
-                            width="70">
-                        <el-avatar :size="35"></el-avatar>
+                            width="150">
                     </el-table-column><!--需要文献名-->
                     <el-table-column
                             fixed
-                            prop="paper.keyword"
-                            label="关键词"
-                            width="150">
+                            prop="Title"
+                            label="标题"
+                            width="70">
                         <template slot-scope="scope">
-                            <el-link @click="viewScholar(scope.$index)">{{scope.row.name}}</el-link>
+                            <el-link @click="viewPaper(scope.$index)">{{scope.row.Title}}</el-link>
                         </template>
                     </el-table-column>
                     <el-table-column
-                            prop="paper.name"
+                            prop="Author"
                             label="学者姓名"
                             width="120">
                     </el-table-column>
                     <el-table-column
-                            prop="paper.field"
-                            label="领域"
+                            prop="Time"
+                            label="发布时间"
                             width="260">
                     </el-table-column>
                     <el-table-column
@@ -111,7 +110,7 @@
                     type: 'warning'
                 }).then(() => {
                     let postData = {
-                        'Did': this.this.$route.query.Did
+                        'Cid': this.paper_list[index].Cid
                     }
                     this.$axios.post('/collection/cancelinpaper', postData).then((response) => {
                         this.showpaperinfo()
@@ -127,6 +126,15 @@
                     });
                 });
             },
+            viewPaper(index){
+                this.$router.replace(
+                    {path:'/paperread',
+                        query:{
+                            id: this.paper_list[index].Paper
+                            //     id:this.$route.query.id
+                        }
+                    })
+            }
         }
     }
 
