@@ -13,35 +13,7 @@
               @click="dialogVisible = true"
               >收藏</el-button
             >
-            <el-dialog :visible.sync="formVisible" width="35%" center>
-              <div class="login-body">
-                <el-form :model="collectForm" label-position="right">
-                  <el-form-item
-                    label="选择收藏夹"
-                    style="margin-bottom: 15px"
-                    prop="collect"
-                  >
-                    <el-select
-                      v-model="collectForm.collect"
-                      placeholder="请选择"
-                    >
-                      <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      >
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-form>
-                <div style="margin-top: 30px">
-                  <el-button type="primary" style="width: 100%" @click="collect"
-                    >完 成</el-button
-                  >
-                </div>
-              </div>
-            </el-dialog>
+            
           </span>
           <p>关键词：{{ keywords }}</p>
           <p>简介：{{ paperintro }}</p>
@@ -202,78 +174,6 @@ export default {
     errorHandler() {
       return true;
     },
-    getCollect() {
-      if (sessionStorage.getItem('userL') === null) {
-        this.canCollect = false;
-        this.canCancel = false;
-      } else {
-        var _this = this;
-        axios.get("http://127.0.0.1:8081/collection/status?paper=" + _this.$route.params.id )
-                .then(function (response) {
-                  if (response.data.status === 200) {
-                    if (response.data.data === 0) {
-                      _this.canCollect = true;
-                      _this.canCancel = false;
-                    } else {
-                      _this.canCollect = false;
-                      _this.canCancel = true;
-                    }
-                  }
-                })
-                .catch(function (error) {
-                  console.log(error)
-                })
-      }
-    },
-     collect(){
-      var _this = this;
-      axios.get("http://127.0.0.1:8081/collection?Did=" + _this.collectForm.collect+ "&paper=" + _this.$route.params.id)
-              .then(function (response) {
-                if (response.data.status === 200) {
-                  _this.$message({
-                    message: "收藏成功",
-                    type: "success",
-                  });
-                  _this.formVisible = false;
-                  _this.reload();
-                }
-              })
-              .catch(function (error) {
-                console.log(error)
-              })
-    },
-    getCollection(){
-      var _this = this;
-      axios.post("http://127.0.0.1:8081/getCollection/id" + _this.$route.params.id)
-              .then(function (response) {
-                if (response.data.status === 200) {
-                  _this.option = response.data.data;
-                }
-              })
-              .catch(function (error) {
-                console.log(error)
-              })
-    },
-    cancelCollect(){
-      var _this = this;
-      axios.post("http://127.0.0.1:8081//collection/cancelinpaper?paper=" + _this.$route.params.id)
-              .then(function (response) {
-                if (response.data.status === 200) {
-                  _this.$message({
-                    message: "取消收藏成功",
-                    type: "success",
-                  });
-                  _this.reload();
-                }
-              })
-              .catch(function (error) {
-                console.log(error)
-              })
-    },
-    created() {
-      this.getCollect();
-      this.getCollection();
-    }
   },
 };
 </script>
@@ -340,19 +240,5 @@ html {
   font-family: "Microsoft YaHei";
   font-weight: bold;
 }
-.input-with-select .el-input-group__prepend {
-    background-color: #fff;
-  }
 
-.body-top{
-  background: url("../assets/background.jpg");
-  width: 100%;
-  background-size: 100%;
-  height: 150px;
-}
-.body-form{
-  padding-top: 50px;
-  padding-left: 10%;
-  padding-right: 10%;
-}
 </style>

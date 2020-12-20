@@ -5,6 +5,7 @@
         <div class="ownc3">
           <textarea class="ownc4" placeholder="写下你的评论..." v-model="input"></textarea>
         </div>
+        <el-button type="success" size="medium" style="margin-left:10px;" @click="commentssub"> 发布</el-button>
       </div>
     </div>
   </footer>
@@ -17,6 +18,11 @@ export default {
     return{
       input:"",
     }
+  },
+  methods:{
+    commentssub(){
+      
+    }
   }
 };
 </script>
@@ -28,7 +34,7 @@ export default {
   right: 0;
   bottom: 0;
   background-color: #fff;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 -2px 10px rgba(228, 186, 186, 0.05);
   z-index: 100;
 }
 .ownc2 {
@@ -54,5 +60,6 @@ export default {
 }
 textarea {
   overflow: auto;
+  color: rgb(94, 94, 255);
 }
 </style>
