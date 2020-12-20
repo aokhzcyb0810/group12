@@ -27,7 +27,7 @@
             <table style="width: 100%">
                 <tr>
                     <td style="width: 48%">
-                        <div style="margin-top:-20%" >
+                        <div style="margin-top:-5%" >
                             <!--
                             <el-form ref="form" :model="form" label-width="70px" :disabled="isuser" style="margin-left: 5%">
                                 <el-form-item label="用户id">
@@ -84,6 +84,14 @@
                     </td>
                     <el-divider direction="vertical"></el-divider>
                     <td style="width: 48%">
+                        <div>
+                            <!--关系图表-->
+                            <div class="Echarts">
+                                <div id="main" style="width:400px;height: 400px">
+                                </div>
+                                
+                            </div>
+                        </div>
                         <!--
                         <div style="margin-top: 0%;height: 700px">
                             <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" style="margin-top: 0px">
@@ -169,6 +177,11 @@
     import ElInput from "../../node_modules/element-ui/packages/input/src/input.vue";
 
     export default {
+        name:'Echarts',
+        mounted()
+        {
+            this.myEcharts();
+        },
         components: {
             ElInput,
             ElButton,
@@ -217,7 +230,34 @@
             this.showUserinfo();
             this.showSysMessagelist();
         },
+
         methods: {
+            myEcharts()
+            {
+                var myChart = this.$echarts.init(document.getElementById('main'));
+                var option = {
+                    title:
+                    {
+                        text:'test图谱'
+                    },
+                    tooltip:{},
+                    legend:{
+                        data:['论文']
+                    },
+                    xAxis:
+                    {
+                        data:["计算机","电子电信","人工智能"]
+                    },
+                    yAxis:{},
+                    series:[{
+                        name: '产量',
+                        type: 'bar',
+                        data:[5,3,12]
+                    }]
+                };
+                myChart.setOption(option);
+            },
+
             showUserinfo () {
                 const res= this.$axios({
                     method:'get',
@@ -348,7 +388,8 @@
 
 
 
-        }
+        },
+
     }
 
 </script>
