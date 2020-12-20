@@ -120,7 +120,7 @@
         <p class="commentText">{{item.content}}</p>
         <div style="width: 100%" class="commentTime">
           <div style="margin-left: 8.3%">
-            <p>{{item.dateTime}}</p>
+            <p>{{getTime(item.dateTime)}}</p>
           </div>
         </div>
         <el-divider></el-divider>
@@ -134,9 +134,9 @@
               <el-select v-model="collectForm.collect" placeholder="请选择">
                 <el-option
                         v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
+                        :key="item.key"
+                        :label="item.value"
+                        :value="item.key">
                 </el-option>
               </el-select>
           </el-form-item>
@@ -217,18 +217,18 @@ export default {
         collect: 1
       },
       options: [{
-        value: 1,
-        label: '收藏夹1'
+        key: 1,
+        value: '收藏夹1'
       }, {
-        value: 2,
-        label: '收藏夹2'
+        key: 2,
+        value: '收藏夹2'
       }],
     };
   },
   methods: {
     getDoc() {
       var _this = this;
-      axios.get("http://10.251.253.212:8081/paper/get/" + _this.$route.params.id)
+      axios.get("http://127.0.0.1:8081/paper/get/" + _this.$route.params.id)
               .then(function (response) {
                 if (response.data.status === 200) {
                   while (_this.paperdata.length > 0) {
@@ -236,8 +236,8 @@ export default {
                   }
                   _this.papertitle = response.data.data.title;
                   _this.paperdata.push({key: '摘要', value: response.data.data.abstract});
-                  _this.paperdata.push({key: '作者', value: response.data.data.authorshow});
-                  _this.paperdata.push({key: '关键词', value: response.data.data.keywordshow});
+                  _this.paperdata.push({key: '作者', value: response.data.data.authorShow});
+                  _this.paperdata.push({key: '关键词', value: response.data.data.keywordShow});
                   _this.paperdata.push({key: '发表时间', value: response.data.data.year});
                 }
               })
@@ -251,7 +251,7 @@ export default {
         this.canCancel = false;
       } else {
         var _this = this;
-        axios.get("http://10.251.253.212:8081/collection/status?paper=" + _this.$route.params.id + "&user=" + JSON.parse(sessionStorage.getItem("userL")).id)
+        axios.get("http://127.0.0.1:8081/collection/status?paper=" + _this.$route.params.id + "&user=" + JSON.parse(sessionStorage.getItem("userL")).id)
                 .then(function (response) {
                   if (response.data.status === 200) {
                     if (response.data.data === 0) {
@@ -274,9 +274,10 @@ export default {
           var _this = this;
           var userL = JSON.parse(sessionStorage.getItem("userL"));
           axios
-                  .post("http://10.251.253.212:8081/comment/" + userL.id, {
+                  .post("http://127.0.0.1:8081/comment", {
                     content: _this.Form.content,
-                    paperid: _this.$route.params.id
+                    commentator: userL.id,
+                    paperId: _this.$route.params.id
                   })
                   .then(function (response) {
                     if (response.data.status === 200) {
@@ -285,6 +286,8 @@ export default {
                         type: "success",
                       });
                       _this.reload();
+                      _this.Form.content = "";
+                      _this.getComment();
                     }
                   })
                   .catch(function (error) {
@@ -298,7 +301,7 @@ export default {
     },
     collect(){
       var _this = this;
-      axios.get("http://10.251.253.212:8081/collection?Did=" + _this.collectForm.collect+ "&paper=" + _this.$route.params.id)
+      axios.post("http://127.0.0.1:8081/collect?Did=" + _this.collectForm.collect+ "&paper=" + _this.$route.params.id + "&user=" + JSON.parse(sessionStorage.getItem("userL")).id)
               .then(function (response) {
                 if (response.data.status === 200) {
                   _this.$message({
@@ -307,6 +310,8 @@ export default {
                   });
                   _this.formVisible = false;
                   _this.reload();
+                  _this.canCollect = false;
+                  _this.canCancel = true;
                 }
               })
               .catch(function (error) {
@@ -315,10 +320,10 @@ export default {
     },
     getCollection(){
       var _this = this;
-      axios.post("http://10.251.253.212:8081/getCollection?id=" + _this.$route.params.id + "&user=" + JSON.parse(sessionStorage.getItem("userL")).id)
+      axios.post("http://127.0.0.1:8081/getCollection?user=" + JSON.parse(sessionStorage.getItem("userL")).id)
               .then(function (response) {
                 if (response.data.status === 200) {
-                  _this.option = response.data.data;
+                  _this.options = response.data.data;
                 }
               })
               .catch(function (error) {
@@ -327,7 +332,7 @@ export default {
     },
     cancelCollect(){
       var _this = this;
-      axios.post("http://10.251.253.212:8081//collection/cancelinpaper?paper=" + _this.$route.params.id)
+      axios.post("http://127.0.0.1:8081//collection/cancelinpaper?paper=" + _this.$route.params.id + "&user=" + JSON.parse(sessionStorage.getItem("userL")).id)
               .then(function (response) {
                 if (response.data.status === 200) {
                   _this.$message({
@@ -335,6 +340,8 @@ export default {
                     type: "success",
                   });
                   _this.reload();
+                  _this.canCollect = true;
+                  _this.canCancel = false;
                 }
               })
               .catch(function (error) {
@@ -343,22 +350,38 @@ export default {
     },
     getComment(){
       var _this = this;
-      axios.post("http://10.251.253.212:8081/paper/comment/" + _this.$route.params.id)
+      axios.post("http://127.0.0.1:8081/paper/comment/" + _this.$route.params.id)
               .then(function (response) {
                 if (response.data.status === 200) {
                   _this.commentItem = response.data.data;
+                  for(var i = 0; i < _this.commentItem.length; i ++){
+                    var src = _this.commentItem[i].profileUrl;
+                    _this.commentItem[i].profileUrl = "http://10.251.253.212" + src;
+                  }
                 }
               })
               .catch(function (error) {
                 console.log(error)
               })
-    }
+    },
+    getTime(time) {
+
+      var _time=new Date(time);
+      var year=_time.getFullYear();//2017
+      var month=_time.getMonth()+1;//7
+      var date=_time.getDate();//10
+      var hour=_time.getHours();//10
+      var minute=_time.getMinutes();//56
+      var second=_time.getSeconds();//15
+      return year+"年"+month+"月"+date+"日"+hour+":"+minute+":"+second;
+    },
   },
     created() {
-      //this.getDoc();
-      //this.getCollect();
-      //this.getCollection();
+      this.getDoc();
+      this.getCollect();
+      this.getCollection();
       this.getComment();
+      this.headSrc = "http://10.251.253.212" + JSON.parse(sessionStorage.getItem("userL")).avatar;
     }
 }
 </script>
