@@ -6,36 +6,49 @@
                     <div><span style="margin-left: 5%"><i class="el-icon-info"> 管理员检索</i></span></div>
                 </el-col>
             </el-row>
+            <el-divider></el-divider>
             <el-row>
-              <h1>搜索框</h1>
+              <div class="body-form">
+                <el-form :model="searchForm" label-position="right">
+                    <el-row>
+                        <el-col :span="4">
+                            <el-form-item>
+                                <el-radio-group v-model="searchForm.radio">
+                                    <el-radio label="1" style="margin-bottom: 5px; color: gray; font-size: 8px">学术资源检索</el-radio>
+                                    <el-radio label="2" style="color: gray;font-size: 8px">科研工作者检索</el-radio>
+                                </el-radio-group>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="16">
+                            <el-form-item>
+                                <el-input v-model="searchForm.text"><i slot="suffix" class="el-input__icon el-icon-search search-button"></i></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="4" style="text-align: center">
+                            <div v-if="searchForm.radio === '1'">
+                                <el-form-item>
+                                    <el-button type="primary" @click="formVisible = true">设置搜索条件</el-button>
+                                </el-form-item>
+                            </div>
+                            <div v-else>
+                                <el-form-item>
+                                    <el-button type="primary" disabled>设置搜索条件</el-button>
+                                </el-form-item>
+                            </div>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
             </el-row>
+             <el-divider></el-divider>
             <el-row>
                 <el-col :span="8">
                     <div><span style="margin-left: 5%"><i class="el-icon-info"> 管理员通知信息</i></span></div>
                 </el-col>
             </el-row>
-            <el-row>
-                <el-col :span="8">
-                </el-col>
-                <el-col :span="12">
-                    <div> </div>
-                </el-col>
-                <el-col :span="8">
-                    <div>
-                    </div>
-                </el-col>
-                <el-col :span="3">
-                    <div><p>   </p></div>
-                </el-col>
-                <el-col :span="4">
-                    <div>
-                    </div>
-                </el-col>
-            </el-row>
-            <el-divider></el-divider>
-            <table style="width: 100%">
+             <el-divider></el-divider>
+            <table style="width: 100% ">
                 <tr>
-                    <el-divider direction="vertical"></el-divider>
                     <td style="width: 48%">
                         <div style="margin-top: 0%;height: 700px">
                             <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" style="margin-top: 0px">
@@ -63,16 +76,17 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <el-divider></el-divider>
+                            
                             </div>
                         </div>
                     </td>
+                    <el-divider direction="vertical"></el-divider>
                     <td style="width:48%">hhh</td>
                 </tr>
             </table>
 
 
-            <!-- <el-dialog title="发送私信" :visible.sync="dialogFormVisible2">
+            <el-dialog title="发送私信" :visible.sync="dialogFormVisible2">
                 <el-form :model="send_message">
                     <el-form-item label="收件人">
                         <el-input style="width: 45%; margin-left: 2%" v-model="send_message.to" autocomplete="off"></el-input>
@@ -103,8 +117,36 @@
                     <el-button @click="dialogFormVisible = false">取 消</el-button>
                     <el-button type="primary" @click="submitReply">确 定</el-button>
                 </div>
-            </el-dialog> -->
-
+            </el-dialog>
+        <el-dialog :visible.sync="formVisible" width="35%" center>
+            <div class="login-body">
+                <el-form :model="searchForm" label-position="right">
+                    <el-form-item label="学者名" style="margin-bottom: 15px" prop="name">
+                        <el-col :span="24">
+                            <el-input placeholder="NAME" v-model="searchForm.name" autocomplete="off" clearable></el-input>
+                        </el-col>
+                    </el-form-item>
+                    <el-form-item label="关键词" style="margin-bottom: 15px" prop="key">
+                        <el-col :span="24">
+                            <el-input placeholder="KEY" v-model="searchForm.key" autocomplete="off" clearable></el-input>
+                        </el-col>
+                    </el-form-item>
+                    <el-form-item label="发表时间" style="margin-bottom: 30px" prop="time">
+                        <el-col :span="24">
+                            <el-date-picker
+                                    v-model="searchForm.time"
+                                    type="date"
+                                    placeholder="请选择日期"
+                                    style="width: 100%">
+                            </el-date-picker>
+                        </el-col>
+                    </el-form-item>
+                </el-form>
+                <div class="button-row">
+                    <el-button type="primary" style="width: 100%" @click="formVisible = false">完 成</el-button>
+                </div>
+            </div>
+        </el-dialog>
         </div>
     </div>
 
@@ -128,9 +170,14 @@
         },
         data() {
             return {
-                imageUrl: '',//头像
-                isuser:false,
-                isScholar:true,//是否是认证学者，是则为true
+                searchForm:{
+                    radio: '1',
+                    text: '',
+                    name: '',
+                    key: '',
+                    time: ''
+                },
+                formVisible: false,
                 activeIndex: '1',
                 dialogFormVisible: false,//回复私信的dialog
                 dialogFormVisible2: false,//发送私信的dialog
@@ -144,7 +191,7 @@
                     info: ''
                 },
                 //message数组看实际情况加载内容，比如在“系统通知”则加载系统通知，切换其它目录时清空后重新加载
-                message:[],
+               message:[{},{}],
                 send_message:{
                     to: '',
                     text: ''
@@ -159,7 +206,7 @@
             showCerMessagelist() {
                 const res= this.$axios({
                     method:'get',
-                    url:'/message/sys'
+                    // url:'/message/sys'
                 }).catch(err=>{console.log(err)})
                 this.message = res.data
 
@@ -168,7 +215,7 @@
             showCAddPaperMessagelist() {
                 const res= this.$axios({
                     method:'get',
-                    url:'/message/fromre'
+                    // url:'/message/fromre'
                 }).catch(err=>{console.log(err)})
                 this.message = res.data
                 return 0
@@ -230,19 +277,7 @@
                     }
                 }).catch(err=>{console.log(err)})
                 this.dialogFormVisible2 = false;
-            },
-            Submit(){
-                let postData = {
-                    'id': parseInt(this.$store.state.userID),
-                    'name': this.form.name,
-                    'email': this.form.email,
-                    'info': this.form.info
-                }
-                this.$axios.post('/api/user/edit', postData).catch(err=>{console.log(err)})
-                this.showUserinfo()
             }
-
-
 
         }
     }
@@ -267,28 +302,11 @@
         margin: 12px 3px;
         border-top: 1px dashed #e8eaec;
     }
-    .avatar-uploader .el-upload {
-        border: 1px dashed #d9d9d9;
-        border-radius: 6px;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-    }
-    .avatar-uploader .el-upload:hover {
-        border-color: #409EFF;
-    }
-    .avatar-uploader-icon {
-        font-size: 28px;
-        color: #8c939d;
-        width: 178px;
-        height: 178px;
-        line-height: 178px;
-        text-align: center;
-    }
-    .avatar {
-        width: 178px;
-        height: 178px;
-        display: block;
+    .body-form{
+        padding-top: 20px;
+        // padding-bottom: 10px;
+        padding-left: 5%;
+        padding-right: 5%;
     }
 
 </style>

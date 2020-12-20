@@ -18,7 +18,7 @@
                 </el-col>
                 <el-col :span="4">
                     <div>
-                                                <el-button type="primary" v-show="isScholar" size="mini" style="float: right" @click="sendMessage">发送私信</el-button>
+                         <el-button type="primary" v-show="isScholar" size="mini" style="float: right" @click="sendMessage">发送私信</el-button>
                                      
                     </div>
                 </el-col>
