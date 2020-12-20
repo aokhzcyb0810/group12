@@ -34,8 +34,8 @@
         </el-form>
       </div>
     </div>
-  <div style="width: 100%; background-color: whitesmoke;padding-bottom: 20px">
-    <el-card style="width: 90%; margin-left: 5%; margin-top: 20px" shadow="hover">
+  <div style="width: 100%; background-color: whitesmoke;padding-bottom: 20px; padding-top: 20px;">
+    <el-card style="width: 90%; margin-left: 5%" shadow="hover">
       <h1 class="papertitle">{{papertitle}}</h1>
       <el-table :data ="paperdata" style = "width : 100%" id="papertable">
         <el-table-column
@@ -50,28 +50,20 @@
         </el-table-column>
       </el-table>
       <br>
-      <div v-if="isManager">
-        <el-row style="text-align: center">
-          <el-button class="read_button" icon="el-icon-reading" round>阅读</el-button>
-          <el-button class="star_button" icon="el-icon-star-off" round>收藏</el-button>
-          <el-button class="del_button" icon="el-icon-close" round>删除</el-button>
-        </el-row>
-      </div>
-      <div v-else>
-        <el-row style="text-align: center">
-          <el-button class="read_button" icon="el-icon-reading" round>阅读</el-button>
-          <el-button class="star_button" icon="el-icon-star-off" round>收藏</el-button>
-        </el-row>
-      </div>
+      <el-row style="text-align: center">
+        <el-button class="read_button" icon="el-icon-reading" round>阅读</el-button>
+        <el-button class="star_button" icon="el-icon-star-off" round v-show="canCollect" @click="formVisible = true">收藏</el-button>
+        <el-button class="star_button" icon="el-icon-star-off" round v-show="canCancel" @click="cancelCollect">取消收藏</el-button>
+      </el-row>
     </el-card>
     <el-card style="margin-top: 20px;width: 90%; margin-left: 5%" shadow="hover">
       <div>
         <el-form :model="Form" :rules="rule" ref="Form">
           <el-row style="margin-top: 10px;">
-            <el-col span="2">
+            <el-col :span="2">
               <img :src="headSrc" class="commentHead" />
             </el-col>
-            <el-col span="22">
+            <el-col :span="22">
               <el-form-item prop="content">
                 <el-input
                         type="textarea"
@@ -88,13 +80,14 @@
           <el-collapse-transition>
             <div v-show="showSubmit">
               <el-row>
-                <el-col span="24">
+                <el-col :span="24">
                   <el-form-item>
                     <el-button
                             type="primary"
                             style="float: right; margin-right: 5%"
                             icon="el-icon-edit"
                             round
+                            @click="onSubmit('Form')"
                     >提交</el-button>
                   </el-form-item>
                 </el-col>
@@ -107,12 +100,12 @@
     <el-card style="margin-top: 20px; width: 90%; margin-left: 5%;" shadow="hover">
     <div style="font-size: 20px; margin-bottom: 40px; margin-left: 7px">
       <el-row>
-        <el-col span="1">
+        <el-col :span="1">
           <div class="tips">
             <p></p>
           </div>
         </el-col>
-        <el-col span="23" style="margin-top: 5px">评论</el-col>
+        <el-col :span="23" style="margin-top: 5px">评论</el-col>
       </el-row>
     </div>
     <el-row></el-row>
@@ -134,6 +127,25 @@
       </li>
     </ul>
     </el-card>
+    <el-dialog :visible.sync="formVisible" width="35%" center>
+      <div class="login-body">
+        <el-form :model="collectForm" label-position="right">
+          <el-form-item label="选择收藏夹" style="margin-bottom: 15px" prop="collect">
+              <el-select v-model="collectForm.collect" placeholder="请选择">
+                <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+              </el-select>
+          </el-form-item>
+        </el-form>
+        <div style="margin-top: 30px">
+          <el-button type="primary" style="width: 100%" @click="collect">完 成</el-button>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </div>
 
@@ -141,14 +153,18 @@
 
 <script>
 import NavBar from "../homepage/NavBar";
+import axios from "axios";
 export default {
   name: "Paper",
   components: {NavBar},
+  inject: ['reload'],
   data() {
     return {
+      formVisible: false,
       headSrc: require("../assets/logo.png"),
       showSubmit: false,
-      isManager: true,
+      canCollect: true,
+      canCancel: true,
       papertitle: ' 文章标题',
       paperdata: [{
         key:'摘要',
@@ -165,14 +181,6 @@ export default {
       {
         key:'发表时间',
         value:'tem_date'
-      }],
-      reference:[{
-        key:'[1]',
-        value:'参考文献1'
-      },
-      {
-        key:'[2]',
-        value:'参考文献2'
       }],
       retrieve:'',
       select:'',
@@ -205,9 +213,141 @@ export default {
       rule: {
         content: [{ required: true, message: "请输入评论", trigger: ["blur"] }],
       },
+      collectForm:{
+        collect: 1
+      },
+      options: [{
+        value: 1,
+        label: '收藏夹1'
+      }, {
+        value: 2,
+        label: '收藏夹2'
+      }],
     };
   },
-};
+  methods: {
+    getDoc() {
+      var _this = this;
+      axios.get("http://127.0.0.1:8081/paper/" + _this.$route.params.id)
+              .then(function (response) {
+                if (response.data.status === 200) {
+                  while (_this.paperdata.length > 0) {
+                    _this.paperdata.pop();
+                  }
+                  _this.papertitle = response.data.data.title;
+                  _this.paperdata.push({key: '摘要', value: response.data.data.abstract});
+                  _this.paperdata.push({key: '作者', value: response.data.data.autohr});
+                  _this.paperdata.push({key: '关键词', value: response.data.data.keyword});
+                  _this.paperdata.push({key: '发表时间', value: response.data.data.papertime});
+                }
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+    },
+    getCollect() {
+      if (sessionStorage.getItem('userL') === null) {
+        this.canCollect = false;
+        this.canCancel = false;
+      } else {
+        var _this = this;
+        axios.get("http://127.0.0.1:8081/collection/status?paper=" + _this.$route.params.id )
+                .then(function (response) {
+                  if (response.data.status === 200) {
+                    if (response.data.data === 0) {
+                      _this.canCollect = true;
+                      _this.canCancel = false;
+                    } else {
+                      _this.canCollect = false;
+                      _this.canCancel = true;
+                    }
+                  }
+                })
+                .catch(function (error) {
+                  console.log(error)
+                })
+      }
+    },
+    onSubmit(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          var _this = this;
+          var userL = JSON.parse(sessionStorage.getItem("userL"));
+          axios
+                  .post("http://127.0.0.1:8081/comment/" + userL.id, {
+                    content: _this.Form.content,
+                    paperid: _this.$route.params.id
+                  })
+                  .then(function (response) {
+                    if (response.data.status === 200) {
+                      _this.$message({
+                        message: "评论成功",
+                        type: "success",
+                      });
+                      _this.reload();
+                    }
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                  });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    collect(){
+      var _this = this;
+      axios.get("http://127.0.0.1:8081/collection?Did=" + _this.collectForm.collect+ "&paper=" + _this.$route.params.id)
+              .then(function (response) {
+                if (response.data.status === 200) {
+                  _this.$message({
+                    message: "收藏成功",
+                    type: "success",
+                  });
+                  _this.formVisible = false;
+                  _this.reload();
+                }
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+    },
+    getCollection(){
+      var _this = this;
+      axios.post("http://127.0.0.1:8081/getCollection/id" + _this.$route.params.id)
+              .then(function (response) {
+                if (response.data.status === 200) {
+                  _this.option = response.data.data;
+                }
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+    },
+    cancelCollect(){
+      var _this = this;
+      axios.post("http://127.0.0.1:8081//collection/cancelinpaper?paper=" + _this.$route.params.id)
+              .then(function (response) {
+                if (response.data.status === 200) {
+                  _this.$message({
+                    message: "取消收藏成功",
+                    type: "success",
+                  });
+                  _this.reload();
+                }
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+    }
+  },
+    created() {
+      this.getDoc();
+      this.getCollect();
+      this.getCollection();
+    }
+}
 </script>
 
 <style scoped>
@@ -277,9 +417,7 @@ export default {
   .el-select  {
     width: 130px;
   }
-  .el-input {
-    widows: 200px;
-  }
+
   .input-with-select .el-input-group__prepend {
     background-color: #fff;
   }
