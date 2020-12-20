@@ -22,18 +22,17 @@
                         style="width: 800px">
                     <el-table-column
                             fixed
-                            prop="Title"
+                            prop=""
                             label=""
-                            width="70">
-                        <el-avatar :size="35"></el-avatar>
+                            width="150">
                     </el-table-column><!--需要文献名-->
                     <el-table-column
                             fixed
-                            prop="Keyword"
-                            label="关键词"
-                            width="150">
+                            prop="Title"
+                            label="标题"
+                            width="70">
                         <template slot-scope="scope">
-                            <el-link @click="viewScholar(scope.$index)">{{scope.row.name}}</el-link>
+                            <el-link @click="viewPaper(scope.$index)">{{scope.row.Title}}</el-link>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -127,6 +126,15 @@
                     });
                 });
             },
+            viewPaper(){
+                this.$router.replace(
+                    {path:'/paperread',
+                        query:{
+                            id: this.paper_list.Paper
+                            //     id:this.$route.query.id
+                        }
+                    })
+            }
         }
     }
 
