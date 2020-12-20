@@ -1,7 +1,32 @@
 <template>
-  <div id="main" style="width: 1500px">
+  <div id="main" style="width: 100%">
     <NavBar></NavBar>
-    <div id="left" style="width: 1120px; float: left">
+    <el-card class="box-card1">
+      <div slot="header" class="clearfix">
+        <span style="font-weight: bold">关于作者</span>
+      </div>
+      <div style="margin-bottom: 60px">
+        <el-avatar :size="60" :src="scholarurl">
+          <img
+            src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
+          />
+        </el-avatar>
+        <span class="name">
+          {{ scholarname }}
+        </span>
+        <div id="right" style="width: 200px; float: right; text-align: center">
+          <p>研究领域</p>
+          <p>{{ researchfield }}</p>
+          <el-button plain>学者主页</el-button>
+        </div>
+        <div id="left" style="width: 200px;float: right; text-align: center">
+          <p>文献</p>
+          <p>{{ papernum }}</p>
+          <el-button plain>关注</el-button>
+        </div>
+      </div>
+    </el-card>
+    <div id="left">
       <el-card class="box-card">
         <div>
           <span>
@@ -10,10 +35,9 @@
               class="star_button"
               icon="el-icon-star-off"
               round
-              @click="dialogVisible = true"
-              >收藏</el-button
-            >
-            
+              @click="collectPaper"
+              >收藏
+            </el-button>
           </span>
           <p>关键词：{{ keywords }}</p>
           <p>简介：{{ paperintro }}</p>
@@ -28,73 +52,39 @@
         </div>
       </el-card>
     </div>
-    <div id="right" style="width: 380px; float: left">
-      <el-card class="box-card1">
-        <div slot="header" class="clearfix">
-          <span style="font-weight: bold">关于作者</span>
+
+    <el-card class="box-card2">
+      <div slot="header" class="clearfix">
+        <span style="font-weight: bold">评论</span>
+      </div>
+      <div v-for="item in papercomments" v-bind:key="item.id">
+        <el-avatar :size="60" :src="item.userurl" @error="errorHandler">
+          <img
+            src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
+          />
+        </el-avatar>
+        <span class="name"> {{ item.username }} {{ item.commentsdate }} </span>
+        <div>
+          <br />
         </div>
         <div>
-          <el-avatar :size="60" :src="scholarurl">
-            <img
-              src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
-            />
-          </el-avatar>
-          <span class="name">
-            {{ scholarname }}
-          </span>
+          <el-input
+            v-model="item.usercomments"
+            type="textarea"
+            readonly="true"
+            class="ocinput2"
+          ></el-input>
+          <br />
+          <br />
+          <el-input
+            v-model="item.othercomments"
+            type="textarea"
+            readonly="true"
+            class="ocinput2"
+          ></el-input>
         </div>
-        <div id="main" style="width: 280px">
-          <div id="left" style="width: 140px; float: left; text-align: center">
-            <p>文献</p>
-            <p>{{ papernum }}</p>
-
-            <el-button plain>关注</el-button>
-          </div>
-          <div id="right" style="width: 140px; float: left; text-align: center">
-            <p>研究领域</p>
-            <p>{{ researchfield }}</p>
-
-            <el-button plain>学者主页</el-button>
-          </div>
-        </div>
-      </el-card>
-      <br />
-      <br />
-      <el-card class="box-card2">
-        <div slot="header" class="clearfix">
-          <span style="font-weight: bold">评论</span>
-        </div>
-        <div v-for="item in papercomments" v-bind:key="item.id">
-          <el-avatar :size="60" :src="item.userurl" @error="errorHandler">
-            <img
-              src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
-            />
-          </el-avatar>
-          <span class="name">
-            {{ item.username }} {{ item.commentsdate }}
-          </span>
-          <div>
-            <br />
-          </div>
-          <div>
-            <el-input
-              v-model="item.usercomments"
-              type="textarea"
-              readonly="true"
-              class="ocinput2"
-            ></el-input>
-            <br />
-            <br />
-            <el-input
-              v-model="item.othercomments"
-              type="textarea"
-              readonly="true"
-              class="ocinput2"
-            ></el-input>
-          </div>
-        </div>
-      </el-card>
-    </div>
+      </div>
+    </el-card>
 
     <div id="some">
       <owncomments></owncomments>
@@ -134,16 +124,19 @@ export default {
         },
       ],
       commentsinput: "",
-      collectForm:{
-        collect: 1
+      collectForm: {
+        collect: 1,
       },
-      options: [{
-        value: 1,
-        label: '收藏夹1'
-      }, {
-        value: 2,
-        label: '收藏夹2'
-      }],
+      options: [
+        {
+          value: 1,
+          label: "收藏夹1",
+        },
+        {
+          value: 2,
+          label: "收藏夹2",
+        },
+      ],
       canCollect: true,
       canCancel: true,
 
@@ -174,6 +167,9 @@ export default {
     errorHandler() {
       return true;
     },
+    collectPaper() {
+      dialogVisible = true
+    }
   },
 };
 </script>
@@ -191,16 +187,19 @@ html {
   clear: both;
 }
 .box-card {
-  width: 1000px;
-  margin-left: 100px;
-  margin-top: 40px;
+  width: 90%;
+  margin-left: 5%;
+  /* margin-top: 40px; */
 }
 .box-card1 {
-  width: 320px;
-  margin-top: 40px;
+  width: 90%;
+  margin-left: 5%;
+  /* margin-top: 40px; */
 }
 .box-card2 {
-  width: 320px;
+  width: 90%;
+  margin-left: 5%;
+  /* margin-top: 40px; */
 }
 .titlestyle {
   color: rgb(175, 175, 245);
@@ -216,7 +215,7 @@ html {
 }
 .name {
   font-weight: bold;
-  margin-left: 15px;
+  margin-left: 10px;
 }
 .paperp {
   text-indent: 2em;
@@ -240,5 +239,4 @@ html {
   font-family: "Microsoft YaHei";
   font-weight: bold;
 }
-
 </style>
