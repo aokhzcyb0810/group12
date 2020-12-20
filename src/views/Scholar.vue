@@ -2,13 +2,13 @@
     <div>
     <NavBar></NavBar>
   <div class="navtop">
-  <el-input placeholder="请输入内容" v-model="input3" class="searchinput input-with-select">
-    <el-select v-model="select" slot="prepend" placeholder="请选择">
-      <el-option label="餐厅名" value="1"></el-option>
+  <el-input :placeholder="fangshi" v-model="input3" class="searchinput input-with-select">
+    <el-select v-model="select" slot="prepend" placeholder="请选择学科">
+      <el-option :label="xueke"  v-for="item in xuekeliebiao" :key=item.name @click.native="xuanzexueke(item.name)" style="height:40px;overflow:auto">{{item.name}}</el-option>
     </el-select>
-    <i slot="suffix" class="el-input__icon el-icon-search search-button" style="cursor: pointer;"></i>
+    <i slot="suffix" class="el-input__icon el-icon-search search-button" style="cursor: pointer;" @click.capture="searchs"></i>
   </el-input>
-  <div class="choose"><span class="lunwen" span @click="tolunwen">论文</span><span class="zhuanjia">专家</span></div>
+  <div class="choose"><span class="lunwen" span @click="tolunwen">论文</span><span class="zhuanjia">专家</span><span style="margin-left:40px;cursor: pointer" class="sousuofangshi" @click="change">{{sousuo}}</span></div>
 </div>
 <div class="zhushi">在所有学科为您找到 “” 相关的结果 (505)。</div>
 <div class=scholarbody>
@@ -25,7 +25,9 @@
           <div class="lunwenshu neirong1"><i class="el-icon-document" style="margin-right:5px"></i>论文数：111</div>
           <div class="yinyongshu neirong1"><i class="el-icon-document-copy" style="margin-right:5px"></i>被引用数：222</div>
           <div class="jigou neirong1"><i class="el-icon-school" style="margin-right:5px"></i>机构</div>
-          <div class="lingyu neirong1">领域</div>
+          <div class="lingyu neirong1">
+            <div v-for="item in lingyulist" :key="item.name" class="lingyunei">{{item.name}}</div>
+          </div>
       </div>
       </el-col>
   <el-col :span="2">
@@ -66,9 +68,39 @@ import NavBar from "../homepage/NavBar";
       pagelist:[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}],
       currentlist:[{id:1},{id:2},{id:3},{id:4},{id:5}],
       show:false,
+      dangqianfangshi:1,
+      xuekeliebiao:[{name:"全部学科"},{name:'java'},{name:'jaa'},{name:'jva'},{name:'ava'},{name:'java'},{name:'java'},],
+      xueke:'',
+      lingyulist:[{name:"领域1"},{name:"领域2"},{name:"领域3"},{name:"领域4"},{name:"领域5"},]
     }
   },
+  computed:{
+          fangshi(){
+            if(this.dangqianfangshi==1)
+            return '当前为关键字搜索'
+            else
+            return '当前为模糊搜索'
+          },
+          sousuo(){
+            if(this.dangqianfangshi==1)
+            return '转为模糊搜索'
+            else
+            return '转为关键字搜索'
+          }
+        },
   methods: {
+    change(){
+      console.log("dsadsa")
+       if(this.dangqianfangshi==1)
+      {
+        this.dangqianfangshi=0
+      }
+      else
+      this.dangqianfangshi=1
+    },
+    xuanzexueke(xueke){
+      this.xueke=xueke
+    },
     tolunwen(){
       this.$router.replace(
             {path:'/search',
@@ -215,5 +247,19 @@ import NavBar from "../homepage/NavBar";
   .neirong2{
       float:right;
     margin-top:0%;
+  }
+  .sousuofangshi:hover{
+    color: yellow;
+  }
+  .lingyunei{
+    float:left;
+    margin-right: 10px;
+   // border: solid 0.5px;
+    height:21px;
+    line-height: 21px;
+    text-align: center;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: rgb(235, 232, 232);
   }
 </style>
