@@ -3,7 +3,7 @@
     <div class="ownc1">
       <div class="ownc2">
         <div class="ownc3">
-          <textarea class="ownc4" placeholder="写下你的评论..."></textarea>
+          <textarea class="ownc4" placeholder="写下你的评论..." v-model="input"></textarea>
         </div>
       </div>
     </div>
@@ -13,6 +13,11 @@
 <script>
 export default {
   name: "Owncomments",
+  data(){
+    return{
+      input:"",
+    }
+  }
 };
 </script>
 
@@ -41,7 +46,7 @@ export default {
   width: 400px;
   height: 36px;
   resize: none;
-  margin-right: 16px;
+  margin-left: 550px;
   padding: 8px 18px;
   border-radius: 18px;
   border: none;

@@ -100,7 +100,7 @@ const routes = [
         ]
     },
     { path: "/paper/:id", component: () => import('../views/Paper.vue') },
-    { path: "/paperread", component: () => import("../views/Paperread.vue") },
+    { path: "/paperread/:id", component: () => import("../views/Paperread.vue") },
 ]
 
 const router = new VueRouter({
