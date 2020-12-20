@@ -83,8 +83,8 @@
                                     <tr style="height: 60px">
                                         <td style="width: 10%">
                                             <div style="height: 60px;font-size: 35px">
-                                                <i  v-show="item.isread = 0" class="el-icon-s-release" style="color: red;margin-bottom: 5px;margin-left: 5px;margin-top: 10px"></i>
-                                                <i  v-show="item.isread = 1" class="el-icon-s-claim" style="color: lawngreen;margin-bottom: 5px;margin-left: 5px;margin-top: 10px"></i>
+                                                <i  v-show="item.read = 0" class="el-icon-s-release" style="color: red;margin-bottom: 5px;margin-left: 5px;margin-top: 10px"></i>
+                                                <i  v-show="item.read = 1" class="el-icon-s-claim" style="color: lawngreen;margin-bottom: 5px;margin-left: 5px;margin-top: 10px"></i>
                                             </div>
                                         </td>
                                         <td>
