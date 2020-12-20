@@ -22,14 +22,14 @@
                         style="width: 800px">
                     <el-table-column
                             fixed
-                            prop="paper.title"
+                            prop="Title"
                             label=""
                             width="70">
                         <el-avatar :size="35"></el-avatar>
                     </el-table-column><!--需要文献名-->
                     <el-table-column
                             fixed
-                            prop="paper.keyword"
+                            prop="Keyword"
                             label="关键词"
                             width="150">
                         <template slot-scope="scope">
@@ -37,13 +37,13 @@
                         </template>
                     </el-table-column>
                     <el-table-column
-                            prop="paper.name"
+                            prop="Author"
                             label="学者姓名"
                             width="120">
                     </el-table-column>
                     <el-table-column
-                            prop="paper.field"
-                            label="领域"
+                            prop="Time"
+                            label="发布时间"
                             width="260">
                     </el-table-column>
                     <el-table-column
@@ -111,7 +111,7 @@
                     type: 'warning'
                 }).then(() => {
                     let postData = {
-                        'Did': this.this.$route.query.Did
+                        'Cid': this.paper_list[index].Cid
                     }
                     this.$axios.post('/collection/cancelinpaper', postData).then((response) => {
                         this.showpaperinfo()
