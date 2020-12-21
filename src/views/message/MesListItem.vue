@@ -2,11 +2,14 @@
   <div class="mes">
     <div class="mes-item">
       <img class="mesimg" src="@/assets/mes.svg" @click="itemClick" />
+      <div style="margin-left: 1%; margin-top: 1px; font-size: 14px">
+        {{ mesItem.name }}
+      </div>
       <div class="mes-info" @click="itemClick">
-        <p>{{ mesItem.content }}</p>
+        <p>{{ mesItem.text }}</p>
       </div>
       <div class="mes-time" @click="itemClick">
-        <p>{{mesItem.dateTime}}</p>
+        <p>{{ mesItem.time }}</p>
       </div>
       <img class="messmallimg" src="@/assets/删除.svg" @click="deleteMes" />
     </div>
@@ -68,7 +71,7 @@ export default {
               instance.confirmButtonText = "执行中...";
               setTimeout(() => {
                 // 同意申请后的将申请者加入团队的接口操作
-                console.log(this.mesItem.content)
+                console.log(this.mesItem.content);
                 axios
                   .post("/news/admitApply", this.mesItem.content)
                   .then((res) => {

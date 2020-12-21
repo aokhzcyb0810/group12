@@ -54,9 +54,13 @@ export default {
         //  获取消息
         .post("/apply/waiting/show")
         .then((res) => {
-          console.log(res.data);
-
-          
+          console.log(res.data.data);
+          this.NowMess = res.data.data;
+          if (this.NowMess == "") {
+            this.isNULL = true;
+          } else {
+            this.isNULL = false;
+          }          
         })
         .catch((err) => {
           console.log(err);

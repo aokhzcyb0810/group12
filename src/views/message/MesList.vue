@@ -1,6 +1,6 @@
 <template>
   <div class="docs">
-    <mes-list-item v-for="item in mess" :mes-item="item" :key="item.newsID" :userID="userID"></mes-list-item>
+    <mes-list-item v-for="item in mess" :mes-item="item" :key="item.Mid" :userID="userID"></mes-list-item>
   </div>
 </template>
 

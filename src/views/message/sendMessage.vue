@@ -54,7 +54,13 @@ export default {
         //  获取消息
         .post("/message/mine?user="+this.userID)
         .then((res) => {
-          console.log(res.data);
+          console.log(res.data.data);
+          this.NowMess = res.data.data;
+          if (this.NowMess == "") {
+            this.isNULL = true;
+          } else {
+            this.isNULL = false;
+          }
         })
         .catch((err) => {
           console.log(err);
