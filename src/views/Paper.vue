@@ -34,99 +34,125 @@
         </el-form>
       </div>
     </div>
-  <div style="width: 100%; background-color: whitesmoke;padding-bottom: 20px; padding-top: 20px;">
-    <el-card style="width: 90%; margin-left: 5%" shadow="hover">
-      <h1 class="papertitle">{{papertitle}}</h1>
-      <el-table :data ="paperdata" style = "width : 100%" id="papertable">
-        <el-table-column
-                prop="key"
-                align="center"
-                width="300"
-        >
-        </el-table-column>
-        <el-table-column
-                prop="value"
-                >
-        </el-table-column>
-      </el-table>
-      <br>
-      <el-row style="text-align: center">
-        <el-button class="read_button" icon="el-icon-reading" round @click="goRead">阅读</el-button>
-        <el-button class="star_button" icon="el-icon-star-off" round v-show="canCollect" @click="formVisible = true">收藏</el-button>
-        <el-button class="star_button" icon="el-icon-star-off" round v-show="canCancel" @click="cancelCollect">取消收藏</el-button>
-      </el-row>
-    </el-card>
-    <el-card style="margin-top: 20px;width: 90%; margin-left: 5%" shadow="hover"  v-show="hasLogin">
-      <div>
-        <el-form :model="Form" :rules="rule" ref="Form">
-          <el-row style="margin-top: 10px;">
-            <el-col :span="2">
-              <img :src="headSrc" class="commentHead" />
+  <div class="main">
+    <div style="width: 70%; float: left;background-color: whitesmoke">
+      <el-card shadow="hover">
+        <h1 class="papertitle">{{papertitle}}</h1>
+        <el-table :data ="paperdata" style = "width : 100%" id="papertable">
+          <el-table-column
+                  prop="key"
+                  align="center"
+                  width="300"
+          >
+          </el-table-column>
+          <el-table-column
+                  prop="value"
+          >
+          </el-table-column>
+        </el-table>
+        <br>
+        <el-row style="text-align: center">
+          <el-button class="read_button" icon="el-icon-reading" round @click="goRead">阅读</el-button>
+          <el-button class="star_button" icon="el-icon-star-off" round v-show="canCollect" @click="formVisible = true">收藏</el-button>
+          <el-button class="star_button" icon="el-icon-star-off" round v-show="canCancel" @click="cancelCollect">取消收藏</el-button>
+        </el-row>
+      </el-card>
+      <el-card style="margin-top: 20px;" shadow="hover"  v-show="hasLogin">
+        <div>
+          <el-form :model="Form" :rules="rule" ref="Form">
+            <el-row style="margin-top: 10px;">
+              <el-col :span="2">
+                <img :src="headSrc" class="commentHead" />
+              </el-col>
+              <el-col :span="22">
+                <el-form-item prop="content">
+                  <el-input
+                          type="textarea"
+                          :autosize="{ minRows: 3}"
+                          placeholder="请输入内容"
+                          v-model="Form.content"
+                          class="te"
+                          @click.native="showSubmit = true"
+                          style="width: 90%"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-collapse-transition>
+              <div>
+                <el-row>
+                  <el-col :span="24">
+                    <el-form-item>
+                      <el-button
+                              type="primary"
+                              style="float: right; margin-right: 5%"
+                              icon="el-icon-edit"
+                              round
+                              @click="onSubmit('Form')"
+                      >提交</el-button>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </div>
+            </el-collapse-transition>
+          </el-form>
+        </div>
+      </el-card>
+      <el-card style="margin-top: 20px;margin-bottom: 20px;" shadow="hover">
+        <div style="font-size: 20px; margin-bottom: 40px; margin-left: 7px">
+          <el-row>
+            <el-col :span="1">
+              <div class="tips">
+                <p></p>
+              </div>
             </el-col>
-            <el-col :span="22">
-              <el-form-item prop="content">
-                <el-input
-                        type="textarea"
-                        :autosize="{ minRows: 3}"
-                        placeholder="请输入内容"
-                        v-model="Form.content"
-                        class="te"
-                        @click.native="showSubmit = true"
-                        style="width: 90%"
-                ></el-input>
-              </el-form-item>
-            </el-col>
+            <el-col :span="23" style="margin-top: 5px">评论</el-col>
           </el-row>
-          <el-collapse-transition>
-            <div>
-              <el-row>
-                <el-col :span="24">
-                  <el-form-item>
-                    <el-button
-                            type="primary"
-                            style="float: right; margin-right: 5%"
-                            icon="el-icon-edit"
-                            round
-                            @click="onSubmit('Form')"
-                    >提交</el-button>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </div>
-          </el-collapse-transition>
-        </el-form>
-      </div>
-    </el-card>
-    <el-card style="margin-top: 20px; width: 90%; margin-left: 5%;" shadow="hover">
-    <div style="font-size: 20px; margin-bottom: 40px; margin-left: 7px">
-      <el-row>
-        <el-col :span="1">
-          <div class="tips">
-            <p></p>
-          </div>
-        </el-col>
-        <el-col :span="23" style="margin-top: 5px">评论</el-col>
-      </el-row>
-    </div>
-    <el-row></el-row>
-    <ul style="list-style: none;margin: 0; padding: 0;">
-      <li v-for="(item,index) in commentItem" :key="index">
-        <div style="width: 100%;float: left">
+        </div>
+        <el-row></el-row>
+        <ul style="list-style: none;margin: 0; padding: 0;">
+          <li v-for="(item,index) in commentItem" :key="index">
+            <div style="width: 100%;float: left">
                   <span style="width: 8.3%; float: left">
                     <img :src="item.profileUrl" class="commentHead"/>
                   </span>
-          <span style="float: left" class="commentName">{{item.userName}}</span>
-        </div>
-        <p class="commentText">{{item.content}}</p>
-        <div style="width: 100%" class="commentTime">
-          <div style="margin-left: 8.3%">
-            <p>{{getTime(item.dateTime)}}</p>
-          </div>
-        </div>
-        <el-divider></el-divider>
-      </li>
-    </ul>
-    </el-card>
+              <span style="float: left" class="commentName">{{item.userName}}</span>
+            </div>
+            <p class="commentText">{{item.content}}</p>
+            <div style="width: 100%" class="commentTime">
+              <div style="margin-left: 8.3%">
+                <p>{{getTime(item.dateTime)}}</p>
+              </div>
+            </div>
+            <el-divider></el-divider>
+          </li>
+        </ul>
+      </el-card>
+    </div>
+   <div style="width: 28%; float: left; background-color: whitesmoke;margin-left: 2%">
+     <el-card id="fixedCard" :class="{'isFixed':fixed}">
+       <div slot="header" class="clearfix">
+         <span style="font-weight: bold">关于作者</span>
+       </div>
+       <div style="margin-bottom: 60px">
+         <div style="float: left;width: 100%">
+           <span style="font-weight: bold;margin-left: 10px;">
+          {{ scholarname }}
+        </span>
+         </div>
+         <div style="width: 100%; float: left;margin-top: 20px; margin-left: 10px;">
+           <p>研究领域: <span style="color: #409EFF">{{ researchfield }}</span></p>
+           <p>工作单位: <span style="color: #409EFF">{{ work }}</span></p>
+         </div>
+         <div style="width: 100%;float: left; text-align: center;margin-bottom: 20px; margin-top: 20px;">
+           <el-button plain icon="el-icon-share" @click="toPage">学者主页</el-button>
+           <el-button lain icon="el-icon-star" @click="follow" v-show="canFollow">关注</el-button>
+           <el-button lain icon="el-icon-star" @click="cancelFollow" v-show="canCancelFollow">取消关注</el-button>
+         </div>
+       </div>
+     </el-card>
+   </div>
+  </div>
     <el-dialog :visible.sync="formVisible" width="35%" center>
       <div class="login-body">
         <el-form :model="collectForm" label-position="right">
@@ -146,8 +172,8 @@
         </div>
       </div>
     </el-dialog>
+  <el-backtop target=".page-component__scroll .el-scrollbar__wrap"></el-backtop>
   </div>
-</div>
 
 </template>
 
@@ -160,6 +186,18 @@ export default {
   inject: ['reload'],
   data() {
     return {
+      canFollow: true,
+      canCancelFollow: true,
+      httpUrl: '',
+      offsetTop: 0,
+      offsetWidth: 0,
+      colWidth: 0,
+      fixed: false,
+      scholarname: "学者名a",
+      scholarurl: require("../assets/logo.png"),
+      work: "北京奶糖大学",
+      researchfield: "计算机",
+      scholarid: 1,
       hasLogin: false,
       formVisible: false,
       headSrc: require("../assets/logo.png"),
@@ -227,6 +265,18 @@ export default {
     };
   },
   methods: {
+    initHeight() {
+      //兼容性，获取页面滚动距离
+      var scrollTop =
+              window.pageYOffset ||
+              document.documentElement.scrollTop ||
+              document.body.scrollTop;
+      //判断滚动距离是否大于元素到顶端距离
+      this.fixed = scrollTop > this.offsetTop ? true : false;
+      //宽度赋值
+      document.getElementById("fixedCard").style.width =
+              this.offsetWidth + "px";
+    },
     getDoc() {
       var _this = this;
       axios.get("http://127.0.0.1:8081/paper/get/" + _this.$route.params.id)
@@ -240,6 +290,8 @@ export default {
                   _this.paperdata.push({key: '作者', value: response.data.data.authorShow});
                   _this.paperdata.push({key: '关键词', value: response.data.data.keywordShow});
                   _this.paperdata.push({key: '发表时间', value: response.data.data.year});
+                  _this.httpUrl = response.data.data.url;
+                  console.log(_this.httpUrl);
                 }
               })
               .catch(function (error) {
@@ -378,19 +430,114 @@ export default {
       return year+"年"+month+"月"+date+"日"+hour+":"+minute+":"+second;
     },
     goRead(){
-      this.$router.push({
-        name: 'paperread',
-        params:{
-          id: this.$route.params.id
-        }
+      window.location.href= this.httpUrl;
+    },
+    getAuthor(){
+      var _this = this;
+      axios.get("http://127.0.0.1:8081/paper/author/" + _this.$route.params.id)
+              .then(function (response) {
+                if (response.data.status === 200) {
+                  _this.scholarid = response.data.data.id;
+                  _this.scholarname = response.data.data.name;
+                  _this.researchfield = response.data.data.field;
+                  _this.work = response.data.data.work;
+                }
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+    },
+    toPage(){
+
+    },
+    follow(){
+      var _this = this;
+      axios.post("http://127.0.0.1:8081/follow/insertFollow", {
+          user: JSON.parse(sessionStorage.getItem("userL")).id,
+          researcher: _this.scholarid
       })
+              .then(function (response) {
+                if (response.data.status === 200) {
+                  _this.$message({
+                    message: "关注成功",
+                    type: "success",
+                  });
+                  _this.reload();
+                  _this.canFollow = false;
+                  _this.canCancelFollow = true;
+                }
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+    },
+    getFollow(){
+        if (sessionStorage.getItem('userL') === null) {
+          this.canFollow = false;
+          this.canCancelFollow = false;
+        } else {
+          var _this = this;
+          axios.post("http://127.0.0.1:8081/follow/getStatus?user=" + JSON.parse(sessionStorage.getItem("userL")).id + "&researcher=" + _this.scholarid)
+                  .then(function (response) {
+                    if (response.data.status === 200) {
+                      if (response.data.data === 0) {
+                        _this.canFollow = true;
+                        _this.canCancelFollow = false;
+                      } else {
+                        _this.canFollow = false;
+                        _this.canCancelFollow = true;
+                      }
+                    }
+                  })
+                  .catch(function (error) {
+                    console.log(error)
+                  })
+        }
+    },
+    cancelFollow(){
+      var _this = this;
+      axios.post("http://127.0.0.1:8081/follow/cancel?user=" + JSON.parse(sessionStorage.getItem("userL")).id + "&researcher=" + _this.scholarid)
+              .then(function (response) {
+                if (response.data.status === 200) {
+                  _this.$message({
+                    message: "取消关注成功",
+                    type: "success",
+                  });
+                  _this.reload();
+                  _this.canFollow = true;
+                  _this.canCancelFollow = false;
+                }
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
     }
+  },
+  mounted() {
+    //对整个页面滚轮进行监听，每发生一次滚轮事件，执行一次方法
+    window.addEventListener("scroll", this.initHeight);
+
+    // DOM异步更新 对未来更新后的视图进行操作 在更新后执行
+    this.$nextTick(() => {
+      //获取到达页面顶端的值
+      var height = document.getElementById("fixedCard");
+      this.offsetTop = height.offsetTop + 60;
+      //获取宽度
+      this.offsetWidth = height.offsetWidth;
+      console.log(1);
+    });
+  },
+  destroyed() {
+    //移除监听
+    window.removeEventListener("scroll", this.initHeight);
   },
     created() {
     console.log(this.$route.params.id);
       this.getDoc();
       this.getCollect();
       this.getComment();
+      this.getAuthor();
+      this.getFollow();
       if (sessionStorage.getItem("userL")=== null){
         this.hasLogin = false;
       }
@@ -400,11 +547,22 @@ export default {
         this.getCollection();
       }
       console.log(this.hasLogin);
-    }
+    },
+  beforeCreate(){
+    // 添加背景色
+    document.querySelector('body').setAttribute('style', 'background-color:whitesmoke')
+  },
+  beforeDestroy(){
+    document.querySelector('body').setAttribute('style', '')
+  },
 }
 </script>
 
 <style scoped>
+  .isFixed{
+    position: fixed;
+    top: 0;
+  }
 .el-header ,.el-footer {
     background-color:whitesmoke;
     color: #333;
@@ -519,5 +677,20 @@ export default {
 }
 .commentText {
   margin-left: 8.3%;
+}
+  .main{
+    width: 95%;
+    margin-left: 2.5%;
+    float: left;
+    background-color: whitesmoke;
+    padding-top: 20px;
+  }
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
+.clearfix:after {
+  clear: both;
 }
 </style>

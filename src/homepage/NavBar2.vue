@@ -16,7 +16,7 @@
                 <el-menu-item index="1-2" @click="changePasswordVisible = true">更改密码</el-menu-item>
                 <el-menu-item index="1-3" @click="quit">退出登录</el-menu-item>
             </el-submenu>
-            <el-menu-item index="2" style="float: right;">
+            <el-menu-item index="2" style="float: right;" @click="toMessage">
                 <i class="el-icon-chat-line-square" style="font-size: 25px;color: #ddd"></i>
             </el-menu-item>
             <div class="username">
@@ -149,6 +149,9 @@
                 else {
                     this.$router.push('/personalInfo');
                 }
+            },
+            toMessage(){
+                this.$router.push('/message');
             }
         }
     }

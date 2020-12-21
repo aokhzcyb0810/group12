@@ -17,6 +17,11 @@ import Scholar from '../views/Scholar.vue'
 import Paper from "../views/Paper";
 import Paperread from "../views/Paperread";
 import Academic_home from "../components/Academic_home.vue"
+import cerMessage from "../views/message/cerMessage.vue";
+import recMessage from "../views/message/recMessage.vue";
+import sysMessage from "../views/message/sysMessage.vue";
+import sendMessage from "../views/message/sendMessage.vue";
+
 const originalPush = VueRouter.prototype.push
 
 VueRouter.prototype.push = function push(location) {
@@ -114,7 +119,32 @@ const routes = [
         path: "/paperread/:id",
         name: 'paperread',
         component: Paperread
-    }
+    },
+    {
+        path:"/message",
+        name:'message',
+        component:sysMessage
+    },    
+    {
+        path:"/sysmessage",
+        name:'sysmessage',
+        component:sysMessage
+    },
+    {
+        path:"/cermessage",
+        name:'cermessage',
+        component:cerMessage
+    },
+    {
+        path:"/recmessage",
+        name:'recmessage',
+        component:recMessage
+    },
+    {
+        path:"/sendmessage",
+        name:'sendmessage',
+        component:sendMessage
+    },
 ]
 
 const router = new VueRouter({

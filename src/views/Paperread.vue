@@ -17,12 +17,12 @@
         <div id="right" style="width: 200px; float: right; text-align: center">
           <p>研究领域</p>
           <p>{{ researchfield }}</p>
-          <el-button plain>学者主页</el-button>
+          <el-button plain @click="gotoScholarInfo">学者主页</el-button>
         </div>
         <div id="left" style="width: 200px;float: right; text-align: center">
           <p>文献</p>
           <p>{{ papernum }}</p>
-          <el-button plain>关注</el-button>
+          <el-button plain @click="collectScholar">关注</el-button>
         </div>
       </div>
     </el-card>
@@ -35,7 +35,7 @@
               class="star_button"
               icon="el-icon-star-off"
               round
-              @click="collectPaper"
+              @click="formVisible = true"
               >收藏
             </el-button>
           </span>
@@ -89,6 +89,25 @@
     <div id="some">
       <owncomments></owncomments>
     </div>
+    <el-dialog :visible.sync="formVisible" width="35%" center>
+      <div class="login-body">
+        <el-form :model="collectForm" label-position="right">
+          <el-form-item label="选择收藏夹" style="margin-bottom: 15px" prop="collect">
+              <el-select v-model="collectForm.collect" placeholder="请选择">
+                <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+              </el-select>
+          </el-form-item>
+        </el-form>
+        <div style="margin-top: 30px">
+          <el-button type="primary" style="width: 100%" @click="collect">完 成</el-button>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -103,6 +122,7 @@ export default {
   data() {
     Owncomments;
     return {
+      formVisible: false,
       papertitle: "文章标题",
       keywords: "BFS",
       paperintro: "文章简介",
@@ -167,8 +187,17 @@ export default {
     errorHandler() {
       return true;
     },
-    collectPaper() {
-      dialogVisible = true
+    collectScholar() {
+      alert("关注");
+    },
+    gotoScholarInfo() {
+      this.$router.replace(
+                    {path:'/personalinfo/personalinfo_academ',
+                        query:{
+                            // id: this.paper_list[index].Paper
+                            //     id:this.$route.query.id
+                        }
+                    })
     }
   },
 };
