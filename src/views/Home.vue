@@ -48,7 +48,7 @@
                                         <i class="el-icon-edit-outline" style="font-size: 30px; color: gray;"></i>
                                     </el-col>
                                     <el-col :span="22">
-                                        <h2 style="margin-top: 12px;">{{item.title}}</h2>
+                                        <h2 style="margin-top: 12px;" @click="toDoc(item.paperId)">{{item.title}}</h2>
                                         <span class="detail">
                                             published at {{item.date}} by {{item.author}}
                                         </span>
@@ -183,6 +183,15 @@
                     .catch(function (error) {
                         console.log(error)
                     })
+            },
+            toDoc(did){
+                console.log("id是------------" + did);
+                this.$router.push({
+                    name: 'paper',
+                    params:{
+                        id: did
+                    }
+                });
             }
         },
         created() {

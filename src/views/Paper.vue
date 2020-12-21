@@ -51,12 +51,12 @@
       </el-table>
       <br>
       <el-row style="text-align: center">
-        <el-button class="read_button" icon="el-icon-reading" round>阅读</el-button>
+        <el-button class="read_button" icon="el-icon-reading" round @click="goRead">阅读</el-button>
         <el-button class="star_button" icon="el-icon-star-off" round v-show="canCollect" @click="formVisible = true">收藏</el-button>
         <el-button class="star_button" icon="el-icon-star-off" round v-show="canCancel" @click="cancelCollect">取消收藏</el-button>
       </el-row>
     </el-card>
-    <el-card style="margin-top: 20px;width: 90%; margin-left: 5%" shadow="hover">
+    <el-card style="margin-top: 20px;width: 90%; margin-left: 5%" shadow="hover"  v-show="hasLogin">
       <div>
         <el-form :model="Form" :rules="rule" ref="Form">
           <el-row style="margin-top: 10px;">
@@ -78,7 +78,7 @@
             </el-col>
           </el-row>
           <el-collapse-transition>
-            <div v-show="showSubmit">
+            <div>
               <el-row>
                 <el-col :span="24">
                   <el-form-item>
@@ -160,6 +160,7 @@ export default {
   inject: ['reload'],
   data() {
     return {
+      hasLogin: false,
       formVisible: false,
       headSrc: require("../assets/logo.png"),
       showSubmit: false,
@@ -352,8 +353,9 @@ export default {
       var _this = this;
       axios.post("http://127.0.0.1:8081/paper/comment/" + _this.$route.params.id)
               .then(function (response) {
-                if (response.data.status === 200) {
+                if (response.data.status === 200 || response.data.status === 400) {
                   _this.commentItem = response.data.data;
+                  console.log("拿到评论了");
                   for(var i = 0; i < _this.commentItem.length; i ++){
                     var src = _this.commentItem[i].profileUrl;
                     _this.commentItem[i].profileUrl = "http://10.251.253.212" + src;
@@ -375,13 +377,29 @@ export default {
       var second=_time.getSeconds();//15
       return year+"年"+month+"月"+date+"日"+hour+":"+minute+":"+second;
     },
+    goRead(){
+      this.$router.push({
+        name: 'paperread',
+        params:{
+          id: this.$route.params.id
+        }
+      })
+    }
   },
     created() {
+    console.log(this.$route.params.id);
       this.getDoc();
       this.getCollect();
-      this.getCollection();
       this.getComment();
-      this.headSrc = "http://10.251.253.212" + JSON.parse(sessionStorage.getItem("userL")).avatar;
+      if (sessionStorage.getItem("userL")=== null){
+        this.hasLogin = false;
+      }
+      else {
+        this.hasLogin = true;
+        this.headSrc = "http://10.251.253.212" + JSON.parse(sessionStorage.getItem("userL")).avatar;
+        this.getCollection();
+      }
+      console.log(this.hasLogin);
     }
 }
 </script>

@@ -14,6 +14,8 @@ import ManagerInfo_manager from '../components/ManagerInfo_manager.vue'
 import PersonalInfo_academ from '../components/PersonalInfo_academ.vue'
 import Search from '../views/Search'
 import Scholar from '../views/Scholar.vue'
+import Paper from "../views/Paper";
+import Paperread from "../views/Paperread";
 
 const originalPush = VueRouter.prototype.push
 
@@ -99,8 +101,16 @@ const routes = [
 
         ]
     },
-    { path: "/paper/:id", component: () => import('../views/Paper.vue') },
-    { path: "/paperread/:id", component: () => import("../views/Paperread.vue") },
+    {
+        path: "/paper/:id",
+        name: 'paper',
+        component: Paper
+    },
+    {
+        path: "/paperread/:id",
+        name: 'paperread',
+        component: Paperread
+    }
 ]
 
 const router = new VueRouter({
