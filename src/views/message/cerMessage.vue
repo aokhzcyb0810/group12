@@ -19,7 +19,6 @@
 
         </div>
       </el-main>
-      <right-bar></right-bar>
     </el-container>
   </el-container>
 </template>
@@ -50,19 +49,14 @@ export default {
     // },
     fetchList() {
       this.userL = JSON.parse(sessionStorage.getItem("userL"));
-      this.userID = this.userL.userID;
+      this.userID = this.userL.id;
       axios
         //  获取消息
-        .post("/news/getNews", this.userID)
+        .post("/apply/waiting/show")
         .then((res) => {
-          console.log(this.data);
-          if (res.data == "") {
-            this.isNULL = true;
-          } else {
-            this.isNULL = false;
-            this.NowMess = res.data;
-            console.log(this.NowMess);
-          }
+          console.log(res.data);
+
+          
         })
         .catch((err) => {
           console.log(err);

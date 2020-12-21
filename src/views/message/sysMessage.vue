@@ -55,14 +55,8 @@ export default {
         //  获取消息
         .post("/message/sys?user="+_this.userID)
         .then((res) => {
-          console.log(res.data.data);
-          // if (res.data == "") {
-          //   this.isNULL = true;
-          // } else {
-          //   this.isNULL = false;
-          //   this.NowMess = res.data;
-          //   console.log(this.NowMess);
-          // }
+          console.log(res.data);
+          
         })
         .catch((err) => {
           console.log(err);
