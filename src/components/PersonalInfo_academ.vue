@@ -77,9 +77,11 @@
                                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                                 </el-upload>
                             </div>
+                            <!--
                             <div style="text-align: center;margin-top: 3%">
                                 <h4 v-show="!isScholar">你还未进行学者认证，<el-link type="primary" style="font-size: 16px" @click="toIdentify">点击这里</el-link>进行认证</h4>
                             </div>
+                            -->
                         </div>
                     </td>
                     <el-divider direction="vertical"></el-divider>
@@ -128,9 +130,11 @@
             </table>
                         <el-divider></el-divider>
             <span style="font-size:25px;">学者文献</span>
+            <!--
             <el-button type="primary" @click="add_file" style="margin-left:90% ; ">
                 <i class="el-icon-document" ></i><span>添加文献</span>
             </el-button>
+            -->
             <el-main>
                 <el-table :data="doc_table" style="width:100%" :row-style="{height:'30px'}">
                     <el-table-column prop="title" label="题目" @contextmenu.prevent=""></el-table-column>

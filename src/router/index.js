@@ -16,7 +16,7 @@ import Search from '../views/Search'
 import Scholar from '../views/Scholar.vue'
 import Paper from "../views/Paper";
 import Paperread from "../views/Paperread";
-
+import Academic_home from "../components/Academic_home.vue"
 const originalPush = VueRouter.prototype.push
 
 VueRouter.prototype.push = function push(location) {
@@ -65,6 +65,10 @@ const routes = [
                 component:PersonalInfo_academ
             }
         ]
+    },
+    {
+        path:'/academic_home',
+        component:Academic_home
     },
     {
         path: '/top',
