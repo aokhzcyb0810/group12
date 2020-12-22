@@ -34,14 +34,9 @@
                                     <el-input v-model="form.id" disabled style="width: 300px" size="small"></el-input>
                                 </el-form-item>
                                 <el-form-item label="姓名">
-                                    <el-input v-model="form.name" :disabled="!editing" style="width: 300px" size="small"></el-input>
+                                    <el-input v-model="form.trueName" :disabled="!editing" style="width: 300px" size="small"></el-input>
                                 </el-form-item>
-                                <el-form-item
-                                        prop="email"
-                                        label="邮箱"
-                                >
-                                    <el-input v-model="form.email" :disabled="!editing" style="width: 300px" size="small"></el-input>
-                                </el-form-item>
+
                                 <el-form-item label="简介">
                                     <el-input type="textarea" v-model="form.info" :disabled="!editing" style="width: 300px" size="small"></el-input>
                                 </el-form-item>
@@ -64,9 +59,9 @@
                                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                                 </el-upload>
                             </div>
-                            <div style="text-align: center;margin-top: 3%">
+                          <!--  <div style="text-align: center;margin-top: 3%">
                                 <h4 v-show="!isScholar">你还未进行学者认证，<el-link type="primary" style="font-size: 16px" @click="toIdentify">点击这里</el-link>进行认证</h4>
-                            </div>
+                            </div> -->
                         </div>
                     </td>
                     <el-divider direction="vertical"></el-divider>
@@ -163,6 +158,7 @@
     import ElAvatar from "../../node_modules/element-ui/packages/avatar/src/main.vue";
     import ElButton from "../../node_modules/element-ui/packages/button/src/button.vue";
     import ElInput from "../../node_modules/element-ui/packages/input/src/input.vue";
+    import axios from "axios";
 
     export default {
         components: {
@@ -176,6 +172,7 @@
         },
         data() {
             return {
+
                 editing:false,
                 imageUrl: '',//头像
                 isuser:false,
@@ -188,10 +185,7 @@
                 select:0,//选择查看哪一个消息
                 reply:'',//回复内容
                 form: {
-                    id: this.$store.state.userid,
-                    name: '',
-                    email: '',
-                    info: ''
+
                 },
                 //message数组看实际情况加载内容，比如在“系统通知”则加载系统通知，切换其它目录时清空后重新加载
                 message:[{},{}],
@@ -205,23 +199,27 @@
                 }
             }
         },
-        created(){
-            this.showUserinfo();
-            this.showSysMessagelist();
-        },
+
         methods: {
             showUserinfo () {
-                const res= this.$axios({
-                    method:'get',
-                    url:'/user/getUser'
-                }).catch(err=>{console.log(err)})
+                var _this=this;
+                _this.userL = JSON.parse(sessionStorage.getItem("userL"));
+                _this.userid = _this.userL.id
+                //axios.post('/message/sys?user=" + id)
 
-                this.form.name=res.data.name
-                this.form.email=res.data.email
-                this.form.info=res.data.info
+                axios.post("/user/getUser?id=" + _this.userid)
+                    .then(function (response) {
+                        console.log(response.data)
+                        _this.form = response.data
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+
+
                 return 0
             },
-            showSysMessagelist() {
+            /*showSysMessagelist() {
                 const res= this.$axios({
                     method:'get',
                     url:'/message/sys'
@@ -229,7 +227,7 @@
                 this.message = res.data
 
                 return 0
-            },
+            },*/
             showScoMessagelist() {
                 const res= this.$axios({
                     method:'get',
@@ -327,20 +325,35 @@
                 this.dialogFormVisible3 = false;
             },
             Submit(){
-                                this.editing=false;
+                var _this=this;
+                //_this.userL = JSON.parse(sessionStorage.getItem("userL"));
+                this.editing=false;
                 let postData = {
-                    'id': parseInt(this.$store.state.userID),
-                    'name': this.form.name,
-                    'email': this.form.email,
-                    'info': this.form.info
+                    id: JSON.parse(sessionStorage.getItem("userL")).id,
+                    trueName: _this.form.trueName,
+                    //email: this.form.email,
+                    info: _this.form.info,
+                    avatar: _this.imageUrl
                 }
-                this.$axios.post('/api/user/edit', postData).catch(err=>{console.log(err)})
-                this.showUserinfo()
+                this.$axios.post('/user/info/change',postData)
+                    .then(function (response) {
+                        console.log(response)
+                        _this.showUserinfo()
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+
+
             }
 
 
 
-        }
+        },
+        created(){
+            this.showUserinfo();
+            this.showSysMessagelist();
+        },
     }
 
 </script>
