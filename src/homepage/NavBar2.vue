@@ -67,7 +67,7 @@
                 }
             };
             return{
-                logo: require("../assets/navLogo2.png"),
+                logo: require("../assets/navLogo.png"),
                 changePasswordVisible: false,
                 labelPos: 'right',
                 form: {

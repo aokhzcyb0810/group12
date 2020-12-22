@@ -10,7 +10,7 @@
                 </el-col>
                 <el-col :span="8">
                     <div>
-                        <span style="margin-left: 48%"><i class="el-icon-message"> 消息</i></span>
+                        <span style="margin-left: 48%"><i class="el-icon-message"> 编辑头像</i></span>
                     </div>
                 </el-col>
                 <el-col :span="3">
@@ -46,19 +46,7 @@
                                     <el-button v-if="editing" style="margin-left: 160px" @click="editing=false" size="small">取消</el-button>
                                 </el-form-item>
                             </el-form>
-                            <span style="margin-left: 5%">编辑头像</span>
-                            <div>
-                                <el-upload
-                                        class="avatar-uploader"
-                                        action="https://jsonplaceholder.typicode.com/posts/"
-                                        :show-file-list="false"
-                                        :on-success="handleAvatarSuccess"
-                                        :before-upload="beforeAvatarUpload"
-                                        style="margin-left: 30%">
-                                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                                </el-upload>
-                            </div>
+
                           <!--  <div style="text-align: center;margin-top: 3%">
                                 <h4 v-show="!isScholar">你还未进行学者认证，<el-link type="primary" style="font-size: 16px" @click="toIdentify">点击这里</el-link>进行认证</h4>
                             </div> -->
@@ -66,34 +54,19 @@
                     </td>
                     <el-divider direction="vertical"></el-divider>
                     <td style="width: 48%">
+
                         <div style="margin-top: 0%;height: 700px">
-                            <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" style="margin-top: 0px">
-                                <el-menu-item index="1" @click="showSysMessagelist">系统通知</el-menu-item>
-                                <el-menu-item index="2" @click="showScoMessagelist">学者私信</el-menu-item>
-                                <el-menu-item index="3" @click="showMineMessagelist">我的私信</el-menu-item>
-                            </el-menu>
-                            <div style="height: 5px"></div>
-                            <div v-for="(item,index) in message" :key="item" @click="viewMessage(item)">
-                                <table style="width: 100%">
-                                    <tr style="height: 60px">
-                                        <td style="width: 10%">
-                                            <div style="height: 60px;font-size: 35px">
-                                                <i  v-show="item.read = 0" class="el-icon-s-release" style="color: red;margin-bottom: 5px;margin-left: 5px;margin-top: 10px"></i>
-                                                <i  v-show="item.read = 1" class="el-icon-s-claim" style="color: lawngreen;margin-bottom: 5px;margin-left: 5px;margin-top: 10px"></i>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div style="margin-left: 1%;margin-top:1px;font-size: 14px">
-                                                {{item.from}}
-                                            </div>
-                                            <div style="margin-left: 1%;margin-top: 10px;font-size: 12px">
-                                                {{item.text}}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <el-divider></el-divider>
-                            </div>
+                            <el-upload
+                                    class="avatar-uploader"
+                                    action="https://jsonplaceholder.typicode.com/posts/"
+                                    :show-file-list="false"
+                                    :on-success="handleAvatarSuccess"
+                                    :before-upload="beforeAvatarUpload"
+                                    style="margin-left: 30%">
+                                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                            </el-upload>
+                            <span style="margin-left: 35%;font-size: 14px">点击“+”上传头像</span>
                         </div>
                     </td>
                 </tr>

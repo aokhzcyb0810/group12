@@ -19,10 +19,10 @@
 
             <el-divider></el-divider>
             <div>
-                <div v-for="(item,index) in collection_list" :key="item" @click="viewCollection(item.Did)" style="display: inline-block;width: 16%;margin-top: 10px">
-                    <i class="el-icon-folder" style="font-size: 80px;margin-left: 23%;color: gold"></i>
-                    <div style="text-align: center">
-                        {{item.name}}
+                <div v-for="(item,index) in collection_list" :key="item"  style="display: inline-block;width: 16%;margin-top: 10px">
+                    <i class="el-icon-folder" style="font-size: 80px;margin-left: 25%;color: gold" @click="viewCollection(item.key)"></i>
+                    <div style="text-align: center;font-size: 12px">
+                        {{item.value}}
                     </div>
 
                     <el-button slot="reference" size="mini" style="margin-left: 30%;margin-top: 5px" @click="deleteCollection(index)">删除</el-button>
@@ -45,6 +45,7 @@
     import ElInput from "../../node_modules/element-ui/packages/input/src/input.vue";
     import ElLink from "../../node_modules/element-ui/packages/link/src/main.vue";
     import ElIcon from "../../node_modules/element-ui/packages/icon/src/icon.vue";
+    import axios from "axios";
 
     export default {
         components: {
@@ -72,12 +73,22 @@
         },
         methods: {
             showCollection () {
-                const res= this.$axios({
-                    method:'get',
-                    url:'/showdir'
-                }).catch(err=>{console.log(err)})
+                var _this=this;
+                _this.userL = JSON.parse(sessionStorage.getItem("userL"));
+                _this.userid = _this.userL.id
+                //axios.post('/message/sys?user=" + id)
 
-                this.collection_list = res.data
+                axios.post("/getCollection?user=" + _this.userid)
+                    .then(function (response) {
+                        console.log(response.data)
+                        console.log(response.data.data)
+                        _this.collection_list = response.data.data
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+
+
                 return 0
             },
             toIdentify(){
@@ -89,6 +100,7 @@
                     })
             },
             deleteCollection(index){
+                var _this=this;
                 this.$confirm('是否确定删除该文件夹?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -96,12 +108,18 @@
                 }).then(() => {
                     //this.collection_list.splice(index, 1);
                     //从collection_list里删除该文件夹
-                    let postData = {
-                        'Did': this.collection_list[index].id
-                    }
-                    this.$axios.post('/dir/delete', postData).then((response) => {
-                        this.showCollection()
-                    })
+                    _this.did = _this.collection_list[index].key
+                    //axios.post('/message/sys?user=" + id)
+
+                    axios.post("/dir/delete?Did=" + _this.did)
+                        .then(function (response) {
+                            console.log('233')
+                            console.log(response.data)
+                            _this.showCollection()
+                        })
+                        .catch(function (error) {
+                            console.log(error)
+                        })
                     this.$message({
                         type: 'success',
                         message: '删除成功!'
@@ -113,37 +131,40 @@
                     });
                 });
             },
-            viewCollection(id){
+            viewCollection(did){
+
+                console.log(did)
                 this.$router.replace(
                     {path:'/papercollection',
                         query:{
                             //    id:this.$route.query.id,
-                            Did:id,
+                            id:did,
                         }
                     })
 
                 //跳转到对应收藏夹页
             },
-            async newCollection() {
-                await this.$prompt('请输入收藏夹名称', '提示', {
+            newCollection() {
+                var _this=this;
+                _this.userL = JSON.parse(sessionStorage.getItem("userL"));
+                _this.userid = _this.userL.id
+                this.$prompt('请输入收藏夹名称', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消'
-                }).then(async ({ value }) => {
+                }).then(({ value }) => {
                     if(!value){
                         alert('收藏夹名不能为空')
                     }
                     else{
-                        const res=await this.$axios({
-                            type:'params',
-                            method:'post',
-                            url:'/makedir',
-                            data:{
-                                Dname:value
-                            }
-                        }).catch(err=>{console.log(err)})
-                        console.log(res)
-
-                        this.showCollection()
+                        axios.post("/makedir?Dname=" + value + '&user=' + _this.userid)
+                            .then(function (response) {
+                                console.log('233')
+                                console.log(response.data)
+                                _this.showCollection()
+                            })
+                            .catch(function (error) {
+                                console.log(error)
+                            })
                         this.$message({
                             type: 'success',
                             message: '新建成功'
