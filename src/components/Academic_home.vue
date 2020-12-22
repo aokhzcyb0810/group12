@@ -718,6 +718,16 @@
                        num.push(res.data.data[i].pubCount)
                        obj.push(res.data.data[i])
                    }
+                   obj.sort(function(a,b){return a.year-b.year})
+           //        for(var i=0;i<obj.length;i++)
+             //      {
+               //        alert(obj[i].year)
+                //   }
+                for(var i=0;i<obj.length;i++)
+                {
+                                           year.push(res.data.data[i].year)
+                       num.push(res.data.data[i].pubCount)
+                }
            //        alert(that.zhe_option.series[0].data)
                    that.zhe_option.xAxis[0].data=year
                    that.zhe_option.series[0].data=num
