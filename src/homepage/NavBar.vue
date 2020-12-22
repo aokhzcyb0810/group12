@@ -194,7 +194,7 @@
                 }
             };
             return{
-                logo: require("../assets/navLogo2.png"),
+                logo: require("../assets/navLogo.png"),
                 user: !!sessionStorage.getItem('userL'),
                 activeIndex: '1',
                 loginFormVisible: false,
