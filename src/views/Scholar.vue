@@ -2,52 +2,87 @@
     <div>
     <NavBar></NavBar>
   <div class="navtop">
-  <el-input :placeholder="fangshi" v-model="input3" class="searchinput input-with-select">
-    <el-select v-model="select" slot="prepend" placeholder="请选择学科">
-      <el-option :label="xueke"  v-for="item in xuekeliebiao" :key=item.name @click.native="xuanzexueke(item.name)" style="height:40px;overflow:auto">{{item.name}}</el-option>
+  <el-input placeholder="请输入内容" v-model="input3" class="searchinput input-with-select">
+    <el-select v-model="select" slot="prepend" filterable placeholder="请选择学科">
+      <el-option :label="item" :value="item"  v-for="item in xuekeliebiao" :key="item" @click.native="xuanzexueke(item)" style="height:40px;overflow:auto">{{item}}</el-option>
     </el-select>
-    <i slot="suffix" class="el-input__icon el-icon-search search-button" style="cursor: pointer;" @click.capture="searchs"></i>
+    <i slot="suffix" class="el-input__icon el-icon-search search-button" style="cursor: pointer;" @click.capture="tosearch"></i>
   </el-input>
-  <div class="choose"><span class="lunwen" span @click="tolunwen">论文</span><span class="zhuanjia">专家</span><span style="margin-left:40px;cursor: pointer" class="sousuofangshi" @click="change">{{sousuo}}</span></div>
+  <div class="choose"><span>论文</span><span class="zhuanjia" @click="tozhuanjia" >专家</span></div>
 </div>
-<div class="zhushi">在所有学科为您找到 “” 相关的结果 (505)。</div>
-<div class=scholarbody>
-    <div class="neirong" v-for="item in currentlist" :key="item.id">
-<el-row :gutter="20">
-  <el-col :span="6">
-      <div style="margin-top:0%">
-          <img src="../assets/head.png" style="width:150px;height:150px;margin-left:20px;margin-top:0%">
+<div class="zhushi" v-show="isshowhead"><span v-show="ishowselect">在{{select}}中</span>为您找到 “{{sousuoneirong}}” 相关的结果 ({{tiaoshu}})。</div>
+<div class="searchbody"><el-row :gutter="20">
+  <el-col :span="4">
+  <div class="shijian">
+  <el-collapse accordion style="border-top:solid blue 2px;border-bottom:solid blue 1px;margin-top:10px">
+  <el-collapse-item>
+    <template slot="title">
+    <i class="el-icon-date"></i>选择日期
+    </template>
+    <el-dropdown trigger="click">
+      <div class=" shijianxuanze">
+        {{startdate}}<i class="el-icon-arrow-down el-icon--right" style="float:right;margin-top:0%"></i>
       </div>
-      </el-col>
-  <el-col :span="16">
-      <div>
-          <div class="xingming neirong1" >姓名</div>
-          <div class="lunwenshu neirong1"><i class="el-icon-document" style="margin-right:5px"></i>论文数：111</div>
-          <div class="yinyongshu neirong1"><i class="el-icon-document-copy" style="margin-right:5px"></i>被引用数：222</div>
-          <div class="jigou neirong1"><i class="el-icon-school" style="margin-right:5px"></i>机构</div>
-          <div class="lingyu neirong1">
-            <div v-for="item in lingyulist" :key="item.name" class="lingyunei">{{item.name}}</div>
-          </div>
+      <el-dropdown-menu slot="dropdown" size="mini" style="height:300px;overflow:auto">
+        <el-dropdown-item  @click.native="choose_startdate(item.date)" v-for="item in date" :key=item.date>{{item.date}}</el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
+    <span>—</span>
+    <el-dropdown trigger="click">
+      <div class=" shijianxuanze">
+        {{enddate}}<i class="el-icon-arrow-down el-icon--right" style="float:right;margin-top:0%"></i>
       </div>
-      </el-col>
-  <el-col :span="2">
-      <div class="neirong2">
-          <el-button type="info" icon="el-icon-star-off" circle></el-button>
-      </div>
-      </el-col>
-</el-row>
-<div style="border-top:solid 1px;height:20px"></div>
+      <el-dropdown-menu slot="dropdown" size="mini" style="height:300px;overflow:auto">
+        <el-dropdown-item @click.native="choose_enddate(item.date)" v-for="item in date" :key=item.date>{{item.date}}</el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
+    <i style="float:right;margin-top:7px;cursor: pointer"  class="el-icon-search" @click.capture="searchtime"></i>
+    <div style="clear:both;margin-top:5px">
+    <div class="kuaijieshijian" @click="jinshinian">近十年</div>
+    <div class="kuaijieshijian" @click="jinwunian">近五年</div>
+    <div class="kuaijieshijian" @click="jinsannian">近三年</div>
     </div>
-    <div v-if="show">已经没有内容了</div>
-    <el-pagination
-     style="margin-top:0px;margin-bottom:20px"
+  </el-collapse-item>
+  </el-collapse>
+  </div>
+    </el-col>
+  <el-col :span="18"><div class="jieguo">
+  <el-tabs v-model="activeName" v-show="isshowhead">
+    <el-tab-pane label="按时间" name="first"></el-tab-pane>
+    <el-tab-pane label="按引用" name="second"></el-tab-pane>
+  </el-tabs>
+  <div class="neirong" style="margin-bottom:35px;margin-top:0px" v-for="item in currentlist" :key="item.id">
+    <div class="neirong1">
+      <div class="neirong11">
+        <div class="biaoti neirong111"><span @click="topage" class="biaotilianjie">{{item.title}}</span></div>
+        <div class="zuozhe neirong111" style="line-height:30px;margin-top:5px"><span v-for="(it,index) in item.author" :key="index" >{{it}}</span></div>
+        <div class="jianjie neirong111" style="margin-top:5px"><span>{{item.abstract}}</span></div>
+      </div>
+      <div class="neirong12">
+        <el-button  icon="el-icon-star-off" circle></el-button>
+      </div>
+    </div>
+    <div class="neirong2">
+      <div class="xuanze"><span style="margin-right:20px">被引用：{{item.citation}}</span></div>
+      <div class="xuanze"><span style="margin-right:20px">引用</span></div>
+      <div class="xuanze"><span style="margin-right:20px">发表时间：{{item.year}}</span></div>
+      <div class="xuanze"><span style="margin-right:20px">关键字：{{item.keywords[0]}}</span></div>
+    </div>
+  </div>
+  <div v-if="show&&isshowhead">已经没有内容了</div>
+    </div>
+     <el-pagination
+     v-show="isshowhead"
+     style="margin-top:30px;margin-bottom:20px"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
       :page-size="5"
       layout="prev, pager, next, jumper"
       :total="100">
-      </el-pagination>
-</div>
+    </el-pagination>
+    </el-col>
+  <el-col :span="2"></el-col>
+</el-row></div>
 </div>
 </template>
 
@@ -57,24 +92,13 @@ import NavBar from "../homepage/NavBar";
     export default {
         name:'Search',
         components: {NavBar, NavBar2},
-        data() {
-    return {
-      input1: '',
-      input2: '',
-      input3: '',
-      select: '',
-      activeNames: ['1'],
-      currentPage: 1,
-      pagelist:[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}],
-      currentlist:[{id:1},{id:2},{id:3},{id:4},{id:5}],
-      show:false,
-      dangqianfangshi:1,
-      xuekeliebiao:[{name:"全部学科"},{name:'java'},{name:'jaa'},{name:'jva'},{name:'ava'},{name:'java'},{name:'java'},],
-      xueke:'',
-      lingyulist:[{name:"领域1"},{name:"领域2"},{name:"领域3"},{name:"领域4"},{name:"领域5"},]
-    }
-  },
-  computed:{
+        mounted(){
+          this.createsearch(),
+          this.createdate(),
+          this.ifshowhead(),
+          this.getfield()
+        },
+        computed:{
           fangshi(){
             if(this.dangqianfangshi==1)
             return '当前为关键字搜索'
@@ -86,9 +110,106 @@ import NavBar from "../homepage/NavBar";
             return '转为模糊搜索'
             else
             return '转为关键字搜索'
-          }
+          },
         },
-  methods: {
+    data() {
+    return {
+      input1: '',
+      input2: '',
+      input3: '',
+      select: '',
+      activeNames: ['1'],
+      currentPage: 1,
+      pagelist:[],
+      currentlist:[],
+      xuekeliebiao:[],
+      xueke:'',
+      date:[{date:222}],
+      show:false,
+      isActive:true,
+      startdate:'',
+      enddate:'',
+      dangqianfangshi:1,
+      sousuoneirong:'',
+      tiaoshu:'',
+      isshowhead:false,
+      isshowselect:false,
+      timelist:[],
+      shijianpaixu:[],
+    }
+  },
+  methods:{
+    searchtime(){
+      var list=[]
+      var j=0
+      for(var i=0;i<this.pagelist.length;i++){
+        if(this.pagelist[i].year>=this.startdate && this.pagelist[i].year<=this.enddate){
+          list[j++]=this.pagelist[i]
+        }
+      }
+      this.timelist=list
+      this.handleCurrentChange2(1)
+      console.log(list)
+    //  console.log(this.enddate)
+    },
+    ifshowselect(){
+      if(this.select!='')
+      this.ishowselect=true
+      else
+      this.ishowselect=false
+    },
+    async getfield(){
+       const res=await this.$axios({
+             //  type:'params',
+               method:'get',
+               url:'/field', 
+            }).catch(err=>{console.log(err)})
+            var list=[]
+            list[0]='全部学科'
+            for(var i=0;i<1000;i++){
+            list[i+1]=res.data.data[i]
+            }
+            this.xuekeliebiao=list
+            console.log(this.xuekeliebiao)
+    },
+    ifshowhead(){
+            if(this.$route.query.content.length==0  && (this.$route.query.select.length==0 || this.$route.query.select=='全部学科'))
+            this.isshowhead=false
+            else
+            this.isshowhead=true
+          },
+     tosearch(){
+      this.$router.replace(
+            {path:'/search',
+              query:{
+              content:this.input3,
+              select:this.select
+              }
+            })
+      this.searchs()
+    },
+    createsearch(){
+      console.log(this.$route.query.content)
+      this.input3=this.$route.query.content
+      this.select=this.$route.query.select
+     if(this.input3!='' && this.input3!=null || (this.select!='' && this.select!=null && this.select!='全部学科'))
+      this.searchs()
+    },
+    topage(){
+      console.log("还没写")
+    },
+    jinshinian(){
+      this.startdate=2010
+      this.enddate=2020
+    },
+    jinwunian(){
+      this.startdate=2015
+      this.enddate=2020
+    },
+    jinsannian(){
+      this.startdate=2017
+      this.enddate=2020
+    },
     change(){
       console.log("dsadsa")
        if(this.dangqianfangshi==1)
@@ -101,16 +222,85 @@ import NavBar from "../homepage/NavBar";
     xuanzexueke(xueke){
       this.xueke=xueke
     },
-    tolunwen(){
+    createdate(){
+        var i=2020
+      var j=0;
+      var list=[]
+      for(;i>1950;i--){
+        list.push({date:i})
+      }
+      this.date=list
+    },
+    choose_startdate(date){
+      this.startdate=date
+    },
+    choose_enddate(date){
+      this.enddate=date
+    },
+    tozhuanjia(){
       this.$router.replace(
-            {path:'/search',
+            {path:'/scholar',
               query:{
-         //     id:this.$route.query.id
+              content:this.input3,
+              select:this.select
               }
             })
     },
-    searchs(){
-      console.log("sss")
+    async searchs(){
+      var self=this
+      if(this.select==''|| this.select=='全部学科'){
+      const res=await this.$axios({
+             //  type:'params',
+               method:'get',
+               url:'/fuzzysearch?key='+self.input3, 
+               data:{
+                 keyword:self.input3
+                 }
+            }).catch(err=>{console.log(err)})
+            this.pagelist=res.data.data
+            for(var i=0;i<this.pagelist.length;i++){
+              this.pagelist[i].abstract=this.pagelist[i].abstract.substring(0,300)+'......'
+              if(this.pagelist[i].keywords[0].length>50){
+                this.pagelist[i].keywords[0]=this.pagelist[i].keywords[0].substring(0,73)+'...'
+              }
+              for(var j=0;j<this.pagelist[i].author.length-1;j++){
+                this.pagelist[i].author[j]=this.pagelist[i].author[j]+'，'
+              }
+            }
+            this.sousuoneirong=this.input3
+            this.tiaoshu=this.pagelist.length
+            this.handleCurrentChange(1)
+            console.log(this.pagelist[0])
+            this.ifshowhead()
+            this.ifshowselect()
+      }
+      else{
+        const res=await this.$axios({
+             //  type:'params',
+               method:'get',
+               url:'/search/keyword?field='+self.select+'&key='+self.input3, 
+               data:{
+                 filed:self.select,
+                 keyword:self.input3
+                 }
+            }).catch(err=>{console.log(err)})
+            this.pagelist=res.data.data
+            for(var i=0;i<this.pagelist.length;i++){
+              this.pagelist[i].abstract=this.pagelist[i].abstract.substring(0,300)+'......'
+              if(this.pagelist[i].keywords[0].length>50){
+                this.pagelist[i].keywords[0]=this.pagelist[i].keywords[0].substring(0,73)+'...'
+              }
+              for(var j=0;j<this.pagelist[i].author.length-1;j++){
+                this.pagelist[i].author[j]=this.pagelist[i].author[j]+'，'
+              }
+            }
+            this.sousuoneirong=this.input3
+            this.tiaoshu=this.pagelist.length
+            this.handleCurrentChange(1)
+            console.log(this.pagelist[0])
+            this.ifshowhead()
+            this.ifshowselect()
+      }
     },
     handleCurrentChange(newpage){
     //  int i;
@@ -125,6 +315,25 @@ import NavBar from "../homepage/NavBar";
       }
       this.currentlist=list;
       if(this.pagelist.length<=5*(newpage-1))
+      this.show=true
+      else
+      {
+        this.show=false;
+      }
+    },
+    handleCurrentChange2(newpage){
+    //  int i;
+    var list=[];
+    var flag=1;
+      for(var i=0;i<5;i++){
+        if(this.timelist.length>i+5*(newpage-1))
+        list[i]=this.timelist[i+5*(newpage-1)]
+        else{
+          break;
+        }
+      }
+      this.currentlist=list;
+      if(this.timelist.length<=5*(newpage-1))
       this.show=true
       else
       {
@@ -195,20 +404,22 @@ import NavBar from "../homepage/NavBar";
   }
   .zhuanjia{
     margin-left: 30px;
-  //  color: #99a9bf;
-  }
-  .lunwen{
-   // margin-left: 30px;
     color: #99a9bf;
   }
-  .lunwen:hover{
+  .zhuanjia:hover{
     color: white;
     cursor: pointer;
   }
   .zhushi{
-    margin-left: 20%;
+    margin-left: 327px;
     height: 30px;
     line-height: 30px;
+  }
+  .searchbody{
+    margin-left: 8%;
+    margin-right: 12%;
+  //  background-color: aquamarine;
+    height: 100%;
   }
   .bg-purple-dark {
     background: #99a9bf;
@@ -227,39 +438,92 @@ import NavBar from "../homepage/NavBar";
     padding: 10px 0;
     background-color: #f9fafc;
   }
-  .scholarbody{
-      margin-left: 20%;
-      margin-right: 25%;
-      margin-top: 30px;
+  .shijian{
+    height:100px;
+   // background-color:#99a9bf;
   }
-  .neirong{
-      height:200px;
-    //  background-color:#e5e9f2;
+  .shijianxuanze{
+    width: 60px;
+    height:15px;
+    line-height: 15px;
+    border-bottom: solid 1px;
+    text-align: center;
   }
-  .neirong1{
-      line-height: 30px;
-      height: 30px;
+  .biaoti{
+    font-size: 24px;
+    font-weight: 520;
+    min-height:30px;
+    word-wrap:break-word;
+    height:auto;
   }
-  .xingming{
-      font-size: 20px;
-      font-weight: 510;
+  .zuozhe{
+    font-size: 15px;
+    color:#207e04
+  }
+  .jianjie{
+    font-size: 15px;
+    word-break:break-all;
+    height:65px;
+    color:rgb(102, 89, 84);
+    // overflow:hidden;
+    // text-overflow:ellipsis;
+    // white-space: nowrap; 
+  }
+  .neirong12{
+    float:right;
+    margin-top:0%;
+    width:5%;
+  }
+  .neirong11{
+    float:left;
+    width:95%;
   }
   .neirong2{
-      float:right;
-    margin-top:0%;
+    clear:both;
+    border-top:dotted 1px;
+    border-bottom: solid 1px;
+    height:30px;
+  //  margin-top:20px;
+  }
+  .xuanze{
+    text-align: center;
+    line-height: 12px;
+    margin-right: 20px;
+    border-right: solid 1px;
+    float:left;
+    height:12px;
+    margin-top: 9px;
+    font-size: 9px;
+    font-weight: 600;
+    border-color: #06e690;
+    color: rgb(21, 135, 228);
+  }
+  .neirong1{
+    height:118px;
   }
   .sousuofangshi:hover{
     color: yellow;
   }
-  .lingyunei{
+  .kuaijieshijian{
+    margin-bottom: 0%;
+  //  background-color:gainsboro;
+   // border-radius: 5px;
+    border: solid 1px;
     float:left;
-    margin-right: 10px;
-   // border: solid 0.5px;
-    height:21px;
-    line-height: 21px;
+    margin-left: 5px;
+    width:48px;
     text-align: center;
-    padding-left: 5px;
-    padding-right: 5px;
-    background-color: rgb(235, 232, 232);
+    font-size: 10px;
+    height:15px;
+    line-height: 15px;
+    cursor: pointer;
+  //  color: #fff;
+  }
+  .biaotilianjie{
+    cursor: pointer;
+  }
+  .biaotilianjie:hover{
+    color: rgb(70, 70, 202);
+    text-decoration: underline;
   }
 </style>
