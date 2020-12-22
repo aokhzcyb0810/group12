@@ -16,6 +16,7 @@ import Search from '../views/Search'
 import Scholar from '../views/Scholar.vue'
 import Paper from "../views/Paper";
 import Paperread from "../views/Paperread";
+import Academic_home from "../components/Academic_home.vue"
 import cerMessage from "../views/message/cerMessage.vue";
 import recMessage from "../views/message/recMessage.vue";
 import sysMessage from "../views/message/sysMessage.vue";
@@ -69,6 +70,10 @@ const routes = [
                 component:PersonalInfo_academ
             }
         ]
+    },
+    {
+        path:'/academic_home/:id',
+        component:Academic_home
     },
     {
         path: '/top',
