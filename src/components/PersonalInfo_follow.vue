@@ -37,7 +37,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column
-                            prop="article_num"
+                            prop="paperCount"
                             label="文献数量"
                             width="120">
                     </el-table-column>
@@ -69,6 +69,7 @@
     import ElButton from "../../node_modules/element-ui/packages/button/src/button.vue";
     import ElInput from "../../node_modules/element-ui/packages/input/src/input.vue";
     import ElLink from "../../node_modules/element-ui/packages/link/src/main.vue";
+    import axios from "axios";
 
     export default {
         components: {
@@ -86,27 +87,11 @@
                 activeIndex: '1',
                 dialogFormVisible: false,//发送私信的dialog
                 formLabelWidth: '120px',
-                select:0,//选择查看哪一个消息
-                form: {
-                    id: '123456789',
-                    sid: '',
-                    name: this.$store.state.userid,
-                    email: '',
-                    info: ''
-                },
-                //message数组看实际情况加载内容，比如在“系统通知”则加载系统通知，切换其它目录时清空后重新加载
+
                 scholar_list:[{
-                    id:'',//关注id
-                    photo:'',//头像
-                    name:'学者1',//学者姓名
-                    article_num:1,//文献数量
-                    field:'医学'//研究领域
+
                 },{
-                    id:'',
-                    photo:'',
-                    name:'学者2',
-                    article_num:10,
-                    field:'计算机，数学，电子技术，软件，人工智能'
+
                 },{
                     id:'',
                     photo:'',
@@ -121,12 +106,22 @@
         },
         methods: {
             showfollowinfo () {
-                let postData = {
-                    'id': parseInt(this.$store.state.userID)
-                }
-                this.$axios.post('/follow/getList', postData).then((response) => {
-                    this.scholar_list = response.data
-                })
+                var _this=this;
+                _this.userL = JSON.parse(sessionStorage.getItem("userL"));
+                _this.userid = _this.userL.id
+                //axios.post('/message/sys?user=" + id)
+
+                axios.post("/follow/getList?id=" + _this.userid)
+                    .then(function (response) {
+                        console.log(response.data)
+                        _this.scholar_list = response.data
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+
+
+                return 0
             },
             toIdentify(){
                 this.$router.replace(
