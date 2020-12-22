@@ -2,15 +2,15 @@
     <div>
     <NavBar></NavBar>
   <div class="navtop">
-  <el-input :placeholder="fangshi" v-model="input3" class="searchinput input-with-select">
-    <el-select v-model="select" slot="prepend" placeholder="请选择学科">
-      <el-option :label="xueke"  v-for="item in xuekeliebiao" :key=item.name @click.native="xuanzexueke(item.name)" style="height:40px;overflow:auto">{{item.name}}</el-option>
+  <el-input placeholder="请输入内容" v-model="input3" class="searchinput input-with-select">
+    <el-select v-model="select" slot="prepend" filterable placeholder="请选择学科">
+      <el-option :label="item" :value="item"  v-for="item in xuekeliebiao" :key="item" @click.native="xuanzexueke(item)" style="height:40px;overflow:auto">{{item}}</el-option>
     </el-select>
-    <i slot="suffix" class="el-input__icon el-icon-search search-button" style="cursor: pointer;" @click.capture="searchs"></i>
+    <i slot="suffix" class="el-input__icon el-icon-search search-button" style="cursor: pointer;" @click.capture="tosearch"></i>
   </el-input>
-  <div class="choose"><span class="lunwen" span @click="tolunwen">论文</span><span class="zhuanjia">专家</span><span style="margin-left:40px;cursor: pointer" class="sousuofangshi" @click="change">{{sousuo}}</span></div>
+  <div class="choose"><span class="lunwen" span @click="tolunwen">论文</span><span class="zhuanjia">专家</span></div>
 </div>
-<div class="zhushi">在所有学科为您找到 “” 相关的结果 (505)。</div>
+<div class="zhushi" v-show="isshowhead"><span v-show="ishowselect">在{{select}}中</span>为您找到 “{{sousuoneirong}}” 相关的结果 ({{tiaoshu}})。</div>
 <div class=scholarbody>
     <div class="neirong" v-for="item in currentlist" :key="item.id">
 <el-row :gutter="20">
@@ -21,12 +21,12 @@
       </el-col>
   <el-col :span="16">
       <div>
-          <div class="xingming neirong1" >姓名</div>
-          <div class="lunwenshu neirong1"><i class="el-icon-document" style="margin-right:5px"></i>论文数：111</div>
-          <div class="yinyongshu neirong1"><i class="el-icon-document-copy" style="margin-right:5px"></i>被引用数：222</div>
-          <div class="jigou neirong1"><i class="el-icon-school" style="margin-right:5px"></i>机构</div>
+          <div class="xingming neirong1" >{{item.name}}</div>
+          <div class="lunwenshu neirong1"><i class="el-icon-document" style="margin-right:5px"></i>论文数：{{item.paperCount}}</div>
+          <div class="yinyongshu neirong1"><i class="el-icon-document-copy" style="margin-right:5px"></i>被引用数：{{item.citation}}</div>
+          <div class="jigou neirong1"><i class="el-icon-school" style="margin-right:5px"></i>{{item.organization}}</div>
           <div class="lingyu neirong1">
-            <div v-for="item in lingyulist" :key="item.name" class="lingyunei">{{item.name}}</div>
+            <div v-for="it in item.field.slice(0,6)" :key="it" class="lingyunei">{{it}}</div>
           </div>
       </div>
       </el-col>
@@ -40,7 +40,8 @@
     </div>
     <div v-if="show">已经没有内容了</div>
     <el-pagination
-     style="margin-top:0px;margin-bottom:20px"
+    v-show="isshowhead"
+     style="margin-top:0px;margin-bottom:20px;clear:both"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
       :page-size="5"
@@ -65,14 +66,22 @@ import NavBar from "../homepage/NavBar";
       select: '',
       activeNames: ['1'],
       currentPage: 1,
-      pagelist:[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}],
-      currentlist:[{id:1},{id:2},{id:3},{id:4},{id:5}],
+      scholarlist:[],
+      currentlist:[],
       show:false,
       dangqianfangshi:1,
-      xuekeliebiao:[{name:"全部学科"},{name:'java'},{name:'jaa'},{name:'jva'},{name:'ava'},{name:'java'},{name:'java'},],
-      xueke:'',
-      lingyulist:[{name:"领域1"},{name:"领域2"},{name:"领域3"},{name:"领域4"},{name:"领域5"},]
+      xuekeliebiao:[],
+      xueke:'1',
+      lingyulist:[],
+      sousuoneirong:'',
+      tiaoshu:'',
+      isshowhead:false,
+      ishowselect:false,
     }
+  },
+  created(){
+    this.createsearch(),
+    this.getfield()
   },
   computed:{
           fangshi(){
@@ -89,6 +98,49 @@ import NavBar from "../homepage/NavBar";
           }
         },
   methods: {
+    ifshowselect(){
+      if(this.select!='')
+      this.ishowselect=true
+      else
+      this.ishowselect=false
+    },
+   async getfield(){
+       const res=await this.$axios({
+             //  type:'params',
+               method:'get',
+               url:'/field', 
+            }).catch(err=>{console.log(err)})
+            var list=[]
+            list[0]='全部学科'
+            for(var i=0;i<1000;i++){
+            list[i+1]=res.data.data[i]
+            }
+            this.xuekeliebiao=list
+            console.log(this.xuekeliebiao)
+    },
+    ifshowhead(){
+          if(this.$route.query.content.length==0  && (this.$route.query.select.length==0 || this.$route.query.select=='全部学科'))
+            this.isshowhead=false
+            else
+            this.isshowhead=true
+          },
+    tosearch(){
+      this.$router.replace(
+            {path:'/scholar',
+              query:{
+              content:this.input3,
+              select:this.select
+              }
+            })
+      this.searchs()
+    },
+    createsearch(){
+      console.log(this.$route.query.content)
+      this.input3=this.$route.query.content
+      this.select=this.$route.query.select
+      if(this.input3!='' && this.input3!=null || (this.select!='' && this.select!=null && this.select!='全部学科'))
+      this.searchs()
+    },
     change(){
       console.log("dsadsa")
        if(this.dangqianfangshi==1)
@@ -105,26 +157,55 @@ import NavBar from "../homepage/NavBar";
       this.$router.replace(
             {path:'/search',
               query:{
-         //     id:this.$route.query.id
+               content:this.input3,
+               select:this.select
               }
             })
     },
-    searchs(){
-      console.log("sss")
+    async searchs(){
+      var self=this
+      if(this.select==''|| this.select=='全部学科'){
+      const res=await this.$axios({
+             //  type:'params',
+               method:'get',
+               url:'/search/researcher?key='+self.input3, 
+            }).catch(err=>{console.log(err)})
+            this.scholarlist=res.data.data
+            console.log(this.scholarlist)
+            this.handleCurrentChange(1)
+            this.sousuoneirong=this.input3
+            this.tiaoshu=this.scholarlist.length
+            this.ifshowhead()
+            this.ifshowselect()
+      }
+      else{
+        const res=await this.$axios({
+             //  type:'params',
+               method:'get',
+               url:'/search/researcher/field?field='+self.select, 
+            }).catch(err=>{console.log(err)})
+            this.scholarlist=res.data.data
+            console.log(this.scholarlist)
+            this.handleCurrentChange(1)
+            this.sousuoneirong=this.input3
+            this.tiaoshu=this.scholarlist.length
+            this.ifshowhead()
+            this.ifshowselect()
+      }
     },
     handleCurrentChange(newpage){
     //  int i;
     var list=[];
     var flag=1;
       for(var i=0;i<5;i++){
-        if(this.pagelist.length>i+5*(newpage-1))
-        list[i]=this.pagelist[i+5*(newpage-1)]
+        if(this.scholarlist.length>i+5*(newpage-1))
+        list[i]=this.scholarlist[i+5*(newpage-1)]
         else{
           break;
         }
       }
       this.currentlist=list;
-      if(this.pagelist.length<=5*(newpage-1))
+      if(this.scholarlist.length<=5*(newpage-1))
       this.show=true
       else
       {
@@ -229,7 +310,7 @@ import NavBar from "../homepage/NavBar";
   }
   .scholarbody{
       margin-left: 20%;
-      margin-right: 25%;
+      margin-right: 23%;
       margin-top: 30px;
   }
   .neirong{
@@ -237,8 +318,9 @@ import NavBar from "../homepage/NavBar";
     //  background-color:#e5e9f2;
   }
   .neirong1{
-      line-height: 30px;
-      height: 30px;
+    //  line-height: 30px;
+      min-height: 30px;
+      height:auto;
   }
   .xingming{
       font-size: 20px;
@@ -255,11 +337,14 @@ import NavBar from "../homepage/NavBar";
     float:left;
     margin-right: 10px;
    // border: solid 0.5px;
-    height:21px;
-    line-height: 21px;
+    min-height:21px;
+    height:auto;
+   // line-height: 21px;
     text-align: center;
     padding-left: 5px;
     padding-right: 5px;
     background-color: rgb(235, 232, 232);
+    margin-bottom: 5px;
+    margin-top: 5px;
   }
 </style>
