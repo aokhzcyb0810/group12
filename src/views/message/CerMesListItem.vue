@@ -2,25 +2,21 @@
   <div>
     <el-card class="box-card1">
       <div slot="header" class="clearfix">
-        <span style="font-weight: bold">from:  {{ mesItem.name }}</span>
+        <span style="font-weight: bold">from:  {{ mesItem.name }} </span>
         <img
           class="messreadimg"
-          src="@/assets/消息已读.svg"
+          src="@/assets/处理.svg"
           v-show="this.isRead"
         />
         <img
           class="messreadimg"
-          src="@/assets/消息未读.svg"
+          src="@/assets/未处理.svg"
           v-show="!this.isRead"
         />
-        <img class="messmallimg" src="@/assets/删除.svg" @click="deleteMes" />
       </div>
-      <div style="margin-bottom: 100px" @click="itemClick" display="false">
+      <div style="margin-bottom: 100px" @click="itemClick" display=false>
         <div class="mes-text">
-          {{ mesItem.text }}
-        </div>
-        <div class="mes-time">
-          {{ mesItem.time }}
+          邮箱：{{ mesItem.feedback }}
         </div>
       </div>
     </el-card>
@@ -52,7 +48,7 @@
 import axios from "axios";
 
 export default {
-  name: "MesListItem",
+  name: "CerMesListItem",
   data() {
     return {
       isRead: false,
@@ -60,7 +56,7 @@ export default {
       send_message: {
         to: "",
         text: "",
-      },
+      }
     };
   },
   inject: ["reload"],
@@ -83,22 +79,22 @@ export default {
   },
   methods: {
     submitSend() {
-      console.log(this.send_message);
-      let data = {
-        user: this.userID,
-        from: this.mesItem.Uid,
-        text: this.send_message.text,
-      };
-      console.log(data);
-      axios
-        .post("/message/response", data)
-        .then((res) => {
-          console.log(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      this.dialogFormVisible2 = false;
+        console.log(this.send_message);
+        let data = {
+           user:this.userID,
+           from:this.mesItem.Uid,
+           text:this.send_message.text
+        };
+        console.log(data)
+        axios
+          .post("/message/response", data)
+          .then((res) => {
+            console.log(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+          this.dialogFormVisible2=false;
     },
     setRead() {
       axios
@@ -131,11 +127,59 @@ export default {
       }
       if (this.currentIndex == 2) {
         // 回复私信
-        this.dialogFormVisible2 = true;
+        this.dialogFormVisible2=true
       }
       setTimeout(() => {
         this.reload();
       }, 300);
+
+      if (this.currentIndex == 4) {
+        const h = this.$createElement;
+        this.$msgbox({
+          title: "提示",
+          message: h("p", null, [h("span", null, "是否要同意申请?")]),
+          showCancelButton: true,
+          confirmButtonText: "同意",
+          cancelButtonText: "拒绝",
+          beforeClose: (action, instance, done) => {
+            if (action === "confirm") {
+              instance.confirmButtonLoading = true;
+              instance.confirmButtonText = "执行中...";
+              setTimeout(() => {
+                // 同意申请
+                axios
+                  .post("/apply/accept?id=" + this.mesItem.Uid + "&user=")
+                  .then((res) => {
+                    console.log(res);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+                this.reload();
+                done();
+                setTimeout(() => {
+                  instance.confirmButtonLoading = false;
+                  this.reload();
+                }, 300);
+              }, 1000);
+            } else {
+              done();
+            }
+          },
+        })
+          .then((action) => {
+            this.$message({
+              type: "info",
+              message: "已同意申请",
+            });
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已拒绝申请",
+            });
+          });
+      }
     },
 
     deleteMes() {
@@ -188,7 +232,7 @@ export default {
         },
       })
         .then((action) => {
-          this.reload();
+          this.reload()
           this.$message({
             type: "info",
             message: "已成功删除",
@@ -203,8 +247,6 @@ export default {
     },
   },
   created: function () {
-    if (this.mesItem.read == 0) this.isRead = false;
-    else this.isRead = true;
   },
 };
 </script>
@@ -222,19 +264,12 @@ export default {
 }
 .messreadimg {
   position: absolute;
-  right: 150px;
-  width: 35px;
-  padding-top: 0px;
-  padding-right: 0px;
-}
-
-.messmallimg {
-  position: absolute;
   right: 100px;
   width: 35px;
   padding-top: 0px;
   padding-right: 0px;
 }
+
 
 .mes-text {
   font-size: 16px;

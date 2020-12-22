@@ -14,7 +14,7 @@
       <el-main style="width: 80%">
         <h2 class="h2color">学者认证</h2>
         <!-- 获取的消息列表 -->
-        <mes-list :mess="NowMess" :userID="userID" :currentIndex="4"></mes-list>
+        <cer-mes-list :mess="NowMess" :userID="userID" :currentIndex="4"></cer-mes-list>
         <div style="margin-left: 41%; margin-top: 8%" v-show="this.isNULL">
           <div><img src="../../assets/空.png" style=" width: 110px"></div>
 
@@ -27,13 +27,13 @@
 <script>
 import NavBar from "@/homepage/NavBar";
 import MesSideBar from "./MesSideBar";
-import MesList from "./MesList";
+import CerMesList from "./CerMesList";
 import axios from 'axios';
 import SendButton from './SendButton';
 
 export default {
   name: "Message",
-  components: { NavBar, MesSideBar, MesList,SendButton },
+  components: { NavBar, MesSideBar, CerMesList,SendButton },
   data() {
     return {
       headUrl: require("@/assets/head.jpg"),
@@ -56,8 +56,8 @@ export default {
         //  获取消息
         .post("/apply/waiting/show")
         .then((res) => {
-          console.log(res.data.data);
           this.NowMess = res.data.data;
+          console.log(this.NowMess)
           if (this.NowMess == "") {
             this.isNULL = true;
           } else {
