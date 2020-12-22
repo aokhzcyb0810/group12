@@ -64,15 +64,23 @@ export default {
       console.log(this.userL)
       this.userID = this.userL.id;
       console.log(this.send_message)
+      let data = {
+        user: this.userID,
+        to: this.send_message.to,
+        text: this.send_message.text
+      };
+      console.log(data)
       axios
-        .post("/message/send?To="+encodeURI(encodeURI(this.send_message.to))+"&text="+encodeURI(encodeURI(this.send_message.text))+"&Uid="+encodeURI(encodeURI(this.userID)))
+        .post("/message/send/byname",data)
         .then((res) => {
           console.log(res.data);
         })
         .catch((err) => {
           console.log(err);
         });
+
       this.dialogFormVisible2 = false;
+      this.$message('发送成功');
     },
   },
 };
