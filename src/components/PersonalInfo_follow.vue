@@ -113,6 +113,7 @@
 
                 axios.post("/follow/getList?id=" + _this.userid)
                     .then(function (response) {
+                        console.log('233')
                         console.log(response.data)
                         _this.scholar_list = response.data
                     })
