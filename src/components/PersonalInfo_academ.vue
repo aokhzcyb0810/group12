@@ -323,7 +323,11 @@
             }
         },
         created(){
-            this.showUserinfo();
+            this.get_user_info();
+            this.get_acad_info();
+
+            this.get_acad_docs();
+            this.get_graph_info();
             this.showSysMessagelist();
         },
 
@@ -479,21 +483,69 @@
         ],
       }]
     };
+    {//这一段从接口中获取本学者的信息
+
+    }
     myChart.setOption(option);
 
             },
 
-            showUserinfo () {
-                const res= this.$axios({
-                    method:'get',
-                    url:'/user/getUser'
-                }).catch(err=>{console.log(err)})
+            get_user_info () {
+ {
+                var _this=this;
+                _this.userL = JSON.parse(sessionStorage.getItem("userL"));
+                _this.userid = _this.userL.id
+                //axios.post('/message/sys?user=" + id)
 
-                this.form.name=res.data.name
-                this.form.email=res.data.email
-                this.form.info=res.data.info
+                axios.post("/user/getUser?id=" + _this.userid)
+                    .then(function (response) {
+                        console.log(response.data)
+                        _this.form = response.data
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+
+
                 return 0
+            }
             },
+             get_acad_info()
+            { 
+
+            /*    let postdata=
+                {
+                    'id':this.$store.state.id//路由器的传值
+                }
+                */
+                var that=this
+                this.$axios.post('/researcher/info/'+this.form.id).then (function(resopnse)
+                {
+                    this.researcher.id=res.data.id
+                    this.researcher.name=res.data.name
+                    this.researcher.email=res.data.email
+                    this.researcher.organization=res.data.organization
+                    this.researcher.papercount=res.data.papercount
+                    this.researcher.index=res.data.index
+                    this.researcher.info=res.data.info
+                }).catch(function (error)
+                {
+                    console.log(error)
+                })
+
+            },
+             get_acad_docs()//会返回所有这个名字的文献
+           {
+                var that=this
+                this.$axios.post('researcher/paper?AuthorName='+that.researcher.name).then (function(resopnse)
+                {
+                    that.doc_table=res.data
+                   
+                }).catch(function (error)
+                {
+                    console.log(error)
+                })
+           },
             showSysMessagelist() {
                 const res= this.$axios({
                     method:'get',
@@ -613,7 +665,7 @@
                     message:"修改成功",
                     type:"success"
                 })
-                this.showUserinfo()
+                this.get_user_info()
             }
 
 

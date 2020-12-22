@@ -416,7 +416,7 @@
         data:[
           {
             // 分类
-            category: '学校',
+            category: '学者',
             // 名称
             name: "西安电子科技大学",
             // 值，越大则节点越大
@@ -440,9 +440,9 @@
         ],
         // 分类
         categories:[
-      {name: '学者'}
-    //  {name: '属性'},
-    //  {name: '其他'}
+      {name: '学者'},
+      {name: '属性'},
+      {name: '其他'}
     ],
         force: {
             edgeLength: 200,
@@ -712,6 +712,7 @@
                    var year =[]
                    var num =[]
                    var obj=[]
+
                    for(var i=0;i<res.data.data.length;i++)
                    {
                        year.push(res.data.data[i].year)
@@ -719,10 +720,14 @@
                        obj.push(res.data.data[i])
                    }
                    obj.sort(function(a,b){return a.year-b.year})
-           //        for(var i=0;i<obj.length;i++)
-             //      {
-               //        alert(obj[i].year)
-                //   }
+                 //                         alert(obj.length)
+              /*
+              for(var i=0;i<obj.length;i++)
+                   {
+
+                     alert(obj[i].year)
+                   }
+                   */
                 for(var i=0;i<obj.length;i++)
                 {
                                            year.push(res.data.data[i].year)
@@ -731,7 +736,7 @@
            //        alert(that.zhe_option.series[0].data)
                    that.zhe_option.xAxis[0].data=year
                    that.zhe_option.series[0].data=num
-    that.myEcharts();
+  //  that.myEcharts();
       //                             alert(1+that.zhe_option.xAxis[0].data)
                 }).catch(function (error)
                 {
@@ -765,19 +770,27 @@
                
                 axios.post('/researcher/relation/'+that.$route.params.id).then(function(res)
                 {
+                    
+                //    alert(that.f_option.series[0].data[0].name)
                     var dataa=[]
                     var linkk=[]
-                    for(var i=0;i<res.data.data.edges.length;i++)
+                    for(var i=0;i<res.data.data.nodes.length;i++)
                     {
-                        dataa.push({'category':'学者','name':res.data.data.edges[i].target,'value':1})
+                 //       if(i==0)
+                   //     {
+                     //        dataa.push({'category':'学者','name':res.data.data.edges[i].source,'value':1})
+                       // }
+                        dataa.push({'category':'学者','name':res.data.data.nodes[i].name,'value':1})
                     }
-                    that.f_option.data=dataa
+                    alert(dataa[0].value)
+                    that.f_option.series[0].data=dataa
 
                     for(var i=0;i<res.data.data.edges.length;i++)
                     {
                        linkk.push({'source':res.data.data.edges[i].source,'target':res.data.data.edges[i].target})
                     }
-                    that.f_option.links=linkk
+                //    alert(linkk.length)
+                    that.f_option.series[0].links=linkk
              /*       for(var i=0;i<linkk.length;i++)
                     {
                         alert(i+linkk[i].source+linkk[i].target)
