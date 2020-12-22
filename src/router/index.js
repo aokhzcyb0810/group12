@@ -72,7 +72,7 @@ const routes = [
         ]
     },
     {
-        path:'/academic_home',
+        path:'/academic_home/:id',
         component:Academic_home
     },
     {
