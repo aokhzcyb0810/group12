@@ -6,6 +6,7 @@
       </div>
     </el-header>
     <el-container>
+      <send-button></send-button>
       <el-aside width="15%">
         <!-- <mes-side-bar @unReadMes="handleUnReadMes" @allMes="handleAllMes"></mes-side-bar> -->
         <mes-side-bar currentindex="4"></mes-side-bar>
@@ -13,7 +14,7 @@
       <el-main style="width: 80%">
         <h2 class="h2color">学者认证</h2>
         <!-- 获取的消息列表 -->
-        <mes-list :mess="NowMess" :userID="userID"></mes-list>
+        <mes-list :mess="NowMess" :userID="userID" :currentIndex="4"></mes-list>
         <div style="margin-left: 41%; margin-top: 8%" v-show="this.isNULL">
           <div><img src="../../assets/空.png" style=" width: 110px"></div>
 
@@ -28,10 +29,11 @@ import NavBar from "@/homepage/NavBar";
 import MesSideBar from "./MesSideBar";
 import MesList from "./MesList";
 import axios from 'axios';
+import SendButton from './SendButton';
 
 export default {
   name: "Message",
-  components: { NavBar, MesSideBar, MesList },
+  components: { NavBar, MesSideBar, MesList,SendButton },
   data() {
     return {
       headUrl: require("@/assets/head.jpg"),

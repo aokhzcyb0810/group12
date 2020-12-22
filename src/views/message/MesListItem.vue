@@ -1,18 +1,29 @@
 <template>
-  <div class="mes">
-    <div class="mes-item">
-      <img class="mesimg" src="@/assets/mes.svg" @click="itemClick" />
-      <div style="margin-left: 1%; margin-top: 1px; font-size: 14px">
-        {{ mesItem.name }}
+  <div>
+    <el-card class="box-card1">
+      <div slot="header" class="clearfix">
+        <span style="font-weight: bold">{{ mesItem.name }}</span>
+        <img
+          class="messreadimg"
+          src="@/assets/消息已读.svg"
+          v-show="this.isRead"
+        />
+        <img
+          class="messreadimg"
+          src="@/assets/消息未读.svg"
+          v-show="!this.isRead"
+        />
+        <img class="messmallimg" src="@/assets/删除.svg" @click="deleteMes" />
       </div>
-      <div class="mes-info" @click="itemClick">
-        <p>{{ mesItem.text }}</p>
+      <div style="margin-bottom: 100px" @click="itemClick">
+        <div class="mes-text">
+          {{ mesItem.text }}
+        </div>
+        <div class="mes-time">
+          {{ mesItem.time }}
+        </div>
       </div>
-      <div class="mes-time" @click="itemClick">
-        <p>{{ mesItem.time }}</p>
-      </div>
-      <img class="messmallimg" src="@/assets/删除.svg" @click="deleteMes" />
-    </div>
+    </el-card>
   </div>
 </template>
 
@@ -22,10 +33,16 @@ import axios from "axios";
 export default {
   name: "MesListItem",
   data() {
-    return {};
+    return {
+      isRead: false,
+    };
   },
-  inject: ["reload"],
+  inject: ['reload'],
   props: {
+    currentIndex: {
+      type: Number,
+      default: 1,
+    },
     mesItem: {
       type: Object,
       default() {
@@ -40,15 +57,10 @@ export default {
   },
   methods: {
     setRead() {
-      let data = {
-        NewsID: this.mesItem.newsID,
-        UserID: this.userID,
-      };
-      console.log(data);
       axios
-        .post("/news/readNews", data)
+        .post("/message/read?Mid=" + this.mesItem.Mid)
         .then((res) => {
-          console.log(res);
+          console.log(res.data);
         })
         .catch((err) => {
           console.log(err);
@@ -56,8 +68,21 @@ export default {
     },
     itemClick() {
       // 将是否已读设置为已读
+      // this.sendMessage();
       this.setRead();
-      if (this.mesItem.type == 1) {
+      this.$alert(this.mesItem.text, "消息内容", {
+        confirmButtonText: "确定",
+        callback: (action) => {
+          this.$message({
+            type: "info",
+            message: `action: ${action}`,
+          });
+        },
+      });
+      this.reload()
+      console.log(this.mesItem)
+
+      if (this.currentIndex == 4) {
         const h = this.$createElement;
         this.$msgbox({
           title: "提示",
@@ -70,10 +95,9 @@ export default {
               instance.confirmButtonLoading = true;
               instance.confirmButtonText = "执行中...";
               setTimeout(() => {
-                // 同意申请后的将申请者加入团队的接口操作
-                console.log(this.mesItem.content);
+                // 同意申请
                 axios
-                  .post("/news/admitApply", this.mesItem.content)
+                  .post("/apply/accept?id="+this.mesItem)
                   .then((res) => {
                     console.log(res);
                   })
@@ -107,13 +131,9 @@ export default {
       }
     },
     setRead() {
-      let data = {
-        NewsID: this.mesItem.newsID,
-        UserID: this.userID,
-      };
-      console.log(data);
+      console.log(this.mesItem);
       axios
-        .post("/news/readNews", data)
+        .post("/message/read?Mid=" + this.mesItem.Mid)
         .then((res) => {
           console.log(res);
         })
@@ -136,18 +156,30 @@ export default {
             instance.confirmButtonLoading = true;
             instance.confirmButtonText = "执行中...";
             setTimeout(() => {
-              let data = {
-                NewsID: this.mesItem.newsID,
-                UserID: this.userID,
-              };
-              axios
-                .post("/news/deleteNews", data)
-                .then((res) => {
-                  console.log(res);
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
+              console.log(this.mesItem);
+              console.log(this.currentIndex);
+              if (this.currentIndex == 2 || this.currentIndex == 1) {
+                axios
+                  // "/message/read?Mid=" + this.mesItem.Mid
+                  .post("/message/delete1?Mid=" + this.mesItem.Mid)
+                  .then((res) => {
+                    console.log(res);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              }
+              if (this.currentIndex == 3) {
+                axios
+                  .post("/message/delete2?Mid=" + this.mesItem.Mid)
+                  .then((res) => {
+                    console.log(res);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              }
+              this.reload();
               done();
               setTimeout(() => {
                 instance.confirmButtonLoading = false;
@@ -173,58 +205,57 @@ export default {
         });
     },
   },
+  created: function () {
+    if (this.mesItem.read == 0) this.isRead = false;
+    else this.isRead = true;
+  },
 };
 </script>
 
 <style scoped>
-.mes {
-  position: relative;
-  padding: 10px;
-}
-.mes-item {
-  display: flex;
-  position: relative;
-  border-radius: 20px;
-  padding: 5px;
-  background-color: #f4f7f8;
+.box-card1 {
+  width: 95%;
+  /* margin-left: 5%; */
+  margin-top: 5px;
 }
 
 .mesimg {
   width: 50px;
   padding: 10px;
 }
+.messreadimg {
+  position: absolute;
+  right: 150px;
+  width: 35px;
+  padding-top: 0px;
+  padding-right: 0px;
+}
 
 .messmallimg {
   position: absolute;
-  right: 30px;
-  width: 30px;
-  padding-top: 20px;
-  padding-right: 10px;
+  right: 100px;
+  width: 35px;
+  padding-top: 0px;
+  padding-right: 0px;
 }
 
-.mes-info {
+.mes-text {
   font-size: 16px;
-  position: relative;
-  padding-left: 0px;
+  position: absolute;
+  left: 150px;
+  padding-left: 100px;
   padding-top: 10px;
   padding-top: 10px;
   padding-right: 20px;
-  overflow: hidden;
   text-align: left;
 }
 
-.mes-info p {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  margin-bottom: 3px;
-}
 .mes-time {
-  font-size: 12px;
+  font-size: 16px;
   position: absolute;
-  right: 70px;
+  right: 100px;
   padding-left: 0;
-  padding-top: 10px;
+  padding-top: 20px;
   padding-bottom: 10px;
   padding-right: 20px;
   overflow: hidden;
