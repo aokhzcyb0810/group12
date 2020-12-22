@@ -16,21 +16,12 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="16">
-                            <el-form-item>
-                                <el-input v-model="searchForm.text"><i slot="suffix" class="el-input__icon el-icon-search search-button"></i></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="4" style="text-align: center">
-                            <div v-if="searchForm.radio === '1'">
-                                <el-form-item>
-                                    <el-button type="primary" @click="formVisible = true">设置搜索条件</el-button>
-                                </el-form-item>
-                            </div>
-                            <div v-else>
-                                <el-form-item>
-                                    <el-button type="primary" disabled>设置搜索条件</el-button>
-                                </el-form-item>
-                            </div>
+                            <el-input placeholder="请输入搜索内容" v-model="searchForm.text" class="searchinput input-with-select">
+                                <el-select v-model="searchForm.select" slot="prepend" placeholder="请选择学科" style="width: 120px;">
+                                    <el-option :label="item.name"  v-for="item in xuekeliebiao" :key=item.name style="height:40px;overflow:auto">{{item.name}}</el-option>
+                                </el-select>
+                                <i slot="suffix" class="el-input__icon el-icon-search search-button" style="cursor: pointer;"></i>
+                            </el-input>
                         </el-col>
                     </el-row>
                 </el-form>
@@ -75,35 +66,6 @@
                 </el-col>
             </el-row>
         </div>
-        <el-dialog :visible.sync="formVisible" width="35%" center>
-            <div class="login-body">
-                <el-form :model="searchForm" label-position="right">
-                    <el-form-item label="学者名" style="margin-bottom: 15px" prop="name">
-                        <el-col :span="24">
-                            <el-input placeholder="NAME" v-model="searchForm.name" autocomplete="off" clearable></el-input>
-                        </el-col>
-                    </el-form-item>
-                    <el-form-item label="关键词" style="margin-bottom: 15px" prop="key">
-                        <el-col :span="24">
-                            <el-input placeholder="KEY" v-model="searchForm.key" autocomplete="off" clearable></el-input>
-                        </el-col>
-                    </el-form-item>
-                    <el-form-item label="发表时间" style="margin-bottom: 30px" prop="time">
-                        <el-col :span="24">
-                            <el-date-picker
-                                    v-model="searchForm.time"
-                                    type="date"
-                                    placeholder="请选择日期"
-                                    style="width: 100%">
-                            </el-date-picker>
-                        </el-col>
-                    </el-form-item>
-                </el-form>
-                <div class="button-row">
-                    <el-button type="primary" style="width: 100%" @click="formVisible = false">完 成</el-button>
-                </div>
-            </div>
-        </el-dialog>
     </div>
 </template>
 
@@ -116,12 +78,12 @@
         components: {NavBar, NavBar2},
         data(){
             return{
+                xuekeliebiao:[{name:"全部学科"},{name:'java'},{name:'jaa'},{name:'jva'},{name:'ava'},{name:'java'},{name:'java'},],
+                xueke:'',
                 searchForm:{
-                    radio: '1',
-                    text: '',
-                    name: '',
-                    key: '',
-                    time: ''
+                    radio: '1', //1代表搜索文章，2代表搜索学者
+                    text: '',  //搜索框内的内容
+                    select: '',  //所选择的领域
                 },
                 formVisible: false,
                 hotArticle: [
@@ -197,7 +159,15 @@
         created() {
             this.getHotArticle();
             this.getHotSpot();
-        }
+        },
+        computed:{
+            fangshi(){
+                if(this.dangqianfangshi==1)
+                    return '当前为关键字搜索'
+                else
+                    return '当前为模糊搜索'
+            }
+        },
     }
 </script>
 

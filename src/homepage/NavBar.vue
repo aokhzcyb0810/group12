@@ -12,7 +12,7 @@
                     active-text-color="#ffd04b"
                     style="border: 0">
                 <div class="logo-div">
-                    logo
+                    <img :src="logo" width="70px">
                 </div>
                 <div class="menu">
                     <el-menu-item index="1" @click="loginFormVisible = true">登录/注册</el-menu-item>
@@ -194,6 +194,7 @@
                 }
             };
             return{
+                logo: require("../assets/navLogo2.png"),
                 user: !!sessionStorage.getItem('userL'),
                 activeIndex: '1',
                 loginFormVisible: false,
@@ -462,6 +463,8 @@
     .logo-div{
         float: left;
         margin-left: 5%;
+        text-align: center;
+        margin-top: 5px;
     }
     .menu{
         float: right;

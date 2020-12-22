@@ -146,8 +146,8 @@
          </div>
          <div style="width: 100%;float: left; text-align: center;margin-bottom: 20px; margin-top: 20px;">
            <el-button plain icon="el-icon-share" @click="toPage">学者主页</el-button>
-           <el-button lain icon="el-icon-star" @click="follow" v-show="canFollow">关注</el-button>
-           <el-button lain icon="el-icon-star" @click="cancelFollow" v-show="canCancelFollow">取消关注</el-button>
+           <el-button plain icon="el-icon-star-off" @click="follow" v-show="canFollow">关注</el-button>
+           <el-button plain icon="el-icon-star-off" @click="cancelFollow" v-show="canCancelFollow">取消关注</el-button>
          </div>
        </div>
      </el-card>
@@ -438,9 +438,17 @@ export default {
               .then(function (response) {
                 if (response.data.status === 200) {
                   _this.scholarid = response.data.data.id;
+                  console.log("接口拿到id：" + _this.scholarid);
                   _this.scholarname = response.data.data.name;
                   _this.researchfield = response.data.data.field;
+                  if (_this.researchfield === ""){
+                    _this.researchfield = '未知';
+                  }
                   _this.work = response.data.data.work;
+                  if (_this.work === ""){
+                    _this.work = '未知';
+                  }
+                  _this.getFollow();
                 }
               })
               .catch(function (error) {
@@ -448,6 +456,12 @@ export default {
               })
     },
     toPage(){
+      this.$router.push({
+        name: 'Academic_home',
+        params: {
+          id : this.scholarid
+        }
+      })
 
     },
     follow(){
@@ -480,6 +494,10 @@ export default {
           axios.post("http://127.0.0.1:8081/follow/getStatus?user=" + JSON.parse(sessionStorage.getItem("userL")).id + "&researcher=" + _this.scholarid)
                   .then(function (response) {
                     if (response.data.status === 200) {
+                      console.log("用户id：" + JSON.parse(sessionStorage.getItem("userL")).id);
+                      console.log("学者id：" + _this.scholarid);
+                      console.log("关注状态： " + response.data.data);
+                      console.log("关注状态： " + response.data.msg);
                       if (response.data.data === 0) {
                         _this.canFollow = true;
                         _this.canCancelFollow = false;
@@ -537,13 +555,14 @@ export default {
       this.getCollect();
       this.getComment();
       this.getAuthor();
-      this.getFollow();
+      console.log("学者id:" + this.scholarid);
       if (sessionStorage.getItem("userL")=== null){
         this.hasLogin = false;
       }
       else {
         this.hasLogin = true;
         this.headSrc = "http://10.251.253.212" + JSON.parse(sessionStorage.getItem("userL")).avatar;
+        console.log(JSON.parse(sessionStorage.getItem("userL")).avatar);
         this.getCollection();
       }
       console.log(this.hasLogin);
