@@ -6,7 +6,7 @@
         <el-col :span="8">
           <div>
             <span style="margin-left: 5%"
-              ><i class="el-icon-info"> 学者信息</i></span
+              ><i class="el-icon-info" style="font-size: 25px" > 学者信息</i></span
             >
           </div>
         </el-col>
@@ -16,7 +16,7 @@
         <el-col :span="8">
           <div>
             <span style="margin-left: 48%"
-              ><i class="el-icon-view"> 学者关系</i></span
+              ><i class="el-icon-view" style="font-size: 25px"> 学者关系</i></span
             >
           </div>
         </el-col>
@@ -40,45 +40,44 @@
       <table style="width: 100%">
         <tr>
           <td style="width: 48%">
-            <div style="margin-top: -10%">
-              <!--
-                            <el-form ref="form" :model="form" label-width="70px" :disabled="isuser" style="margin-left: 5%">
-                                <el-form-item label="用户id">
-                                    <el-input v-model="form.id" disabled style="width: 300px" size="small"></el-input>
-                                </el-form-item>
-                                <el-form-item label="姓名">
-                                    <el-input v-model="form.name" :disabled="!editing" style="width: 300px" size="small"></el-input>
-                                </el-form-item>
-                                <el-form-item
-                                        prop="email"
-                                        label="邮箱"
-                                >
-                                    <el-input v-model="form.email" :disabled="!editing" style="width: 300px" size="small"></el-input>
-                                </el-form-item>
-                                <el-form-item label="简介">
-                                    <el-input type="textarea" v-model="form.info" :disabled="!editing" style="width: 300px" size="small"></el-input>
-                                </el-form-item>
-                                <el-form-item>
-                                    <el-button v-if="!editing" type="primary" style="margin-left:80px" @click="editing=true" size="small">修改</el-button>
-                                    <el-button v-if="editing" type="primary" @click="Submit" size="small">完成修改</el-button>
-                                    <el-button v-if="editing" style="margin-left: 160px"@click="editing=false" size="small">取消</el-button>
-                                </el-form-item>
-                            </el-form>
-                            -->
-              <div style="margin-left:15%">
-                <p>ID: {{ researcher.id }}</p>
-                <p style="margin-top: 3%">姓名： {{ researcher.name }}</p>
+            <div style="margin-top:-20%">
+            
+              <div style="margin-left:5%;">
+                  <el-card class="box-card">
+<div style="float:left;margin-top:10%;margin-left:5%;margin-bottom:10%">
+                  <img src="../../public/default_researcher.jpg" style="border-radius:50%">
+                  <div >
+                      <!--style="float:right;marigin-top:110%"-->
+           <el-button plain icon="el-icon-star" @click="follow" style="font-size: 16px;margin-top:3%;width:100%" v-show="canfollow">关 注</el-button>
+           <el-button plain icon="el-icon-star" @click="cancelfollow" style="font-size: 16px;margin-top:3%"  v-show="!canfollow">取消关注</el-button>
+                  </div>
+                  <div>
+                   <el-button :v-show="form.role=='1'" type="primary" style="font-size: 16px;margin-top:5%" @click="toIdentify" >认领主页</el-button>
+                   </div>
+</div>
+<div style="float:left;margin-top:10%;margin-left:5%;margin-bottom:10%">
+                <!--<p>ID: {{ researcher.id }}</p>-->
+                <p style="margin-top: 5%">姓名： {{ researcher.name }}</p>
                 <!-- <p style="margin-top:3%">研究领域：  {{researcher.field1}},{{researcher.field2}},{{researcher.field3}}</p> -->
 
-                <p style="margin-top: 3%">
+                <p style="margin-top: 5%">
                   合作机构： {{ researcher.organization }}
                 </p>
-                <p style="margin-top: 3%">
+                <p style="margin-top: 5%">
                   论文数量： {{ researcher.papercount }}篇
                 </p>
-                <p style="margin-top: 3%">Hindex ：{{ researcher.index }}</p>
-                <p>简介： {{ researcher.info }}</p>
+                <p style="margin-top: 5%">Hindex ：{{ researcher.index }}</p>
+                <p style="margin-top: 5%">简介： {{ researcher.info }}</p>
+</div>
+                                                </el-card>
               </div>
+
+                                          <div style="text-align: center;margin-top: 10%">
+                                
+                                   
+                            </div>
+                            <!--这里用了form的role判断是否需要认领，普通用户则展示-->
+              <!--
               <div style="margin-left: 5%; margin-top: 20%">
                 <span>上传头像</span>
               </div>
@@ -96,75 +95,9 @@
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
               </div>
-              
-                            <div style="text-align: center;margin-top: 3%">
-                                
-                                    <el-link :v-show="form.role=='1'" type="primary" style="font-size: 16px" @click="toIdentify" >认领主页</el-link>
-                            </div>
-                            <!--这里用了form的role判断是否需要认领，普通用户则展示-->
-                            
-            </div>
-          </td>
-          <el-divider direction="vertical"></el-divider>
-          <td style="width: 48%">
-            <div>
-              <!--关系图表-->
-              <!--
-                            <div class="Echarts">
-                                <div id="main" style="width:400px;height: 400px">
-                                </div>
-                                
-                            </div>
-                            -->
-            <!--
-              <div class="Echarts">
-                <div id="f_main" style="width: 400px; height: 400px"></div>
-              </div>
               -->
-              <div class="Echarts">
-                <div id="p_main" style="width: 400px; height: 400px"></div>
-              </div>
-                <div class="Echarts">
-                  <div id="z_main" style="width: 400px; height: 400px"></div>
-                </div>
-              
-            </div>
-            <!--
-                        <div style="margin-top: 0%;height: 700px">
-                            <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" style="margin-top: 0px">
-                                <el-menu-item index="1" @click="showSysMessagelist">系统通知</el-menu-item>
-                                <el-menu-item index="2" @click="showScoMessagelist">学者私信</el-menu-item>
-                                <el-menu-item index="3" @click="showMineMessagelist">我的私信</el-menu-item>
-                            </el-menu>
-                            <div style="height: 5px"></div>
-                            <div v-for="(item,index) in message" :key="item" @click="viewMessage(item)">
-                                <table style="width: 100%">
-                                    <tr style="height: 60px">
-                                        <td style="width: 10%">
-                                            <div style="height: 60px;font-size: 35px">
-                                                <i  v-show="item.isread = 0" class="el-icon-s-release" style="color: red;margin-bottom: 5px;margin-left: 5px;margin-top: 10px"></i>
-                                                <i  v-show="item.isread = 1" class="el-icon-s-claim" style="color: lawngreen;margin-bottom: 5px;margin-left: 5px;margin-top: 10px"></i>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div style="margin-left: 1%;margin-top:1px;font-size: 14px">
-                                                {{item.from}}
-                                            </div>
-                                            <div style="margin-left: 1%;margin-top: 10px;font-size: 12px">
-                                                {{item.text}}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-
-                            </div>
-                        </div>
-                        -->
-          </td>
-        </tr>
-      </table>
-      <el-divider></el-divider>
-      <span style="font-size: 25px">学者文献</span>
+              <div style="margin-top:10%;margin-left:5%">
+               <span style="font-size: 25px">学者文献</span>
       <!--
             <el-button type="primary" @click="add_file" style="margin-left:90% ; ">
                 <i class="el-icon-document" ></i><span>添加文献</span>
@@ -208,6 +141,65 @@
           </el-table-column>
         </el-table>
       </el-main>
+              </div>
+                            
+            </div>
+          </td>
+          <el-divider direction="vertical"></el-divider>
+          <td style="width: 48%">
+            <div>
+              <!--关系图表-->
+
+            
+              <div class="Echarts">
+                <div id="f_main" style="width: 400px; height: 400px"></div>
+              </div>
+            <!--
+              <div class="Echarts">
+                <div id="p_main" style="width: 400px; height: 400px"></div>
+              </div>
+              -->
+                <div class="Echarts">
+                  <div id="z_main" style="width: 400px; height: 400px"></div>
+                </div>
+              
+            </div>
+            <!--
+                        <div style="margin-top: 0%;height: 700px">
+                            <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" style="margin-top: 0px">
+                                <el-menu-item index="1" @click="showSysMessagelist">系统通知</el-menu-item>
+                                <el-menu-item index="2" @click="showScoMessagelist">学者私信</el-menu-item>
+                                <el-menu-item index="3" @click="showMineMessagelist">我的私信</el-menu-item>
+                            </el-menu>
+                            <div style="height: 5px"></div>
+                            <div v-for="(item,index) in message" :key="item" @click="viewMessage(item)">
+                                <table style="width: 100%">
+                                    <tr style="height: 60px">
+                                        <td style="width: 10%">
+                                            <div style="height: 60px;font-size: 35px">
+                                                <i  v-show="item.isread = 0" class="el-icon-s-release" style="color: red;margin-bottom: 5px;margin-left: 5px;margin-top: 10px"></i>
+                                                <i  v-show="item.isread = 1" class="el-icon-s-claim" style="color: lawngreen;margin-bottom: 5px;margin-left: 5px;margin-top: 10px"></i>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style="margin-left: 1%;margin-top:1px;font-size: 14px">
+                                                {{item.from}}
+                                            </div>
+                                            <div style="margin-left: 1%;margin-top: 10px;font-size: 12px">
+                                                {{item.text}}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </div>
+                        -->
+          </td>
+        </tr>
+      </table>
+      <el-divider></el-divider>
+     
 
       <el-dialog title="学者认证" :visible.sync="dialogFormVisible3"
         ><!--发送私信-->
@@ -262,8 +254,8 @@
         },
         data() {
             return {
-                
-                imageUrl: '',//头像
+                canfollow:true,
+
                 isuser:false,
                 isScholar:false,//是否是认证学者，是则为true
                 activeIndex: '1',
@@ -285,7 +277,7 @@
                 researcher:
                 {
                    id:'',
-                   researcher_id:this.$store.state.id,
+                   researcher_id:this.$route.params.id,
                    name:'',
                    organization:'',
                    papercount:'',
@@ -380,12 +372,10 @@
         data: ['发表数量']
     },
     toolbox: {
-        feature: {
-            saveAsImage: {}
-        }
+
     },
     grid: {
-        left: '20%',
+        left: '0%',
         right: '4%',
         bottom: '3%',
         containLabel: true
@@ -445,14 +435,162 @@
             
             myEcharts()
             {
-                var pieChart = this.$echarts.init(document.getElementById('p_main'));              
-                pieChart.setOption(this.pie_option);
+            
+            //    var pieChart = this.$echarts.init(document.getElementById('p_main'));              
+            //    pieChart.setOption(this.pie_option);
                 var zheChart = this.$echarts.init(document.getElementById('z_main'));              
                 zheChart.setOption(this.zhe_option);
-                var forceChart = this.$echarts.init(document.getElementById('f_main'));              
-                forceChart.setOption(this.force_option);
+                this.set_forcechart();
+
             },
-            
+            set_forcechart()
+            {
+                 var myChart = this.$echarts.init(document.getElementById('f_main'));
+    // 分类集合
+    var categories = [
+      {name: '学校'},
+      {name: '属性'},
+      {name: '其他'}
+    ];
+    // 配置项
+    var option = {
+        grid:
+        {
+ bottom:5,top:5
+        },
+
+      // 标题设置
+      title: {
+        // 主标题
+        text: '学者关系图',
+        // 副标题
+      //  subtext: '西安电子科技大学力导图',
+        // 位置
+        top: 'top',
+
+      },
+      // 提示框设置
+      tooltip: {
+        // 关闭提示框
+      //  show: true
+      },
+      // 图例设置
+      legend: [{
+          itemWidth:20,
+          itemHeight:20,
+        // 纵向
+        orient: 'horizonal',
+        // 位置
+        left: 'right',
+        // 图例内容，由上面的分类集合决定
+        data: categories.map(function (a) {
+          return a.name;
+        })
+      }],
+      // 数据设置
+      series: [{
+        // 类型
+        type: 'graph',
+        // 力导图布局
+        layout: 'force',
+        // 开启平移与缩放
+        roam: false,
+        // 标签设置
+        label: {
+          normal: {
+            // 是否展示
+            show: false,
+            // 展示位置
+            position: 'top',
+            // 展示内容
+            // formatter: '{b}',
+            // 文本设置
+            textStyle: {
+              // 文本大小
+              fontSize: '12px'
+            },
+          }
+        },
+        // 根据value放缩节点
+        symbolSize: 20,
+        // 是否可拖拽
+        draggable: true,
+        // 节点数据
+        data:[
+          {
+            // 分类
+            category: '学校',
+            // 名称
+            name: "西安电子科技大学",
+            // 值，越大则节点越大
+            value:1
+          },
+          {
+            category: '属性',
+            name: "《与共和国同行》",
+            value:3
+          },
+          {
+            category: '属性',
+            name: "杨宗凯",
+            value:2
+          },
+          {
+            category: '其他',
+            name: "西北工业大学",
+            value:1
+          },
+        ],
+        // 分类
+        categories: categories,
+        force: {
+            edgeLength: 200,
+            repulsion: 300,
+             gravity: 0.1
+        },
+        // 关系
+        links:[
+          {
+            // 源节点
+            source: "西安电子科技大学",
+            // 目标节点
+            target: "《与共和国同行》",
+            // 标签设置
+            label: {
+              normal: {
+                // 是否展示
+                show: true,
+                // 展示内容
+                formatter: '校歌'
+              }
+            }
+          },
+          {
+            source: "西安电子科技大学",
+            target: "杨宗凯",
+            label: {
+              normal: {
+                show: true,
+                formatter: '校长'
+              }
+            }
+          },
+          {
+            source: "西安电子科技大学",
+            target: "西北工业大学",
+            label: {
+              normal: {
+                show: true,
+                formatter: '兄弟院校'
+              }
+            }
+          }
+        ],
+      }]
+    };
+    myChart.setOption(option);
+
+            },
 
             /*
                         viewMessage(item){
@@ -571,31 +709,56 @@
                 this.form.id=res.data.id
                 return 0
             },
-            showSysMessagelist() {
-                const res= this.$axios({
-                    method:'get',
-                    url:'/message/sys'
-                }).catch(err=>{console.log(err)})
-                this.message = res.data
+            follow()
+            {
+                var that=this;
+                axios.post("follow/insertFollow",
+                {
+                    user:this.form.id,
+                    researcher:this.researcher.researcher_id
+                }
+                )
+                .then(function(resopnse)
+                {
+                    if (response.data.status === 200) {
+                    that.$message({
+                    message: "关注成功",
+                    type: "success",
+                  });
+                  that.canfollow=false;
+                    }
+                })
+                .catch(function(error)
+                {
+                    console.log(error)
+                })
 
-                return 0
             },
-            showScoMessagelist() {
-                const res= this.$axios({
-                    method:'get',
-                    url:'/message/fromre'
-                }).catch(err=>{console.log(err)})
-                this.message = res.data
-                return 0
+            cancelfollow()
+            {
+                var that=this;
+                axios.post("follow/cancel",
+                {
+                    user:this.form.id,
+                    researcher:this.researcher.researcher_id
+                }
+                )
+                .then(function(resopnse)
+                {
+                    if (response.data.status === 200) {
+                    that.$message({
+                    message: "取消成功",
+                    type: "success",
+                  });
+                  that.canfollow=true;
+                    }
+                })
+                .catch(function(error)
+                {
+                    console.log(error)
+                })
             },
-            showMineMessagelist() {
-                const res= this.$axios({
-                    method:'get',
-                    url:'/message/mine'
-                }).catch(err=>{console.log(err)})
-                this.message = res.data
-                return 0
-            },
+
             handleAvatarSuccess(res, file) {
                 this.imageUrl = res.avatar
                 //this.imageUrl = URL.createObjectURL(file.raw);
@@ -625,7 +788,7 @@
                 }
                 this.$axios.post('/message/read', postData).then((response) => {
                     for(let i = 0; i < this.message.length; i++){
-                        if(message[i].id == response.data.id){
+                        if(message[i].id === response.data.id){
                             this.select = i;
                             break;
                         }

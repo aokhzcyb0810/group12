@@ -52,7 +52,7 @@
                             width="150"
                             type="index">
                         <template slot-scope="scope">
-                            <el-button type="danger" size="small" @click="cancel(index)">取消关注</el-button>
+                            <el-button type="danger" size="small" @click="cancel(scope.$index)">取消关注</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -113,6 +113,7 @@
 
                 axios.post("/follow/getList?id=" + _this.userid)
                     .then(function (response) {
+                        console.log('233')
                         console.log(response.data)
                         _this.scholar_list = response.data
                     })
@@ -132,6 +133,7 @@
                     })
             },
             cancel(index) {
+                var _this=this;
                 this.$confirm('是否确定取消对该学者的关注?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -139,12 +141,22 @@
                 }).then(() => {
                     //this.scholar_list.splice(index, 1);
                     //从scholar_list里删除该学者
-                    let postData = {
-                        'id': this.scholar_list[index].id
-                    }
-                    this.$axios.post('/follow/delete', postData).then((response) => {
-                        this.showfollowinfo()
-                    })
+                    console.log(index)
+                    _this.userL = JSON.parse(sessionStorage.getItem("userL"));
+                    _this.userid = _this.userL.id
+                    _this.researcherid = _this.scholar_list[index].id
+                    //axios.post('/message/sys?user=" + id)
+
+                    axios.post("/follow/cancel?user=" + _this.userid + '&researcher=' + _this.researcherid)
+                        .then(function (response) {
+                            console.log('233')
+                            console.log(response.data)
+                            _this.showfollowinfo()
+                        })
+                        .catch(function (error) {
+                            console.log(error)
+                        })
+
                     this.$message({
                         type: 'success',
                         message: '取关成功!'
