@@ -179,7 +179,7 @@ export default {
               done();
               setTimeout(() => {
                 instance.confirmButtonLoading = false;
-                this.reload();
+                history.go(0)
               }, 300);
             }, 1000);
           } else {
