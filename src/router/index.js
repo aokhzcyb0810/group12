@@ -72,7 +72,8 @@ const routes = [
         ]
     },
     {
-        path:'/academic_home',
+        path:'/academic_home/:id',
+        name:'Academic_home',
         component:Academic_home
     },
     {
@@ -124,7 +125,7 @@ const routes = [
         path:"/message",
         name:'message',
         component:sysMessage
-    },    
+    },
     {
         path:"/sysmessage",
         name:'sysmessage',

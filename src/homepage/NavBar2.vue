@@ -8,7 +8,7 @@
                 active-text-color="#ffd04b"
                 style="border: 0">
             <div class="logo-div">
-                logo
+                <img :src="logo" width="70px">
             </div>
             <el-submenu index="1" style="float: right;margin-right: 5%">
                 <template slot="title"><img :src="showAvatar" class="userhead"/></template>
@@ -67,6 +67,7 @@
                 }
             };
             return{
+                logo: require("../assets/navLogo2.png"),
                 changePasswordVisible: false,
                 labelPos: 'right',
                 form: {
@@ -161,6 +162,8 @@
     .logo-div{
         float: left;
         margin-left: 5%;
+        text-align: center;
+        margin-top: 5px;
     }
     .username{
         float: right;
