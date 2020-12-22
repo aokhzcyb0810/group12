@@ -19,7 +19,7 @@
                         :data="scholar_list"
 
 
-                        style="width: 800px">
+                        style="width: 1050px">
                     <el-table-column
                             fixed
                             prop="avatar"
@@ -31,7 +31,7 @@
                             fixed
                             prop="name"
                             label="学者姓名"
-                            width="150">
+                            width="250">
                         <template slot-scope="scope">
                             <el-link @click="viewScholar(scope.$index)">{{scope.row.name}}</el-link>
                         </template>
@@ -39,17 +39,17 @@
                     <el-table-column
                             prop="paperCount"
                             label="文献数量"
-                            width="120">
+                            width="100">
                     </el-table-column>
                     <el-table-column
                             prop="field"
                             label="主要研究领域"
-                            width="260">
+                            width="450">
                     </el-table-column>
                     <el-table-column
                             fixed="right"
                             label=""
-                            width="150"
+                            width="110"
                             type="index">
                         <template slot-scope="scope">
                             <el-button type="danger" size="small" @click="cancel(scope.$index)">取消关注</el-button>
