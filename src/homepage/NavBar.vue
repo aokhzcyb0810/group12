@@ -11,7 +11,7 @@
                     text-color="#fff"
                     active-text-color="#ffd04b"
                     style="border: 0">
-                <div class="logo-div" @click="toHome">
+                <div class="logo-div" @click="tohome" style="cursor:pointer">
                     <img :src="logo" width="70px">
                 </div>
                 <div class="menu">
@@ -36,12 +36,12 @@
                 <div class="word-button">
                     <el-row>
                         <el-col :span="6">
-                            <div  @click="openRegister">
+                            <div  @click="openRegister" style="cursor:pointer">
                                 新用户注册
                             </div>
                         </el-col>
                         <el-col :span="6">
-                            <div @click="openFindPass">
+                            <div @click="openFindPass" style="cursor:pointer">
                                 忘记密码？
                             </div>
                         </el-col>
@@ -69,7 +69,7 @@
                             </el-col>
                             <el-col :span="4">
                                 <div class="timer">
-                                    <span v-show="show" @click="getCode">获取验证码</span>
+                                    <span v-show="show" @click="getCode" style="cursor:pointer">获取验证码</span>
                                     <span v-show="!show" class="count">{{count}} s</span>
                                 </div>
                             </el-col>
@@ -91,7 +91,7 @@
                         </el-col>
                     </el-form-item>
                 </el-form>
-                <div class="word-button" style="text-align: center" @click="openLogin">
+                <div class="word-button" style="text-align: center;cursor:pointer" @click="openLogin" >
                     已有账号？点此登录
                 </div>
                 <div style="margin-left: 25%">
@@ -450,6 +450,9 @@
                         console.log(error)
                     });
             },
+             tohome(){
+                this.$router.push('/')
+            }
         },
         created() {
             if(sessionStorage.getItem("userL") === null){

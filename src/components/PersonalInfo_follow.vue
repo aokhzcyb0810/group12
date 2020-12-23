@@ -25,7 +25,7 @@
                             prop="avatar"
                             label=""
                             width="70">
-                        <el-avatar :size="35"></el-avatar>
+                        <el-avatar :size="35" src="'http://10.251.253.212:8082' +avatar" class="avatar"></el-avatar>
                     </el-table-column>
                     <el-table-column
                             fixed
@@ -101,6 +101,7 @@
                 }]
             }
         },
+
         created(){
             this.showfollowinfo()
         },
