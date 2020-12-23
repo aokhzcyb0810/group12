@@ -14,10 +14,11 @@
           <div></div>
         </el-col>
         <el-col :span="8">
-          <div>
-            <span style="margin-left: 48%"
+          <div >
+ <!--           <span style="margin-left: 80%"
               ><i class="el-icon-view" style="font-size: 25px"> 学者关系</i></span
             >
+            -->
           </div>
         </el-col>
         <el-col :span="3">
@@ -39,7 +40,7 @@
       <el-divider></el-divider>
       <table style="width: 100%">
         <tr>
-          <td style="width: 48%">
+          <td style="width: 60%">
             <div  >
             
               <div style="margin-left:5%;">
@@ -48,11 +49,11 @@
                   <img src="../../public/default_researcher.jpg" style="border-radius:50%">
                   <div >
                       <!--style="float:right;marigin-top:110%"-->
-           <el-button plain icon="el-icon-star" @click="follow" style="font-size: 16px;margin-top:3%;width:100%" v-show="canfollow">关 注</el-button>
-           <el-button plain icon="el-icon-star" @click="cancelfollow" style="font-size: 16px;margin-top:3%"  v-show="!canfollow">取消关注</el-button>
+           <el-button plain icon="el-icon-star" @click="follow" style="font-size: 16px;margin-top:3%;width:120px" v-show="canFollow">关 注</el-button>
+           <el-button plain icon="el-icon-star" @click="cancelFollow" style="font-size: 16px;margin-top:3%;width:110px"  v-show="canCancelFollow">取消关注</el-button>
                   </div>
                   <div>
-                   <el-button :v-show="form.role=='1'" type="primary" style="font-size: 16px;margin-top:5%" @click="toIdentify" >认领主页</el-button>
+                   <el-button :v-show="form.role=='1'&&islogin" type="primary" style="font-size: 16px;margin-top:5%" @click="toIdentify" >认领主页</el-button>
                    </div>
 </div>
 <div style="float:left;margin-top:10%;margin-left:5%;margin-bottom:10%">
@@ -96,7 +97,7 @@
                 </el-upload>
               </div>
               -->
-              <div style="margin-top:10%;margin-left:5%">
+              <div style="margin-top:5%;margin-left:5%">
                <span style="font-size: 25px">学者文献</span>
       <!--
             <el-button type="primary" @click="add_file" style="margin-left:90% ; ">
@@ -106,8 +107,9 @@
       <el-main>
         <el-table
           :data="doc_table"
-          style="width: 100%"
+          style="width: 100%;"
           :row-style="{ height: '30px' }"
+          max-height="400"
         >
           <el-table-column
             prop="title"
@@ -117,28 +119,30 @@
           <el-table-column
             prop="year"
             label="发表时间"
-            width="120px"
+            width="100%"
           ></el-table-column>
           <el-table-column
             prop="keywords"
             label="关键字"
-            width="200%"
+            width="300%"
           ></el-table-column>
           <el-table-column
             prop="citation"
             label="被引用量"
-            width="120px"
+            width="100%"
           ></el-table-column>
-          <el-table-column fixed="right" width="50">
-            <!--             <template slot-scope="scope">
+           <!-- 
+      //    <el-table-column fixed="right" width="50">
+                       <template slot-scope="scope">
                 <el-tooltip  effect="dark" content="删除" placement="bottom-end">
                   <el-button @click.native="delFile(scope.row.id)" type="text" style="color: #999" size="mini">
                     <i class="el-icon-delete-solid"></i>
                   </el-button>
                 </el-tooltip>
               </template>
-              -->
+            
           </el-table-column>
+            -->
         </el-table>
       </el-main>
               </div>
@@ -146,7 +150,7 @@
             </div>
           </td>
           <el-divider direction="vertical"></el-divider>
-          <td style="width: 48%">
+          <td style="width: 36%">
             <div>
               <!--关系图表-->
 
@@ -249,13 +253,14 @@
             ElAvatar,
             ElDivider},
         name: 'Academic_home',
+          inject: ['reload'],
         props: {
             msg: String
         },
         data() {
             return {
-                canfollow:true,
-
+               canFollow: false,
+              canCancelFollow: false,
                 isuser:false,
                 isScholar:false,//是否是认证学者，是则为true
                 activeIndex: '1',
@@ -265,7 +270,7 @@
                 formLabelWidth: '120px',
                 select:0,//选择查看哪一个消息
                 reply:'',//回复内容
-                
+                islogin:false,
                 editing:false,//信息是否处于可编辑状态
                 form: {
                     id: this.$store.state.userid,
@@ -563,8 +568,14 @@
             }
         },
         created(){
-            this.get_user_info();
+            if (sessionStorage.getItem("userL")!= null){
+                 this.get_user_info();
+                             this.getFollow()
+                             this.islogin=true
+      }
+        //    this.get_user_info();
             this.get_acad_info();
+         //   this.getFollow()
         //    this.get_acad_docs()
        //     this.get_graph_info()//由于关系图有点麻烦回头再添加上去，这里是将其他两个图的信息放进去
             
@@ -782,7 +793,7 @@
                        // }
                         dataa.push({'category':'学者','name':res.data.data.nodes[i].name,'value':1})
                     }
-                    alert(dataa[0].value)
+  //                  alert(dataa[0].value)
                     that.f_option.series[0].data=dataa
 
                     for(var i=0;i<res.data.data.edges.length;i++)
@@ -833,55 +844,72 @@
 
                 return 0
             },
-            follow()
-            {
-                var that=this;
-                axios.post("follow/insertFollow",
-                {
-                    user:this.form.id,
-                    researcher:this.researcher.researcher_id
-                }
-                )
-                .then(function(resopnse)
-                {
-                    if (response.data.status === 200) {
-                    that.$message({
+             follow(){
+      var _this = this;
+      axios.post("http://127.0.0.1:8081/follow/insertFollow", {
+          user: JSON.parse(sessionStorage.getItem("userL")).id,
+          researcher: _this.$route.params.id
+      })
+              .then(function (response) {
+                if (response.data.status === 200) {
+                  _this.$message({
                     message: "关注成功",
                     type: "success",
                   });
-                  that.canfollow=false;
-                    }
-                })
-                .catch(function(error)
-                {
-                    console.log(error)
-                })
-
-            },
-            cancelfollow()
-            {
-                var that=this;
-                axios.post("follow/cancel",
-                {
-                    user:this.form.id,
-                    researcher:this.researcher.researcher_id
+                  _this.reload();
+                  _this.canFollow = false;
+                  _this.canCancelFollow = true;
                 }
-                )
-                .then(function(resopnse)
-                {
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+    },
+    getFollow(){
+        if (sessionStorage.getItem('userL') === null) {
+          this.canFollow = false;
+          this.canCancelFollow = false;
+        } else {
+          var _this = this;
+          axios.post("http://127.0.0.1:8081/follow/getStatus?user=" + JSON.parse(sessionStorage.getItem("userL")).id + "&researcher=" + _this.$route.params.id)
+                  .then(function (response) {
                     if (response.data.status === 200) {
-                    that.$message({
-                    message: "取消成功",
+                      console.log("用户id：" + JSON.parse(sessionStorage.getItem("userL")).id);
+                      console.log("学者id：" + _this.scholarid);
+                      console.log("关注状态： " + response.data.data);
+                      console.log("关注状态： " + response.data.msg);
+                      if (response.data.data === 0) {
+                        _this.canFollow = true;
+                        _this.canCancelFollow = false;
+                      } else {
+                        _this.canFollow = false;
+                        _this.canCancelFollow = true;
+                      }
+                    }
+                  })
+                  .catch(function (error) {
+                    console.log(error)
+                  })
+        }
+    },
+    cancelFollow(){
+      var _this = this;
+      axios.post("http://127.0.0.1:8081/follow/cancel?user=" + JSON.parse(sessionStorage.getItem("userL")).id + "&researcher=" + _this.$route.params.id)
+              .then(function (response) {
+                if (response.data.status === 200) {
+                  _this.$message({
+                    message: "取消关注成功",
                     type: "success",
                   });
-                  that.canfollow=true;
-                    }
-                })
-                .catch(function(error)
-                {
-                    console.log(error)
-                })
-            },
+                  _this.reload();
+                  _this.canFollow = true;
+                  _this.canCancelFollow = false;
+                }
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+    },
 
             handleAvatarSuccess(res, file) {
                 this.imageUrl = res.avatar
