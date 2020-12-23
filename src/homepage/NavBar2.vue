@@ -7,7 +7,7 @@
                 text-color="#fff"
                 active-text-color="#ffd04b"
                 style="border: 0">
-            <div class="logo-div">
+            <div class="logo-div" @click="toHome">
                 <img :src="logo" width="70px">
             </div>
             <el-submenu index="1" style="float: right;margin-right: 5%">
@@ -97,6 +97,9 @@
             }
         },
         methods: {
+            toHome(){
+                this.$router.push('/');
+            },
             changePass(formName){
                 this.$refs[formName].validate((valid) => {
                     var _this=this;
