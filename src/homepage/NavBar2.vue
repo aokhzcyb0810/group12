@@ -93,7 +93,7 @@
                 return JSON.parse(sessionStorage.getItem("userL")).name
             },
             showAvatar(){
-                return "http://10.251.253.212" + JSON.parse(sessionStorage.getItem("userL")).avatar
+                return "http://10.251.253.212:8082" + JSON.parse(sessionStorage.getItem("userL")).avatar
             }
         },
         methods: {

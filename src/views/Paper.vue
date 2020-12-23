@@ -260,7 +260,7 @@ export default {
             const res=await this.$axios({
              //  type:'params',
                method:'get',
-               url:'/field', 
+               url:'/field',
             }).catch(err=>{console.log(err)})
             var list=[]
             list[0]='全部学科'
@@ -435,7 +435,7 @@ export default {
                   console.log("拿到评论了");
                   for(var i = 0; i < _this.commentItem.length; i ++){
                     var src = _this.commentItem[i].profileUrl;
-                    _this.commentItem[i].profileUrl = "http://10.251.253.212" + src;
+                    _this.commentItem[i].profileUrl = "http://10.251.253.212:8082" + src;
                   }
                 }
               })
@@ -586,7 +586,7 @@ export default {
       }
       else {
         this.hasLogin = true;
-        this.headSrc = "http://10.251.253.212" + JSON.parse(sessionStorage.getItem("userL")).avatar;
+        this.headSrc = "http://10.251.253.212:8082" + JSON.parse(sessionStorage.getItem("userL")).avatar;
         console.log(JSON.parse(sessionStorage.getItem("userL")).avatar);
         this.getCollection();
       }
