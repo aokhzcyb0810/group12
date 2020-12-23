@@ -39,7 +39,7 @@
                                         <i class="el-icon-edit-outline" style="font-size: 30px; color: gray;"></i>
                                     </el-col>
                                     <el-col :span="22">
-                                        <h2 style="margin-top: 12px;" @click="toDoc(item.paperId)">{{item.title}}</h2>
+                                        <h2 style="margin-top: 12px;cursor:poniter" class="biaotilianjie" @click="toDoc(item.paperId)">{{item.title}}</h2>
                                         <span class="detail">
                                             published at {{item.date}} by {{item.author}}
                                         </span>
@@ -58,7 +58,7 @@
                     <h1 style="text-align: center;">热点领域</h1>
                     <div style="margin-left: 10%; margin-right: 10%">
                         <ul style="list-style: none;margin: 0; padding: 0;">
-                            <li v-for="(item, index) in hotSpot" :key="index" class="hotSpot-li">
+                            <li v-for="(item, index) in hotSpot" :key="index" class="hotSpot-li" style="cursor:pointer" @click="toselectsearch(item)">
                                 <a>{{item}}</a>
                             </li>
                         </ul>
@@ -123,6 +123,15 @@
             }
         },
     methods:{
+      toselectsearch(select){
+          this.$router.push(
+            {path:'/search',
+              query:{
+              content:'',
+              select:select
+              }
+            })
+      },
       async getfield(){
             const res=await this.$axios({
              //  type:'params',
@@ -138,7 +147,7 @@
             console.log(this.xuekeliebiao)
            },
             tosearch(){
-                if(this.searchForm.radio==1){
+            if(this.searchForm.radio==1){
                     this.$router.replace(
             {path:'/search',
               query:{
@@ -148,7 +157,7 @@
             })
             }
             else if(this.searchForm.radio==2){
-                this.$router.replace(
+                this.$router.push(
             {path:'/scholar',
               query:{
               content:this.searchForm.text,
@@ -300,5 +309,14 @@
     border:none;
   //  margin-top: 50px;
   }
+  .biaotilianjie{
+    cursor: pointer;
+  }
+  .biaotilianjie:hover{
+    color: rgb(70, 70, 202);
+    text-decoration: underline;
+  }
 </style>
+
+
 
