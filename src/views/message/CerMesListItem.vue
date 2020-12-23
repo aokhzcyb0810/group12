@@ -148,7 +148,7 @@ export default {
               setTimeout(() => {
                 // 同意申请
                 axios
-                  .post("/apply/accept?id=" + this.mesItem.Uid + "&user=")
+                  .post("/apply/accept?id=" + this.mesItem.Uid  + "&user=")
                   .then((res) => {
                     console.log(res);
                   })
@@ -163,6 +163,21 @@ export default {
                 }, 300);
               }, 1000);
             } else {
+              // 拒绝申请
+                axios
+                  .post("apply/reject?=" + this.mesItem.Uid  + "&user=")
+                  .then((res) => {
+                    console.log(res);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+                this.reload();
+                done();
+                setTimeout(() => {
+                  instance.confirmButtonLoading = false;
+                  this.reload();
+                }, 300);
               done();
             }
           },
