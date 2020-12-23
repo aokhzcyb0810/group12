@@ -16,12 +16,12 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="16">
-                            <el-input placeholder="请输入搜索内容" v-model="searchForm.text" class="searchinput input-with-select">
-                                <el-select v-model="searchForm.select" slot="prepend" placeholder="请选择学科" style="width: 120px;">
-                                    <el-option :label="item.name"  v-for="item in xuekeliebiao" :key=item.name style="height:40px;overflow:auto">{{item.name}}</el-option>
-                                </el-select>
-                                <i slot="suffix" class="el-input__icon el-icon-search search-button" style="cursor: pointer;"></i>
-                            </el-input>
+                            <el-input placeholder="请输入内容" v-model="searchForm.text" class="searchinput input-with-select" style="border-radius: 5px">
+                               <el-select v-model="searchForm.select" slot="prepend" filterable placeholder="请选择学科">
+                                   <el-option :label="item" :value="item"  v-for="item in xuekeliebiao" :key="item" @click.native="xuanzexueke(item)" style="height:40px;overflow:auto">{{item}}</el-option>
+                               </el-select>
+                                  <i slot="suffix" class="el-input__icon el-icon-search search-button" style="cursor: pointer;" @click.capture="tosearch"></i>
+                             </el-input>
                         </el-col>
                     </el-row>
                 </el-form>
@@ -78,8 +78,9 @@
         components: {NavBar, NavBar2},
         data(){
             return{
-                xuekeliebiao:[{name:"全部学科"},{name:'java'},{name:'jaa'},{name:'jva'},{name:'ava'},{name:'java'},{name:'java'},],
+                xuekeliebiao:[],
                 xueke:'',
+               // select:'',
                 searchForm:{
                     radio: '1', //1代表搜索文章，2代表搜索学者
                     text: '',  //搜索框内的内容
@@ -121,7 +122,41 @@
                 ]
             }
         },
-        methods:{
+    methods:{
+      async getfield(){
+            const res=await this.$axios({
+             //  type:'params',
+               method:'get',
+               url:'/field', 
+            }).catch(err=>{console.log(err)})
+            var list=[]
+            list[0]='全部学科'
+            for(var i=0;i<1000;i++){
+            list[i+1]=res.data.data[i]
+            }
+            this.xuekeliebiao=list
+            console.log(this.xuekeliebiao)
+           },
+            tosearch(){
+                if(this.searchForm.radio==1){
+                    this.$router.replace(
+            {path:'/search',
+              query:{
+              content:this.searchForm.text,
+              select:this.searchForm.select
+              }
+            })
+            }
+            else if(this.searchForm.radio==2){
+                this.$router.replace(
+            {path:'/scholar',
+              query:{
+              content:this.searchForm.text,
+              select:this.searchForm.select
+              }
+            })
+            }
+            },
             getHotArticle(){
                 var _this=this;
                 axios.get("http://127.0.0.1:8081/hot/paper")
@@ -159,6 +194,7 @@
         created() {
             this.getHotArticle();
             this.getHotSpot();
+            this.getfield();
         },
         computed:{
             fangshi(){
@@ -173,7 +209,7 @@
 
 <style lang="less" scoped>
     .body-top{
-        background: url("../assets/background.jpg");
+        background: url("10.251.253.212:8082/../assets/background.jpg");
         background-size: 100%;
         height: 320px;
     }
@@ -233,5 +269,36 @@
         background-color: #C0C4CC;
         transition-duration: 0.3s;
     }
+    .el-select {
+     width: 150px;
+     border:0px none;
+ //    margin-top: 50px;
+ }.el-input {
+    width: 800px;
+    // height: 46px;
+    border-style: none;
+    border:none;
+  //  margin-top: 50px;
+  }
+ /deep/ .el-input-group__prepend{
+    height: 46px;
+    border:none;
+    border-style: none;
+ //   margin-top: 50px;
+  }
+/deep/ .el-input__inner{
+    height: 46px;
+  //  margin-top: 50px;
+  }
+  .input-with-select {
+      background-color: #fff;
+      border:none;
+    //  margin-top: 50px;
+  }
+  .el-input-group__prepend {
+    background-color: #fff;
+    border:none;
+  //  margin-top: 50px;
+  }
 </style>
 

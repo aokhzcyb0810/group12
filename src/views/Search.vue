@@ -8,12 +8,12 @@
     </el-select>
     <i slot="suffix" class="el-input__icon el-icon-search search-button" style="cursor: pointer;" @click.capture="tosearch"></i>
   </el-input>
-  <div class="choose"><span>论文</span><span class="zhuanjia" @click="tozhuanjia" >专家</span></div>
+  <div class="choose"><span>论文</span><span class="zhuanjia" @click="tozhuanjia" >学者</span></div>
 </div>
 <div class="zhushi" v-show="isshowhead"><span v-show="ishowselect">在{{select}}中</span>为您找到 “{{sousuoneirong}}” 相关的结果 ({{tiaoshu}})。</div>
 <div class="searchbody"><el-row :gutter="20">
   <el-col :span="4">
-  <div class="shijian">
+  <div class="shijian" v-show="isshowhead">
   <el-collapse accordion style="border-top:solid blue 2px;border-bottom:solid blue 1px;margin-top:10px">
   <el-collapse-item>
     <template slot="title">
@@ -47,24 +47,24 @@
   </div>
     </el-col>
   <el-col :span="18"><div class="jieguo">
-  <el-tabs v-model="activeName" v-show="isshowhead">
-    <el-tab-pane label="按时间" name="first"></el-tab-pane>
+  <!-- <el-tabs v-model="activeName" v-show="isshowhead">
+    <el-tab-pane label="按时间" name="first" @click.capture="shijianpaixu"></el-tab-pane>
     <el-tab-pane label="按引用" name="second"></el-tab-pane>
-  </el-tabs>
+  </el-tabs> -->
   <div class="neirong" style="margin-bottom:35px;margin-top:0px" v-for="item in currentlist" :key="item.id">
     <div class="neirong1">
       <div class="neirong11">
-        <div class="biaoti neirong111"><span @click="topage" class="biaotilianjie">{{item.title}}</span></div>
+        <div class="biaoti neirong111"><span @click="topage(item.id)" class="biaotilianjie">{{item.title}}</span></div>
         <div class="zuozhe neirong111" style="line-height:30px;margin-top:5px"><span v-for="(it,index) in item.author" :key="index" >{{it}}</span></div>
         <div class="jianjie neirong111" style="margin-top:5px"><span>{{item.abstract}}</span></div>
       </div>
       <div class="neirong12">
-        <el-button  icon="el-icon-star-off" circle></el-button>
+        <!-- <el-button  icon="el-icon-star-off" circle></el-button> -->
       </div>
     </div>
     <div class="neirong2">
       <div class="xuanze"><span style="margin-right:20px">被引用：{{item.citation}}</span></div>
-      <div class="xuanze"><span style="margin-right:20px">引用</span></div>
+      <!-- <div class="xuanze" ><span style="margin-right:20px">引用</span></div> -->
       <div class="xuanze"><span style="margin-right:20px">发表时间：{{item.year}}</span></div>
       <div class="xuanze"><span style="margin-right:20px">关键字：{{item.keywords[0]}}</span></div>
     </div>
@@ -136,9 +136,23 @@ import NavBar from "../homepage/NavBar";
       isshowselect:false,
       timelist:[],
       shijianpaixu:[],
+      nowlist:[],
+      oldlist:[],
     }
   },
   methods:{
+    // shijianpaixu(){
+    //   var temp
+    //   console.log("sdas")
+    //   for (var i=0; i<this.nowlist.length-1; i++) 
+    //     for (var j=0; j<this.nowlist.length-1-i; j++) { 
+    //         if (this.nowlist[j].year > this.nowlist[j+1].year) {
+    //             temp = this.nowlist[j];
+    //             this.nowlist[j] = this.nowlist[j+1];
+    //             this.nowlist[j+1] = temp;
+    //         }
+    //     }
+    // },
     searchtime(){
       var list=[]
       var j=0
@@ -148,8 +162,11 @@ import NavBar from "../homepage/NavBar";
         }
       }
       this.timelist=list
-      this.handleCurrentChange2(1)
+      this.nowlist=this.timelist
+      this.oldlist=this.nowlist
+      this.handleCurrentChange(1)
       console.log(list)
+      this.tiaoshu=this.nowlist.length
     //  console.log(this.enddate)
     },
     ifshowselect(){
@@ -195,8 +212,10 @@ import NavBar from "../homepage/NavBar";
      if(this.input3!='' && this.input3!=null || (this.select!='' && this.select!=null && this.select!='全部学科'))
       this.searchs()
     },
-    topage(){
-      console.log("还没写")
+    topage(paperid){
+      this.$router.push({
+        path:'/paper/'+paperid,
+      })
     },
     jinshinian(){
       this.startdate=2010
@@ -267,8 +286,10 @@ import NavBar from "../homepage/NavBar";
                 this.pagelist[i].author[j]=this.pagelist[i].author[j]+'，'
               }
             }
+            this.nowlist=this.pagelist
+            this.oldlist=this.nowlist
             this.sousuoneirong=this.input3
-            this.tiaoshu=this.pagelist.length
+            this.tiaoshu=this.nowlist.length
             this.handleCurrentChange(1)
             console.log(this.pagelist[0])
             this.ifshowhead()
@@ -294,8 +315,10 @@ import NavBar from "../homepage/NavBar";
                 this.pagelist[i].author[j]=this.pagelist[i].author[j]+'，'
               }
             }
+            this.nowlist=this.pagelist
+            this.oldlist=this.nowlist
             this.sousuoneirong=this.input3
-            this.tiaoshu=this.pagelist.length
+            this.tiaoshu=this.nowlist.length
             this.handleCurrentChange(1)
             console.log(this.pagelist[0])
             this.ifshowhead()
@@ -307,14 +330,14 @@ import NavBar from "../homepage/NavBar";
     var list=[];
     var flag=1;
       for(var i=0;i<5;i++){
-        if(this.pagelist.length>i+5*(newpage-1))
-        list[i]=this.pagelist[i+5*(newpage-1)]
+        if(this.nowlist.length>i+5*(newpage-1))
+        list[i]=this.nowlist[i+5*(newpage-1)]
         else{
           break;
         }
       }
       this.currentlist=list;
-      if(this.pagelist.length<=5*(newpage-1))
+      if(this.nowlist.length<=5*(newpage-1))
       this.show=true
       else
       {
@@ -339,7 +362,7 @@ import NavBar from "../homepage/NavBar";
       {
         this.show=false;
       }
-    }
+    },
   },
     }
 </script>

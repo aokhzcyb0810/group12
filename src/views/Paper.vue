@@ -14,21 +14,12 @@
               </el-form-item>
             </el-col>
             <el-col :span="16">
-              <el-form-item>
-                <el-input v-model="searchForm.text"><i slot="suffix" class="el-input__icon el-icon-search search-button"></i></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="4" style="text-align: center">
-              <div v-if="searchForm.radio === '1'">
-                <el-form-item>
-                  <el-button type="primary" @click="formVisible = true">设置搜索条件</el-button>
-                </el-form-item>
-              </div>
-              <div v-else>
-                <el-form-item>
-                  <el-button type="primary" disabled>设置搜索条件</el-button>
-                </el-form-item>
-              </div>
+             <el-input placeholder="请输入内容" v-model="searchForm.text" class="searchinput input-with-select" style="border-radius: 5px">
+                               <el-select v-model="searchForm.select" slot="prepend" filterable placeholder="请选择学科">
+                                   <el-option :label="item" :value="item"  v-for="item in xuekeliebiao" :key="item" @click.native="xuanzexueke(item)" style="height:40px;overflow:auto">{{item}}</el-option>
+                               </el-select>
+                                  <i slot="suffix" class="el-input__icon el-icon-search search-button" style="cursor: pointer;" @click.capture="tosearch"></i>
+              </el-input>
             </el-col>
           </el-row>
         </el-form>
@@ -194,13 +185,13 @@ export default {
       colWidth: 0,
       fixed: false,
       scholarname: "学者名a",
-      scholarurl: require("../assets/logo.png"),
+      scholarurl: require("10.251.253.212:8082/../assets/logo.png"),
       work: "北京奶糖大学",
       researchfield: "计算机",
       scholarid: 1,
       hasLogin: false,
       formVisible: false,
-      headSrc: require("../assets/logo.png"),
+      headSrc: require("10.251.253.212:8082/../assets/logo.png"),
       showSubmit: false,
       canCollect: true,
       canCancel: true,
@@ -232,13 +223,13 @@ export default {
       },
       commentItem: [
         {
-          profileUrl: require("../assets/logo.png"),
+          profileUrl: require("10.251.253.212:8082/../assets/logo.png"),
           userName: "YuanCZ",
           content: "你用两个脑子思考？",
           dateTime: "2020-8-13",
         },
         {
-          profileUrl: require("../assets/logo.png"),
+          profileUrl: require("10.251.253.212:8082/../assets/logo.png"),
           userName: "宋友",
           content: "你真幸运",
           dateTime: "2020-8-14",
@@ -265,6 +256,40 @@ export default {
     };
   },
   methods: {
+    async getfield(){
+            const res=await this.$axios({
+             //  type:'params',
+               method:'get',
+               url:'/field',
+            }).catch(err=>{console.log(err)})
+            var list=[]
+            list[0]='全部学科'
+            for(var i=0;i<1000;i++){
+            list[i+1]=res.data.data[i]
+            }
+            this.xuekeliebiao=list
+            console.log(this.xuekeliebiao)
+           },
+            tosearch(){
+                if(this.searchForm.radio==1){
+                    this.$router.replace(
+            {path:'/search',
+              query:{
+              content:this.searchForm.text,
+              select:this.searchForm.select
+              }
+            })
+            }
+            else if(this.searchForm.radio==2){
+                this.$router.replace(
+            {path:'/scholar',
+              query:{
+              content:this.searchForm.text,
+              select:this.searchForm.select
+              }
+            })
+            }
+            },
     initHeight() {
       //兼容性，获取页面滚动距离
       var scrollTop =
@@ -410,7 +435,7 @@ export default {
                   console.log("拿到评论了");
                   for(var i = 0; i < _this.commentItem.length; i ++){
                     var src = _this.commentItem[i].profileUrl;
-                    _this.commentItem[i].profileUrl = "http://10.251.253.212" + src;
+                    _this.commentItem[i].profileUrl = "http://10.251.253.212:8082" + src;
                   }
                 }
               })
@@ -561,7 +586,7 @@ export default {
       }
       else {
         this.hasLogin = true;
-        this.headSrc = "http://10.251.253.212" + JSON.parse(sessionStorage.getItem("userL")).avatar;
+        this.headSrc = "http://10.251.253.212:8082" + JSON.parse(sessionStorage.getItem("userL")).avatar;
         console.log(JSON.parse(sessionStorage.getItem("userL")).avatar);
         this.getCollection();
       }
@@ -577,7 +602,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
   .isFixed{
     position: fixed;
     top: 0;
@@ -654,7 +679,7 @@ export default {
   }
 
 .body-top{
-  background: url("../assets/background.jpg");
+  background: url("10.251.253.212:8082/../assets/background.jpg");
   width: 100%;
   background-size: 100%;
   height: 150px;
@@ -712,4 +737,36 @@ export default {
 .clearfix:after {
   clear: both;
 }
+.el-select {
+     width: 150px;
+     border:0px none;
+ /* //    margin-top: 50px; */
+ }
+ .el-input {
+    width: 800px;
+    /* // height: 46px; */
+    border-style: none;
+    border:none;
+  /* //  margin-top: 50px; */
+  }
+/deep/ .el-input-group__prepend{
+    height: 46px;
+    border:none;
+    border-style: none;
+ //   margin-top: 50px;
+  }
+/deep/ .el-input__inner{
+    height: 46px;
+  //  margin-top: 50px;
+  }
+  .input-with-select {
+      background-color: #fff;
+      border:none;
+    //  margin-top: 50px;
+  }
+  .el-input-group__prepend {
+    background-color: #fff;
+    border:none;
+  //  margin-top: 50px;
+  }
 </style>

@@ -7,7 +7,7 @@
                 text-color="#fff"
                 active-text-color="#ffd04b"
                 style="border: 0">
-            <div class="logo-div">
+            <div class="logo-div" @click="tohome" style="cursor:pointer">
                 <img :src="logo" width="70px">
             </div>
             <el-submenu index="1" style="float: right;margin-right: 5%">
@@ -67,7 +67,7 @@
                 }
             };
             return{
-                logo: require("../assets/navLogo.png"),
+                logo: require("10.251.253.212:8082/../assets/navLogo.png"),
                 changePasswordVisible: false,
                 labelPos: 'right',
                 form: {
@@ -93,10 +93,13 @@
                 return JSON.parse(sessionStorage.getItem("userL")).name
             },
             showAvatar(){
-                return "http://10.251.253.212" + JSON.parse(sessionStorage.getItem("userL")).avatar
+                return "http://10.251.253.212:8082" + JSON.parse(sessionStorage.getItem("userL")).avatar
             }
         },
         methods: {
+            toHome(){
+                this.$router.push('/');
+            },
             changePass(formName){
                 this.$refs[formName].validate((valid) => {
                     var _this=this;
@@ -153,6 +156,9 @@
             },
             toMessage(){
                 this.$router.push('/message');
+            },
+            tohome(){
+                this.$router.push('/')
             }
         }
     }
@@ -190,3 +196,4 @@
         text-align: center;
     }
 </style>
+

@@ -17,7 +17,10 @@ axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
+  components: {
+    App
+  }
 }).$mount('#app')
 
 
