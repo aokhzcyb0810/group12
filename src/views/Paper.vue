@@ -185,13 +185,13 @@ export default {
       colWidth: 0,
       fixed: false,
       scholarname: "学者名a",
-      scholarurl: require("../assets/logo.png"),
+      scholarurl: require("10.251.253.212:8082/../assets/logo.png"),
       work: "北京奶糖大学",
       researchfield: "计算机",
       scholarid: 1,
       hasLogin: false,
       formVisible: false,
-      headSrc: require("../assets/logo.png"),
+      headSrc: require("10.251.253.212:8082/../assets/logo.png"),
       showSubmit: false,
       canCollect: true,
       canCancel: true,
@@ -223,13 +223,13 @@ export default {
       },
       commentItem: [
         {
-          profileUrl: require("../assets/logo.png"),
+          profileUrl: require("10.251.253.212:8082/../assets/logo.png"),
           userName: "YuanCZ",
           content: "你用两个脑子思考？",
           dateTime: "2020-8-13",
         },
         {
-          profileUrl: require("../assets/logo.png"),
+          profileUrl: require("10.251.253.212:8082/../assets/logo.png"),
           userName: "宋友",
           content: "你真幸运",
           dateTime: "2020-8-14",
@@ -679,7 +679,7 @@ export default {
   }
 
 .body-top{
-  background: url("../assets/background.jpg");
+  background: url("10.251.253.212:8082/../assets/background.jpg");
   width: 100%;
   background-size: 100%;
   height: 150px;
