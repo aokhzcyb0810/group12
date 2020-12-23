@@ -67,7 +67,7 @@
                 }
             };
             return{
-                logo: require("../assets/navLogo.png"),
+                logo: require("10.251.253.212:8082/../assets/navLogo.png"),
                 changePasswordVisible: false,
                 labelPos: 'right',
                 form: {
