@@ -244,7 +244,7 @@ export default {
         content: [{ required: true, message: "请输入评论", trigger: ["blur"] }],
       },
       collectForm:{
-        collect: 1
+        collect: '',
       },
       options: [{
         key: 1,
