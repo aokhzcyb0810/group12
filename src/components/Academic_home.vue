@@ -53,7 +53,7 @@
            <el-button plain icon="el-icon-star" @click="cancelFollow" style="font-size: 16px;margin-top:3%;width:110px"  v-show="canCancelFollow">取消关注</el-button>
                   </div>
                   <div>
-                   <el-button :v-show="form.role=='1'&&islogin" type="primary" style="font-size: 16px;margin-top:5%" @click="toIdentify" >认领主页</el-button>
+                   <el-button v-show="form.role=='1'&&islogin" type="primary" style="font-size: 16px;margin-top:5%" @click="toIdentify" >认领主页</el-button>
                    </div>
 </div>
 <div style="float:left;margin-top:10%;margin-left:5%;margin-bottom:10%">
@@ -207,7 +207,8 @@
 
       <el-dialog title="学者认证" :visible.sync="dialogFormVisible3"
         ><!--发送私信-->
-        <el-form :model="identifyinfo">
+        <el-form>
+       <!--
           <el-form-item label="申请用户id">
             <el-input
               style="width: 45%; margin-left: 2%"
@@ -215,11 +216,12 @@
               autocomplete="off"
             ></el-input>
           </el-form-item>
+          -->
           <el-form-item label="身份认证信息">
             <el-input
               type="email"
               style="width: 65%"
-              v-model="identifyinfo.identifyemail"
+              v-model="apply_email"
               autocomplete="off"
               placeholder="请填写邮箱"
             ></el-input>
@@ -278,7 +280,7 @@
                     email: '',
                     info: ''
                 },//当前登录用户的信息状态
-
+                apply_email:'',
                 researcher:
                 {
                    id:'',
@@ -781,8 +783,8 @@
                
                 axios.post('/researcher/relation/'+that.$route.params.id).then(function(res)
                 {
-                    
-                //    alert(that.f_option.series[0].data[0].name)
+                    alert(that.islogin)
+                  //  alert(that.f_option.series[0].data[0].name)
                     var dataa=[]
                     var linkk=[]
                     for(var i=0;i<res.data.data.nodes.length;i++)
@@ -794,6 +796,10 @@
                         dataa.push({'category':'学者','name':res.data.data.nodes[i].name,'value':1})
                     }
   //                  alert(dataa[0].value)
+  for(var i=0;i<dataa.length;i++)
+  {
+   //   alert(dataa[i].name)
+  }
                     that.f_option.series[0].data=dataa
 
                     for(var i=0;i<res.data.data.edges.length;i++)
@@ -982,14 +988,38 @@
                 this.dialogFormVisible2 = false;
             },
             submitIdentify() {
-                this.$axios({//将发送内容返回
-                    method:'post',
-                    url:'',
-                    data:{
+               var _this=this;
+                _this.userL = JSON.parse(sessionStorage.getItem("userL"));
+                _this.userid = _this.userL.id
+                //axios.post('/message/sys?user=" + id)
 
-                    }
-                }).catch(err=>{console.log(err)})
-                this.dialogFormVisible3 = false;
+                axios.post("/apply/send?feedback="+_this.apply_email+"&researcher="+_this.$route.params.id+"&user="+_this.userid
+    /*           {
+                    user:_this.userid,
+                    researcher:_this.$route.params.id,
+                    feedback:_this.apply_email
+
+                }*/ 
+                )
+                    .then(function (response) {
+                  if (response.data.status === 200) {
+                  _this.$message({
+                    message: "关注成功",
+                    type: "success",
+                    
+                  });    
+                  _this.dialogFormVisible3 = false;                  
+                        console.log(response.data)
+                  }
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+
+
+                return 0
+
+                
             },
             Submit(){
                 this.editing=false;
