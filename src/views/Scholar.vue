@@ -8,7 +8,7 @@
     </el-select>
     <i slot="suffix" class="el-input__icon el-icon-search search-button" style="cursor: pointer;" @click.capture="tosearch"></i>
   </el-input>
-  <div class="choose"><span class="lunwen" span @click="tolunwen">论文</span><span class="zhuanjia">专家</span></div>
+  <div class="choose"><span class="lunwen" span @click="tolunwen">论文</span><span class="zhuanjia">学者</span></div>
 </div>
 <div class="zhushi" v-show="isshowhead"><span v-show="ishowselect">在{{select}}中</span>为您找到 “{{sousuoneirong}}” 相关的结果 ({{tiaoshu}})。</div>
 <div class=scholarbody>
@@ -21,7 +21,7 @@
       </el-col>
   <el-col :span="16">
       <div>
-          <div class="xingming neirong1" >{{item.name}}</div>
+          <div class="xingming neirong1" ><span @click="toscholar(item.id)" class="biaotilianjie">{{item.name}}</span></div>
           <div class="lunwenshu neirong1"><i class="el-icon-document" style="margin-right:5px"></i>论文数：{{item.paperCount}}</div>
           <div class="yinyongshu neirong1"><i class="el-icon-document-copy" style="margin-right:5px"></i>被引用数：{{item.citation}}</div>
           <div class="jigou neirong1"><i class="el-icon-school" style="margin-right:5px"></i>{{item.organization}}</div>
@@ -32,13 +32,13 @@
       </el-col>
   <el-col :span="2">
       <div class="neirong2">
-          <el-button type="info" icon="el-icon-star-off" circle></el-button>
+          <!-- <el-button type="info" icon="el-icon-star-off" circle></el-button> -->
       </div>
       </el-col>
 </el-row>
 <div style="border-top:solid 1px;height:20px"></div>
     </div>
-    <div v-if="show">已经没有内容了</div>
+    <div v-if="show&&isshowhead">已经没有内容了</div>
     <el-pagination
     v-show="isshowhead"
      style="margin-top:0px;margin-bottom:20px;clear:both"
@@ -211,12 +211,24 @@ import NavBar from "../homepage/NavBar";
       {
         this.show=false;
       }
-    }
+    },
+    toscholar(scholarid){
+      this.$router.push({
+        path:'/academic_home/'+scholarid,
+      })
+    },
   },
     }
 </script>
 
 <style lang="less"  scoped>
+.biaotilianjie{
+    cursor: pointer;
+  }
+  .biaotilianjie:hover{
+    color: rgb(70, 70, 202);
+    text-decoration: underline;
+  }
  .el-select {
      width: 150px;
      border:0px none;
