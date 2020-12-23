@@ -16,7 +16,7 @@
 <el-row :gutter="20">
   <el-col :span="6">
       <div style="margin-top:0%">
-          <img src="10.251.253.212:8082/../assets/head.png" style="width:150px;height:150px;margin-left:20px;margin-top:0%">
+          <img :src="headSrc" style="width:150px;height:150px;margin-left:20px;margin-top:0%">
       </div>
       </el-col>
   <el-col :span="16">
@@ -60,6 +60,7 @@ import NavBar from "../homepage/NavBar";
         components: {NavBar, NavBar2},
         data() {
     return {
+        headSrc: require("../assets/head.png"),
       input1: '',
       input2: '',
       input3: '',
@@ -108,7 +109,7 @@ import NavBar from "../homepage/NavBar";
        const res=await this.$axios({
              //  type:'params',
                method:'get',
-               url:'/field', 
+               url:'/field',
             }).catch(err=>{console.log(err)})
             var list=[]
             list[0]='全部学科'
@@ -168,7 +169,7 @@ import NavBar from "../homepage/NavBar";
       const res=await this.$axios({
              //  type:'params',
                method:'get',
-               url:'/search/researcher?key='+self.input3, 
+               url:'/search/researcher?key='+self.input3,
             }).catch(err=>{console.log(err)})
             this.scholarlist=res.data.data
             console.log(this.scholarlist)
@@ -182,7 +183,7 @@ import NavBar from "../homepage/NavBar";
         const res=await this.$axios({
              //  type:'params',
                method:'get',
-               url:'/search/researcher/field?field='+self.select, 
+               url:'/search/researcher/field?field='+self.select,
             }).catch(err=>{console.log(err)})
             this.scholarlist=res.data.data
             console.log(this.scholarlist)
@@ -277,7 +278,7 @@ import NavBar from "../homepage/NavBar";
   html,body{
     width: 100%;
             height: 100%;
-            margin: 0; 
+            margin: 0;
             padding: 0;
   }
   .choose{

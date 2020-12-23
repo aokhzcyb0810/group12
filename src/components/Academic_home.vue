@@ -5,7 +5,7 @@
       <el-row>
         <el-col :span="8">
           <div style="margin-left:5%;margin-top:5%">
-            <span 
+            <span
               ><i class="el-icon-info" style="font-size: 25px" > 学者信息</i></span
             >
           </div>
@@ -42,7 +42,7 @@
         <tr>
           <td style="width: 60%">
             <div  >
-            
+
               <div style="margin-left:5%;">
                   <el-card class="box-card">
 <div style="float:left;margin-top:10%;margin-left:5%;margin-bottom:10%">
@@ -74,8 +74,8 @@
               </div>
 
                                           <div style="text-align: center;margin-top: 10%">
-                                
-                                   
+
+
                             </div>
                             <!--这里用了form的role判断是否需要认领，普通用户则展示-->
               <!--
@@ -131,7 +131,7 @@
             label="被引用量"
             width="100%"
           ></el-table-column>
-           <!-- 
+           <!--
       //    <el-table-column fixed="right" width="50">
                        <template slot-scope="scope">
                 <el-tooltip  effect="dark" content="删除" placement="bottom-end">
@@ -140,13 +140,13 @@
                   </el-button>
                 </el-tooltip>
               </template>
-            
+
           </el-table-column>
             -->
         </el-table>
       </el-main>
               </div>
-                            
+
             </div>
           </td>
           <el-divider direction="vertical"></el-divider>
@@ -154,7 +154,7 @@
             <div>
               <!--关系图表-->
 
-            
+
               <div class="Echarts">
                 <div id="f_main" style="width: 400px; height: 400px"></div>
               </div>
@@ -166,7 +166,7 @@
                 <div class="Echarts">
                   <div id="z_main" style="width: 400px; height: 400px"></div>
                 </div>
-              
+
             </div>
             <!--
                         <div style="margin-top: 0%;height: 700px">
@@ -203,7 +203,7 @@
         </tr>
       </table>
       <el-divider></el-divider>
-     
+
 
       <el-dialog title="学者认证" :visible.sync="dialogFormVisible3"
         ><!--发送私信-->
@@ -449,7 +449,7 @@
         categories:[
       {name: '学者本人'},
       {name: '合作学者'},
-     
+
     ],
         force: {
             edgeLength: 100,
@@ -539,7 +539,7 @@
         }
     ],
     series: [
-       
+
         {
             name: '发表数量',
             type: 'line',
@@ -566,7 +566,7 @@
                     id:'',//用户id
                     identifyemail: ''//认证邮箱
                 }
-                
+
             }
         },
         created(){
@@ -580,7 +580,7 @@
          //   this.getFollow()
         //    this.get_acad_docs()
        //     this.get_graph_info()//由于关系图有点麻烦回头再添加上去，这里是将其他两个图的信息放进去
-            
+
 
            // this.get_acad_docs();
           //  this.get_graph_info();//由于关系图有点麻烦回头再添加上去，这里是将其他两个图的信息放进去
@@ -588,14 +588,14 @@
         },
 
         methods: {
-            
+
             myEcharts()
             {
-            
-            //    var pieChart = this.$echarts.init(document.getElementById('p_main'));              
+
+            //    var pieChart = this.$echarts.init(document.getElementById('p_main'));
             //    pieChart.setOption(this.pie_option);
             var that=this
-                var zheChart = that.$echarts.init(document.getElementById('z_main'));              
+                var zheChart = that.$echarts.init(document.getElementById('z_main'));
                 zheChart.setOption(that.zhe_option);
                 that.set_forcechart();
 
@@ -604,7 +604,7 @@
             {
                  var myChart = this.$echarts.init(document.getElementById('f_main'));
     // 分类集合
-   
+
     myChart.setOption(this.f_option);
 
             },
@@ -650,7 +650,7 @@
                    }
                    that.zhe_option.xAxis[0].data=year
                    that.zhe_option.series[0].data=num
-                   
+
                 }).catch(function (error)
                 {
                     console.log(error)
@@ -669,8 +669,8 @@
                    }
                    that.pie_option.legend.data=filed
                    that.pie_option.series[0].data=num
-                  
-                   
+
+
                 }).catch(function (error)
                 {
                     console.log(error)
@@ -684,14 +684,14 @@
                 axios.post('researcher/paper?AuthorName='+that.researcher.name).then (function(res)
                 {
                     that.doc_table=res.data.data
-                   
+
                 }).catch(function (error)
                 {
                     console.log(error)
                 })
            },
             get_acad_info()
-            { 
+            {
 
             /*    let postdata=
                 {
@@ -714,7 +714,7 @@
                 axios.post('researcher/paper?AuthorName='+that.researcher.name).then (function(res)
                 {
                     that.doc_table=res.data.data
-                   
+
                 }).catch(function (error)
                 {
                     console.log(error)
@@ -771,8 +771,8 @@
                    }
                    that.pie_option.legend.data=filed
                    that.pie_option.series[0].data=num
-                  
-                   
+
+
                 }).catch(function (error)
                 {
                     console.log(error)
@@ -780,7 +780,7 @@
                 */
 
 
-               
+
                 axios.post('/researcher/relation/'+that.$route.params.id).then(function(res)
                 {
            //         alert(that.islogin)
@@ -829,12 +829,12 @@
                 })
 
 
-                
+
                 })
           //  alert(that.researcher.name);
            //     alert(this.researcher.name)
 
-              
+
 
             },
             get_user_info () {
@@ -857,7 +857,7 @@
             },
              follow(){
       var _this = this;
-      axios.post("http://127.0.0.1:8081/follow/insertFollow", {
+      axios.post("http://10.251.253.212:8081/follow/insertFollow", {
           user: JSON.parse(sessionStorage.getItem("userL")).id,
           researcher: _this.$route.params.id
       })
@@ -882,7 +882,7 @@
           this.canCancelFollow = false;
         } else {
           var _this = this;
-          axios.post("http://127.0.0.1:8081/follow/getStatus?user=" + JSON.parse(sessionStorage.getItem("userL")).id + "&researcher=" + _this.$route.params.id)
+          axios.post("http://10.251.253.212:8081/follow/getStatus?user=" + JSON.parse(sessionStorage.getItem("userL")).id + "&researcher=" + _this.$route.params.id)
                   .then(function (response) {
                     if (response.data.status === 200) {
                       console.log("用户id：" + JSON.parse(sessionStorage.getItem("userL")).id);
@@ -905,7 +905,7 @@
     },
     cancelFollow(){
       var _this = this;
-      axios.post("http://127.0.0.1:8081/follow/cancel?user=" + JSON.parse(sessionStorage.getItem("userL")).id + "&researcher=" + _this.$route.params.id)
+      axios.post("http://10.251.253.212:8081/follow/cancel?user=" + JSON.parse(sessionStorage.getItem("userL")).id + "&researcher=" + _this.$route.params.id)
               .then(function (response) {
                 if (response.data.status === 200) {
                   _this.$message({
@@ -1004,16 +1004,16 @@
                     researcher:_this.$route.params.id,
                     feedback:_this.apply_email
 
-                }*/ 
+                }*/
                 )
                     .then(function (response) {
                   if (response.data.status === 200) {
                   _this.$message({
                     message: "申请成功",
                     type: "success",
-                    
-                  });    
-                  _this.dialogFormVisible3 = false;                  
+
+                  });
+                  _this.dialogFormVisible3 = false;
                         console.log(response.data)
                   }
                     })
@@ -1024,7 +1024,7 @@
 
                 return 0
 
-                
+
             },
             Submit(){
                 this.editing=false;
