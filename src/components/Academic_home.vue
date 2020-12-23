@@ -49,11 +49,11 @@
                   <img src="../../public/default_researcher.jpg" style="border-radius:50%">
                   <div >
                       <!--style="float:right;marigin-top:110%"-->
-           <el-button plain icon="el-icon-star" @click="follow" style="font-size: 16px;margin-top:3%;width:120px" v-show="canFollow">关 注</el-button>
-           <el-button plain icon="el-icon-star" @click="cancelFollow" style="font-size: 16px;margin-top:3%;width:110px"  v-show="canCancelFollow">取消关注</el-button>
+           <el-button plain icon="el-icon-star" @click="follow" style="font-size: 16px;margin-top:3%;width:110px" v-show="canFollow">关 注</el-button>
+           <el-button plain icon="el-icon-star" @click="cancelFollow" style="font-size: 16px;margin-top:3%;width:110px;margin-left:0px"  v-show="canCancelFollow">取消关注</el-button>
                   </div>
                   <div>
-                   <el-button v-show="form.role=='1'&&islogin" type="primary" style="font-size: 16px;margin-top:5%" @click="toIdentify" >认领主页</el-button>
+                   <el-button v-show="form.role=='1'&&islogin" type="primary" style="font-size: 16px;margin-top:5%;width:110px" @click="toIdentify" >认领主页</el-button>
                    </div>
 </div>
 <div style="float:left;margin-top:10%;margin-left:5%;margin-bottom:10%">
