@@ -7,7 +7,7 @@
                 text-color="#fff"
                 active-text-color="#ffd04b"
                 style="border: 0">
-            <div class="logo-div">
+            <div class="logo-div" @click="tohome" style="cursor:pointer">
                 <img :src="logo" width="70px">
             </div>
             <el-submenu index="1" style="float: right;margin-right: 5%">
@@ -153,6 +153,9 @@
             },
             toMessage(){
                 this.$router.push('/message');
+            },
+            tohome(){
+                this.$router.push('/')
             }
         }
     }
@@ -190,3 +193,4 @@
         text-align: center;
     }
 </style>
+
