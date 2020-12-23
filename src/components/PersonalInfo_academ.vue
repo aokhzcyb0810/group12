@@ -27,7 +27,7 @@
             <table style="width: 100%">
                 <tr>
                     <td style="width: 48%">
-                        <div style="margin-top:-5%" >
+                        <div style="margin-top:0" >
                             <!--
                             <el-form ref="form" :model="form" label-width="70px" :disabled="isuser" style="margin-left: 5%">
                                 <el-form-item label="用户id">
@@ -61,7 +61,7 @@
                    <div style="float:left;margin-top:10%;margin-left:5%;margin-bottom:10%">
                 <!--<p>ID: {{ researcher.id }}</p>-->
                 <p style="margin-top: 5%">姓名： {{ researcher.name }}</p>
-                <!-- <p style="margin-top:3%">研究领域：  {{researcher.field1}},{{researcher.field2}},{{researcher.field3}}</p> -->
+              
 
                 <p style="margin-top: 5%">
                   合作机构： {{ researcher.organization }}
@@ -70,16 +70,17 @@
                   论文数量： {{ researcher.papercount }}篇
                 </p>
                 <p style="margin-top: 5%">Hindex ：{{ researcher.index }}</p>
-               <p style="margin-top: 5%"> 简介：</p><el-input v-model="form.info"  style="" size="large"></el-input>
+               <p style="margin-top: 5%"> 简介： {{ researcher.info }}</p>
+                   <!--</p><el-input v-model="form.info"  style="" size="large"></el-input>
                                     <el-button v-if="!editing" type="primary" style="margin-top:5%" @click="editing=true" size="middle">修改</el-button>
                                     <el-button v-if="editing" type="primary" @click="Submit" size="large">完成修改</el-button>
                                     <el-button v-if="editing" style="margin-top5%" @click="editing=false" size="large">取消</el-button>
-                                                  </div>
+                                             -->     </div>
                                                 </el-card>
               </div>                           
                             
                             <div style="text-align: center;margin-top: 3%">
-                                <h4 v-show="!isScholar">你还未进行学者认证，<el-link type="primary" style="font-size: 16px" @click="toIdentify">点击这里</el-link>进行认证</h4>
+                                <h4 v-show="form.role==1">你还未进行学者认证，<el-link type="primary" style="font-size: 16px" @click="toIdentify">点击这里</el-link>进行认证</h4>
                             </div>
                            
                                       <div style="margin-top:10%;margin-left:5%">
@@ -94,6 +95,7 @@
           :data="doc_table"
           style="width: 100%"
           :row-style="{ height: '30px' }"
+          max-height="400"
         >
           <el-table-column
             prop="title"
@@ -103,18 +105,19 @@
           <el-table-column
             prop="year"
             label="发表时间"
-            width="240px"
+            width="100%"
           ></el-table-column>
           <el-table-column
             prop="keywords"
             label="关键字"
-            width="120px"
+            width="300%"
           ></el-table-column>
           <el-table-column
             prop="citation"
             label="被引用量"
-            width="120px"
+            width="100%"
           ></el-table-column>
+          <!--
           <el-table-column fixed="right" width="50">
             <!--             <template slot-scope="scope">
                 <el-tooltip  effect="dark" content="删除" placement="bottom-end">
@@ -123,8 +126,9 @@
                   </el-button>
                 </el-tooltip>
               </template>
-              -->
+             
           </el-table-column>
+          -->
         </el-table>
       </el-main>
               </div>
@@ -134,7 +138,7 @@
                     <td style="width: 48%">
                         <div>
                             <!--关系图表-->
-           
+           <div v-show="form.role==1"><img src="../assets/空.png" style=" width: 110px"></div>
               <div class="Echarts">
                 <div id="f_main" style="width: 400px; height: 400px"></div>
               </div>
@@ -212,12 +216,12 @@
     import ElAvatar from "../../node_modules/element-ui/packages/avatar/src/main.vue";
     import ElButton from "../../node_modules/element-ui/packages/button/src/button.vue";
     import ElInput from "../../node_modules/element-ui/packages/input/src/input.vue";
-
+    import axios from "axios";
     export default {
         name:'Echarts',
         mounted()
         {
-            this.myEcharts();
+       //     this.myEcharts();
         },
         components: {
             ElInput,
@@ -247,9 +251,23 @@
                     email: '',
                     info: ''
                 },
+                doc_table:[
+                    {
+                        title:'',
+                        year:'',
+                        keywords:'',
+                        citation:'',
+                    },
+                ],
                 researcher:
                 {
-
+                   id:'',
+                   researcher_id:'',
+                   name:'',
+                   organization:'',
+                   papercount:'',
+                   index:'',
+                   info:'',
                 },
                 //message数组看实际情况加载内容，比如在“系统通知”则加载系统通知，切换其它目录时清空后重新加载
                 message:[{},{}],
@@ -261,6 +279,143 @@
                     id:'',//用户id
                     identifyemail: ''//认证邮箱
                 },
+                f_option : {
+        grid:
+        {
+ bottom:5,top:5
+        },
+
+      // 标题设置
+      title: {
+        // 主标题
+        text: '学者关系图',
+        // 副标题
+      //  subtext: '西安电子科技大学力导图',
+        // 位置
+        top: 'top',
+
+      },
+      // 提示框设置
+      tooltip: {
+        // 关闭提示框
+      //  show: true
+      },
+      // 图例设置
+      legend: [{
+          itemWidth:20,
+          itemHeight:20,
+        // 纵向
+        orient: 'horizonal',
+        // 位置
+        left: 'right',
+        // 图例内容，由上面的分类集合决定
+
+      }],
+      // 数据设置
+      series: [{
+        // 类型
+        type: 'graph',
+        // 力导图布局
+        layout: 'force',
+        // 开启平移与缩放
+        roam: false,
+        // 标签设置
+        label: {
+          normal: {
+            // 是否展示
+            show: false,
+            // 展示位置
+            position: 'top',
+            // 展示内容
+            // formatter: '{b}',
+            // 文本设置
+            textStyle: {
+              // 文本大小
+              fontSize: '12px'
+            },
+          }
+        },
+        // 根据value放缩节点
+        symbolSize: 20,
+        // 是否可拖拽
+        draggable: true,
+        // 节点数据
+        data:[
+          {
+            // 分类
+            category: '学者',
+            // 名称
+            name: "西安电子科技大学",
+            // 值，越大则节点越大
+            value:1
+          },
+          {
+            category: '属性',
+            name: "《与共和国同行》",
+            value:3
+          },
+          {
+            category: '属性',
+            name: "杨宗凯",
+            value:2
+          },
+          {
+            category: '其他',
+            name: "西北工业大学",
+            value:1
+          },
+        ],
+        // 分类
+        categories:[
+      {name: '学者本人'},
+      {name: '合作学者'},
+     
+    ],
+        force: {
+            edgeLength: 100,
+            repulsion: 300,
+             gravity: 0.1
+        },
+        // 关系
+        links:[
+          {
+            // 源节点
+            source: "西安电子科技大学",
+            // 目标节点
+            target: "《与共和国同行》",
+            // 标签设置
+            label: {
+              normal: {
+                // 是否展示
+                show: true,
+                // 展示内容
+                formatter: '校歌'
+              }
+            }
+          },
+          {
+            source: "西安电子科技大学",
+            target: "杨宗凯",
+            label: {
+              normal: {
+                show: true,
+                formatter: '校长'
+              }
+            }
+          },
+          {
+            source: "西安电子科技大学",
+            target: "西北工业大学",
+            label: {
+              normal: {
+                show: true,
+                formatter: '兄弟院校'
+              }
+            }
+          }
+        ],
+      }]
+    },
 //年份-发表构件
         zhe_option:
                 {
@@ -323,194 +478,64 @@
             }
         },
         created(){
-            this.get_user_info();
-            this.get_acad_info();
-
-            this.get_acad_docs();
-            this.get_graph_info();
-            this.showSysMessagelist();
+                        if (sessionStorage.getItem("userL")!= null){
+      //  alert('1')                
+                 this.get_user_info();
+                      //       this.getFollow()
+                           //  this.islogin=true
+      }
+        //    this.get_user_info();
+        //    this.get_acad_info();
+        //    this.showSysMessagelist();
         },
 
         methods: {
             myEcharts()
             {
-              var zheChart = this.$echarts.init(document.getElementById('z_main'));              
-                zheChart.setOption(this.zhe_option);
-                this.set_forcechart();
+              var that=this
+                var zheChart = that.$echarts.init(document.getElementById('z_main'));              
+                zheChart.setOption(that.zhe_option);
+                that.set_forcechart();
+
             },
             set_forcechart()
             {
                  var myChart = this.$echarts.init(document.getElementById('f_main'));
     // 分类集合
-    var categories = [
-      {name: '学校'},
-      {name: '属性'},
-      {name: '其他'}
-    ];
-    // 配置项
-    var option = {
-        grid:
-        {
- bottom:5,top:5
-        },
-
-      // 标题设置
-      title: {
-        // 主标题
-        text: '学者关系图',
-        // 副标题
-      //  subtext: '西安电子科技大学力导图',
-        // 位置
-        top: 'top',
-
-      },
-      // 提示框设置
-      tooltip: {
-        // 关闭提示框
-      //  show: true
-      },
-      // 图例设置
-      legend: [{
-          itemWidth:20,
-          itemHeight:20,
-        // 纵向
-        orient: 'horizonal',
-        // 位置
-        left: 'right',
-        // 图例内容，由上面的分类集合决定
-        data: categories.map(function (a) {
-          return a.name;
-        })
-      }],
-      // 数据设置
-      series: [{
-        // 类型
-        type: 'graph',
-        // 力导图布局
-        layout: 'force',
-        // 开启平移与缩放
-        roam: false,
-        // 标签设置
-        label: {
-          normal: {
-            // 是否展示
-            show: false,
-            // 展示位置
-            position: 'top',
-            // 展示内容
-            // formatter: '{b}',
-            // 文本设置
-            textStyle: {
-              // 文本大小
-              fontSize: '12px'
-            },
-          }
-        },
-        // 根据value放缩节点
-        symbolSize: 20,
-        // 是否可拖拽
-        draggable: true,
-        // 节点数据
-        data:[
-          {
-            // 分类
-            category: '学校',
-            // 名称
-            name: "西安电子科技大学",
-            // 值，越大则节点越大
-            value:1
-          },
-          {
-            category: '属性',
-            name: "《与共和国同行》",
-            value:3
-          },
-          {
-            category: '属性',
-            name: "杨宗凯",
-            value:2
-          },
-          {
-            category: '其他',
-            name: "西北工业大学",
-            value:1
-          },
-        ],
-        // 分类
-        categories: categories,
-        force: {
-            edgeLength: 200,
-            repulsion: 300,
-             gravity: 0.1
-        },
-        // 关系
-        links:[
-          {
-            // 源节点
-            source: "西安电子科技大学",
-            // 目标节点
-            target: "《与共和国同行》",
-            // 标签设置
-            label: {
-              normal: {
-                // 是否展示
-                show: true,
-                // 展示内容
-                formatter: '校歌'
-              }
-            }
-          },
-          {
-            source: "西安电子科技大学",
-            target: "杨宗凯",
-            label: {
-              normal: {
-                show: true,
-                formatter: '校长'
-              }
-            }
-          },
-          {
-            source: "西安电子科技大学",
-            target: "西北工业大学",
-            label: {
-              normal: {
-                show: true,
-                formatter: '兄弟院校'
-              }
-            }
-          }
-        ],
-      }]
-    };
-    {//这一段从接口中获取本学者的信息
-
-    }
-    myChart.setOption(option);
-
+   
+    myChart.setOption(this.f_option);
             },
 
-            get_user_info () {
+            get_user_info () 
  {
                 var _this=this;
                 _this.userL = JSON.parse(sessionStorage.getItem("userL"));
                 _this.userid = _this.userL.id
                 //axios.post('/message/sys?user=" + id)
+              //  alert( _this.userid);
 
                 axios.post("/user/getUser?id=" + _this.userid)
                     .then(function (response) {
                         console.log(response.data)
                         _this.form = response.data
+                     //   alert(_this.form.role)
+                        if(_this.form.role===2)
+                    {
+                       // alert('t')
+                        _this.get_acad_info();
+                        
+                    }
                     })
                     .catch(function (error) {
                         console.log(error)
                     })
-
+                    
 
                 return 0
-            }
+            
             },
-             get_acad_info()
+
+            get_acad_info()
             { 
 
             /*    let postdata=
@@ -519,21 +544,150 @@
                 }
                 */
                 var that=this
-                this.$axios.post('/researcher/info/'+this.form.id).then (function(resopnse)
+              //  alert(that.form.researcherId)
+                axios.post('/researcher/info/'+that.form.researcherId).then (function(res)
                 {
-                    this.researcher.id=res.data.id
-                    this.researcher.name=res.data.name
-                    this.researcher.email=res.data.email
-                    this.researcher.organization=res.data.organization
-                    this.researcher.papercount=res.data.papercount
-                    this.researcher.index=res.data.index
-                    this.researcher.info=res.data.info
+                    
+                    that.researcher.id=res.data.data.id
+                    that.researcher.name=res.data.data.name
+                    that.researcher.email=res.data.data.email
+                    that.researcher.organization=res.data.data.organization
+                    that.researcher.papercount=res.data.data.paperCount
+                    that.researcher.index=res.data.data.index
+                    that.researcher.info=res.data.data.info
+                    that.researcher.citation=res.data.data.citation
+               //     alert(that.researcher.name)
+                 //   alert(that.researcher.papercount)
+                    
+
+                axios.post('researcher/paper?AuthorName='+that.researcher.name).then (function(res)
+                {
+                    that.doc_table=res.data.data
+                   
                 }).catch(function (error)
                 {
                     console.log(error)
                 })
 
+                axios.post('researcher/yearPub/'+that.researcher.name).then (function(res)
+                {
+                   var year =[]
+                   var num =[]
+                   var obj=[]
+
+                   for(var i=0;i<res.data.data.length;i++)
+                   {
+                       year.push(res.data.data[i].year)
+                       num.push(res.data.data[i].pubCount)
+                       obj.push(res.data.data[i])
+                   }
+                   obj.sort(function(a,b){return a.year-b.year})
+                 //                         alert(obj.length)
+              /*
+              for(var i=0;i<obj.length;i++)
+                   {
+
+                     alert(obj[i].year)
+                   }
+                   */
+                for(var i=0;i<obj.length;i++)
+                {
+                                           year.push(res.data.data[i].year)
+                       num.push(res.data.data[i].pubCount)
+                }
+           //        alert(that.zhe_option.series[0].data)
+                   that.zhe_option.xAxis[0].data=year
+                   that.zhe_option.series[0].data=num
+  //  that.myEcharts();
+      //                             alert(1+that.zhe_option.xAxis[0].data)
+                }).catch(function (error)
+                {
+                    console.log(error)
+                })//饼图
+                 //               alert(that.zhe_option.xAxis[0].data)
+/*
+                 axios.post('researcher/fieldPub/'+that.researcher.name).then (function(res)
+                {
+                   var filed=[]
+                   var num=[]//值-name数组
+                   for(var i=0;i<res.data.length;i++)
+                   {
+                       var now=new Object()
+                       now.value=res.data[i].paperCount
+                       now.name=res.data[i].name
+                       num.push(now)
+                       filed.push(res.data[i].filed)
+                   }
+                   that.pie_option.legend.data=filed
+                   that.pie_option.series[0].data=num
+                  
+                   
+                }).catch(function (error)
+                {
+                    console.log(error)
+                })
+                */
+
+
+               
+                axios.post('/researcher/relation/'+that.researcher.id).then(function(res)
+                {
+           //         alert(that.islogin)
+                  //  alert(that.f_option.series[0].data[0].name)
+                    var dataa=[]
+                    var linkk=[]
+                    for(var i=0;i<res.data.data.nodes.length;i++)
+                    {
+                 //       if(i==0)
+                   //     {
+                     //        dataa.push({'category':'学者','name':res.data.data.edges[i].source,'value':1})
+                       // }
+                       if(res.data.data.nodes[i].name==that.researcher.name)
+                       {
+                          dataa.push({'category':'学者本人','name':res.data.data.nodes[i].name,'value':res.data.data.nodes[i].paperCount})
+                          continue;
+                       }
+                        dataa.push({'category':'合作学者','name':res.data.data.nodes[i].name,'value':res.data.data.nodes[i].paperCount})
+                    }
+  //                  alert(dataa[0].value)
+  for(var i=0;i<dataa.length;i++)
+  {
+   //   alert(dataa[i].name)
+  }
+                    that.f_option.series[0].data=dataa
+
+                    for(var i=0;i<res.data.data.edges.length;i++)
+                    {
+                       linkk.push({'source':res.data.data.edges[i].source,'target':res.data.data.edges[i].target})
+                    }
+                //    alert(linkk.length)
+                    that.f_option.series[0].links=linkk
+             /*       for(var i=0;i<linkk.length;i++)
+                    {
+                        alert(i+linkk[i].source+linkk[i].target)
+
+                    }
+                    */
+                                    //    alert('d'+dataa.length)
+                                    //    alert(linkk.length)
+                               that.myEcharts();
+                               
+                          //     that.get_acad_docs();
+                }).catch(function(err)
+                {
+                    console.log(err)
+                })
+
+
+                
+                })
+          //  alert(that.researcher.name);
+           //     alert(this.researcher.name)
+
+              
+
             },
+            /*
              get_acad_docs()//会返回所有这个名字的文献
            {
                 var that=this
@@ -546,6 +700,7 @@
                     console.log(error)
                 })
            },
+           */
             showSysMessagelist() {
                 const res= this.$axios({
                     method:'get',
@@ -651,7 +806,7 @@
                 }).catch(err=>{console.log(err)})
                 this.dialogFormVisible3 = false;
             },
-            Submit(){
+     /*       Submit(){
                 var that= this
                 this.editing=false;
                 let postData = {
@@ -668,7 +823,7 @@
                 this.get_user_info()
             }
 
-
+*/
 
         },
 
