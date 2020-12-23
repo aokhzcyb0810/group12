@@ -16,7 +16,7 @@
 <el-row :gutter="20">
   <el-col :span="6">
       <div style="margin-top:0%">
-          <img src="../assets/head.png" style="width:150px;height:150px;margin-left:20px;margin-top:0%">
+          <img src="10.251.253.212:8082/../assets/head.png" style="width:150px;height:150px;margin-left:20px;margin-top:0%">
       </div>
       </el-col>
   <el-col :span="16">
