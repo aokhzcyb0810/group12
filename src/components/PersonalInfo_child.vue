@@ -58,12 +58,12 @@
                         <div style="margin-top: 0%;height: 700px">
                             <el-upload
                                     class="avatar-uploader"
-                                    action="https://jsonplaceholder.typicode.com/posts/"
+                                    :action="showAvatar2"
                                     :show-file-list="false"
                                     :on-success="handleAvatarSuccess"
                                     :before-upload="beforeAvatarUpload"
                                     style="margin-left: 30%">
-                                <img :src="showAvatar" class="avatar">
+                                <img v-if="showAvatar" :src="showAvatar" class="avatar">
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
                             <span style="margin-left: 35%;font-size: 14px">点击“+”上传头像</span>
@@ -175,6 +175,9 @@
         computed: {
             showAvatar(){
                 return "http://10.251.253.212:8082" + JSON.parse(sessionStorage.getItem("userL")).avatar
+            },
+            showAvatar2(){
+                return "http://10.251.253.212:8081/user/save/" + JSON.parse(sessionStorage.getItem("userL")).id
             }
         },
         methods: {
