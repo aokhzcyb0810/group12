@@ -4,8 +4,8 @@
     <div>
       <el-row>
         <el-col :span="8">
-          <div>
-            <span style="margin-left: 5%"
+          <div style="margin-left:5%;margin-top:5%">
+            <span 
               ><i class="el-icon-info" style="font-size: 25px" > 学者信息</i></span
             >
           </div>
