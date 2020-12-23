@@ -447,12 +447,12 @@
         ],
         // 分类
         categories:[
-      {name: '学者'},
-      {name: '属性'},
-      {name: '其他'}
+      {name: '学者本人'},
+      {name: '合作学者'},
+     
     ],
         force: {
-            edgeLength: 200,
+            edgeLength: 100,
             repulsion: 300,
              gravity: 0.1
         },
@@ -783,7 +783,7 @@
                
                 axios.post('/researcher/relation/'+that.$route.params.id).then(function(res)
                 {
-                    alert(that.islogin)
+           //         alert(that.islogin)
                   //  alert(that.f_option.series[0].data[0].name)
                     var dataa=[]
                     var linkk=[]
@@ -793,7 +793,12 @@
                    //     {
                      //        dataa.push({'category':'学者','name':res.data.data.edges[i].source,'value':1})
                        // }
-                        dataa.push({'category':'学者','name':res.data.data.nodes[i].name,'value':1})
+                       if(res.data.data.nodes[i].name==that.researcher.name)
+                       {
+                          dataa.push({'category':'学者本人','name':res.data.data.nodes[i].name,'value':res.data.data.nodes[i].paperCount})
+                          continue;
+                       }
+                        dataa.push({'category':'合作学者','name':res.data.data.nodes[i].name,'value':res.data.data.nodes[i].paperCount})
                     }
   //                  alert(dataa[0].value)
   for(var i=0;i<dataa.length;i++)
@@ -1004,7 +1009,7 @@
                     .then(function (response) {
                   if (response.data.status === 200) {
                   _this.$message({
-                    message: "关注成功",
+                    message: "申请成功",
                     type: "success",
                     
                   });    
