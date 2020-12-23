@@ -261,7 +261,7 @@ import NavBar from "../homepage/NavBar";
   //  margin-top: 50px;
   }
   .navtop{
-        background: url("../assets/background.jpg");
+        background: url("10.251.253.212:8082/../assets/background.jpg");
         background-size: 100%;
         height: 130px;
        // background-color: aqua;
