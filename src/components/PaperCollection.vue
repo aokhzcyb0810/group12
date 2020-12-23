@@ -155,8 +155,6 @@
                     .catch(function (error) {
                         console.log(error)
                     })
-
-
                 return 0
             },
 
