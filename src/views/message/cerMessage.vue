@@ -54,7 +54,7 @@ export default {
       this.userID = this.userL.id;
       axios
         //  获取消息
-        .post("/apply/waiting/show")
+        .post("/apply/show")
         .then((res) => {
           this.NowMess = res.data.data;
           console.log(this.NowMess)
