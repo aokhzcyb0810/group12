@@ -63,7 +63,7 @@
                                     :on-success="handleAvatarSuccess"
                                     :before-upload="beforeAvatarUpload"
                                     style="margin-left: 30%">
-                                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                                <img :src="showAvatar" class="avatar">
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
                             <span style="margin-left: 35%;font-size: 14px">点击“+”上传头像</span>
@@ -147,7 +147,7 @@
             return {
 
                 editing:false,
-                imageUrl: '',//头像
+                //imageUrl: '',//头像
                 isuser:false,
                 isScholar:false,//是否是认证学者，是则为true
                 activeIndex: '1',
@@ -172,7 +172,11 @@
                 }
             }
         },
-
+        computed: {
+            showAvatar(){
+                return "http://10.251.253.212:8082" + JSON.parse(sessionStorage.getItem("userL")).avatar
+            }
+        },
         methods: {
             showUserinfo () {
                 var _this=this;
@@ -218,7 +222,7 @@
                 return 0
             },
             handleAvatarSuccess(res, file) {
-                this.imageUrl = res.avatar
+                JSON.parse(sessionStorage.getItem("userL")).avatar = res.avatar
                 //this.imageUrl = URL.createObjectURL(file.raw);
             },
             beforeAvatarUpload(file) {
@@ -326,6 +330,7 @@
         created(){
             this.showUserinfo();
             this.showSysMessagelist();
+
         },
     }
 
