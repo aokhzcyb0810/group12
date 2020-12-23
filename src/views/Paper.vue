@@ -163,7 +163,7 @@
         </div>
       </div>
     </el-dialog>
-  <el-backtop target=".page-component__scroll .el-scrollbar__wrap"></el-backtop>
+  <el-backtop></el-backtop>
   </div>
 
 </template>
@@ -244,7 +244,7 @@ export default {
         content: [{ required: true, message: "请输入评论", trigger: ["blur"] }],
       },
       collectForm:{
-        collect: 1
+        collect: '',
       },
       options: [{
         key: 1,

@@ -108,7 +108,7 @@ import NavBar from "../homepage/NavBar";
        const res=await this.$axios({
              //  type:'params',
                method:'get',
-               url:'/field',
+               url:'/field', 
             }).catch(err=>{console.log(err)})
             var list=[]
             list[0]='全部学科'
@@ -168,7 +168,7 @@ import NavBar from "../homepage/NavBar";
       const res=await this.$axios({
              //  type:'params',
                method:'get',
-               url:'/search/researcher?key='+self.input3,
+               url:'/search/researcher?key='+self.input3, 
             }).catch(err=>{console.log(err)})
             this.scholarlist=res.data.data
             console.log(this.scholarlist)
@@ -182,7 +182,7 @@ import NavBar from "../homepage/NavBar";
         const res=await this.$axios({
              //  type:'params',
                method:'get',
-               url:'/search/researcher/field?field='+self.select,
+               url:'/search/researcher/field?field='+self.select, 
             }).catch(err=>{console.log(err)})
             this.scholarlist=res.data.data
             console.log(this.scholarlist)
@@ -277,7 +277,7 @@ import NavBar from "../homepage/NavBar";
   html,body{
     width: 100%;
             height: 100%;
-            margin: 0;
+            margin: 0; 
             padding: 0;
   }
   .choose{
