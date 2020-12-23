@@ -138,8 +138,10 @@
                     <td style="width: 48%">
                         <div>
                             <!--关系图表-->
-           <div v-show="form.role==1"><img src="../assets/空.png" style=" width: 110px"></div>
-              <div class="Echarts">
+                            <!--
+           <div v-show="form.role==1"><img src="static/img/空.png" style=" width: 200px"></div>
+           -->
+              <div class="Echarts" >
                 <div id="f_main" style="width: 400px; height: 400px"></div>
               </div>
             <!--
@@ -234,6 +236,7 @@
         },
         data() {
             return {
+                
                 imageUrl: '',//头像
                 isuser:false,
                 isScholar:false,//是否是认证学者，是则为true
