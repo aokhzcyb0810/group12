@@ -728,8 +728,8 @@
 
                    for(var i=0;i<res.data.data.length;i++)
                    {
-                       year.push(res.data.data[i].year)
-                       num.push(res.data.data[i].pubCount)
+                //       year.push(res.data.data[i].year)
+                //       num.push(res.data.data[i].pubCount)
                        obj.push(res.data.data[i])
                    }
                    obj.sort(function(a,b){return a.year-b.year})
