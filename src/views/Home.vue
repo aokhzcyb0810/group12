@@ -127,7 +127,7 @@
             const res=await this.$axios({
              //  type:'params',
                method:'get',
-               url:'/field', 
+               url:'/field',
             }).catch(err=>{console.log(err)})
             var list=[]
             list[0]='全部学科'
@@ -209,7 +209,7 @@
 
 <style lang="less" scoped>
     .body-top{
-        background: url("10.251.253.212:8082/../assets/background.jpg");
+        background: url("../assets/background.jpg");
         background-size: 100%;
         height: 320px;
     }
