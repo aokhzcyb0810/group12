@@ -198,7 +198,7 @@
             },
             viewPaper(index){
                 this.$router.replace(
-                    {path:'/paperread',
+                    {path:'/paper',
                         query:{
                             id: this.paper_list[index].Paper
                             //     id:this.$route.query.id
