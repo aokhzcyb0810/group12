@@ -84,7 +84,7 @@
                                         <el-table-column
                                                 prop="Time"
                                                 label="发布时间"
-                                                width="60">
+                                                width="110">
                                         </el-table-column>
                                         <el-table-column
                                                 fixed="right"
