@@ -101,7 +101,11 @@
             prop="title"
             label="题目"
             @contextmenu.prevent=""
-          ></el-table-column>
+          >
+          <template slot-scope="scope">
+                <el-link @click="viewpaper(scope.$index)">{{scope.row.title}}</el-link>
+           </template>
+          </el-table-column>
           <el-table-column
             prop="year"
             label="发表时间"
@@ -580,8 +584,8 @@
 
                    for(var i=0;i<res.data.data.length;i++)
                    {
-                       year.push(res.data.data[i].year)
-                       num.push(res.data.data[i].pubCount)
+                //       year.push(res.data.data[i].year)
+               //        num.push(res.data.data[i].pubCount)
                        obj.push(res.data.data[i])
                    }
                    obj.sort(function(a,b){return a.year-b.year})
@@ -809,6 +813,11 @@
                 }).catch(err=>{console.log(err)})
                 this.dialogFormVisible3 = false;
             },
+            viewpaper(index){
+              this.$router.replace(
+                    {path:'/paper/'+this.doc_table[index].id,
+            })
+            }
      /*       Submit(){
                 var that= this
                 this.editing=false;
@@ -824,8 +833,7 @@
                     type:"success"
                 })
                 this.get_user_info()
-            }
-
+            },
 */
 
         },
