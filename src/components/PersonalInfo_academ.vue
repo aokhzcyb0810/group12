@@ -54,11 +54,11 @@
                             -->
                   <div style="margin-left:5%;">
                   <el-card class="box-card">
-                   <div style="float:left;margin-top:10%;margin-left:5%;margin-bottom:10%">
+                   <div style="float: left;height:250px; margin-top: 10%; margin-left: 5%; margin-bottom: 10%;">
                   <img src="../../public/default_researcher.jpg" style="border-radius:50%">
 
                    </div>
-                   <div style="float:left;margin-top:10%;margin-left:5%;margin-bottom:10%">
+                   <div style="margin-top: 10%;margin-left: 25%;margin-bottom: 10%">
                 <!--<p>ID: {{ researcher.id }}</p>-->
                 <p style="margin-top: 5%">姓名： {{ researcher.name }}</p>
               

@@ -45,7 +45,7 @@
             
               <div style="margin-left:5%;">
                   <el-card class="box-card">
-<div style="float:left;margin-top:10%;margin-left:5%;margin-bottom:10%">
+<div style="float: left;height:250px; margin-top: 10%; margin-left: 5%; margin-bottom: 10%;">
                   <img src="../../public/default_researcher.jpg" style="border-radius:50%">
                   <div >
                       <!--style="float:right;marigin-top:110%"-->
@@ -56,7 +56,7 @@
                    <el-button v-show="form.role=='1'&&islogin" type="primary" style="font-size: 16px;margin-top:5%;width:110px" @click="toIdentify" >认领主页</el-button>
                    </div>
 </div>
-<div style="float:left;margin-top:10%;margin-left:5%;margin-bottom:10%">
+<div style="margin-top: 10%;margin-left: 25%;margin-bottom: 10%;">
                 <!--<p>ID: {{ researcher.id }}</p>-->
                 <p style="margin-top: 5%">姓名： {{ researcher.name }}</p>
                 <!-- <p style="margin-top:3%">研究领域：  {{researcher.field1}},{{researcher.field2}},{{researcher.field3}}</p> -->
