@@ -228,6 +228,10 @@
                 let user = JSON.parse(sessionStorage.getItem("userL"))
                 user.avatar = res.avatar
                 sessionStorage.setItem("userL", JSON.stringify(user));
+                this.$router.replace(
+                    {path:'/'
+
+                    })
             },
             beforeAvatarUpload(file) {
                 const isJPG = file.type === 'image/jpeg';
