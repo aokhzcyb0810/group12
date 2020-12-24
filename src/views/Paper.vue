@@ -18,7 +18,7 @@
                                <el-select v-model="searchForm.select" slot="prepend" filterable placeholder="请选择学科">
                                    <el-option :label="item" :value="item"  v-for="item in xuekeliebiao" :key="item" @click.native="xuanzexueke(item)" style="height:40px;overflow:auto">{{item}}</el-option>
                                </el-select>
-                                  <i slot="suffix" class="el-input__icon el-icon-search search-button" style="cursor: pointer;" @click.capture="tosearch"></i>
+                            <i slot="suffix" class="el-input__icon el-icon-search search-button" style="cursor: pointer;" @click.capture="tosearch"></i>
               </el-input>
             </el-col>
           </el-row>
@@ -163,7 +163,7 @@
         </div>
       </div>
     </el-dialog>
-  <el-backtop></el-backtop>
+  <el-backtop target=".page-component__scroll .el-scrollbar__wrap"></el-backtop>
   </div>
 
 </template>
@@ -196,6 +196,7 @@ export default {
       canCollect: true,
       canCancel: true,
       papertitle: ' 文章标题',
+      xuekeliebiao:[],
       paperdata: [{
         key:'摘要',
         value:'一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要'
@@ -244,7 +245,7 @@ export default {
         content: [{ required: true, message: "请输入评论", trigger: ["blur"] }],
       },
       collectForm:{
-        collect: '',
+        collect: 1
       },
       options: [{
         key: 1,
@@ -260,7 +261,7 @@ export default {
             const res=await this.$axios({
              //  type:'params',
                method:'get',
-               url:'/field',
+               url:'/field', 
             }).catch(err=>{console.log(err)})
             var list=[]
             list[0]='全部学科'
@@ -304,7 +305,7 @@ export default {
     },
     getDoc() {
       var _this = this;
-      axios.get("http://10.251.253.212:8081/paper/get/" + _this.$route.params.id)
+      axios.get("http://127.0.0.1:8081/paper/get/" + _this.$route.params.id)
               .then(function (response) {
                 if (response.data.status === 200) {
                   while (_this.paperdata.length > 0) {
@@ -329,7 +330,7 @@ export default {
         this.canCancel = false;
       } else {
         var _this = this;
-        axios.get("http://10.251.253.212:8081/collection/status?paper=" + _this.$route.params.id + "&user=" + JSON.parse(sessionStorage.getItem("userL")).id)
+        axios.get("http://127.0.0.1:8081/collection/status?paper=" + _this.$route.params.id + "&user=" + JSON.parse(sessionStorage.getItem("userL")).id)
                 .then(function (response) {
                   if (response.data.status === 200) {
                     if (response.data.data === 0) {
@@ -352,7 +353,7 @@ export default {
           var _this = this;
           var userL = JSON.parse(sessionStorage.getItem("userL"));
           axios
-                  .post("http://10.251.253.212:8081/comment", {
+                  .post("http://127.0.0.1:8081/comment", {
                     content: _this.Form.content,
                     commentator: userL.id,
                     paperId: _this.$route.params.id
@@ -379,7 +380,7 @@ export default {
     },
     collect(){
       var _this = this;
-      axios.post("http://10.251.253.212:8081/collect?Did=" + _this.collectForm.collect+ "&paper=" + _this.$route.params.id + "&user=" + JSON.parse(sessionStorage.getItem("userL")).id)
+      axios.post("http://127.0.0.1:8081/collect?Did=" + _this.collectForm.collect+ "&paper=" + _this.$route.params.id + "&user=" + JSON.parse(sessionStorage.getItem("userL")).id)
               .then(function (response) {
                 if (response.data.status === 200) {
                   _this.$message({
@@ -398,7 +399,7 @@ export default {
     },
     getCollection(){
       var _this = this;
-      axios.post("http://10.251.253.212:8081/getCollection?user=" + JSON.parse(sessionStorage.getItem("userL")).id)
+      axios.post("http://127.0.0.1:8081/getCollection?user=" + JSON.parse(sessionStorage.getItem("userL")).id)
               .then(function (response) {
                 if (response.data.status === 200) {
                   _this.options = response.data.data;
@@ -410,7 +411,7 @@ export default {
     },
     cancelCollect(){
       var _this = this;
-      axios.post("http://10.251.253.212:8081//collection/cancelinpaper?paper=" + _this.$route.params.id + "&user=" + JSON.parse(sessionStorage.getItem("userL")).id)
+      axios.post("http://127.0.0.1:8081//collection/cancelinpaper?paper=" + _this.$route.params.id + "&user=" + JSON.parse(sessionStorage.getItem("userL")).id)
               .then(function (response) {
                 if (response.data.status === 200) {
                   _this.$message({
@@ -428,14 +429,14 @@ export default {
     },
     getComment(){
       var _this = this;
-      axios.post("http://10.251.253.212:8081/paper/comment/" + _this.$route.params.id)
+      axios.post("http://127.0.0.1:8081/paper/comment/" + _this.$route.params.id)
               .then(function (response) {
                 if (response.data.status === 200 || response.data.status === 400) {
                   _this.commentItem = response.data.data;
                   console.log("拿到评论了");
                   for(var i = 0; i < _this.commentItem.length; i ++){
                     var src = _this.commentItem[i].profileUrl;
-                    _this.commentItem[i].profileUrl = "http://10.251.253.212:8082" + src;
+                    _this.commentItem[i].profileUrl = "http://10.251.253.212" + src;
                   }
                 }
               })
@@ -459,7 +460,7 @@ export default {
     },
     getAuthor(){
       var _this = this;
-      axios.get("http://10.251.253.212:8081/paper/author/" + _this.$route.params.id)
+      axios.get("http://127.0.0.1:8081/paper/author/" + _this.$route.params.id)
               .then(function (response) {
                 if (response.data.status === 200) {
                   _this.scholarid = response.data.data.id;
@@ -491,7 +492,7 @@ export default {
     },
     follow(){
       var _this = this;
-      axios.post("http://10.251.253.212:8081/follow/insertFollow", {
+      axios.post("http://127.0.0.1:8081/follow/insertFollow", {
           user: JSON.parse(sessionStorage.getItem("userL")).id,
           researcher: _this.scholarid
       })
@@ -516,7 +517,7 @@ export default {
           this.canCancelFollow = false;
         } else {
           var _this = this;
-          axios.post("http://10.251.253.212:8081/follow/getStatus?user=" + JSON.parse(sessionStorage.getItem("userL")).id + "&researcher=" + _this.scholarid)
+          axios.post("http://127.0.0.1:8081/follow/getStatus?user=" + JSON.parse(sessionStorage.getItem("userL")).id + "&researcher=" + _this.scholarid)
                   .then(function (response) {
                     if (response.data.status === 200) {
                       console.log("用户id：" + JSON.parse(sessionStorage.getItem("userL")).id);
@@ -539,7 +540,7 @@ export default {
     },
     cancelFollow(){
       var _this = this;
-      axios.post("http://10.251.253.212:8081/follow/cancel?user=" + JSON.parse(sessionStorage.getItem("userL")).id + "&researcher=" + _this.scholarid)
+      axios.post("http://127.0.0.1:8081/follow/cancel?user=" + JSON.parse(sessionStorage.getItem("userL")).id + "&researcher=" + _this.scholarid)
               .then(function (response) {
                 if (response.data.status === 200) {
                   _this.$message({
@@ -575,6 +576,7 @@ export default {
     window.removeEventListener("scroll", this.initHeight);
   },
     created() {
+      this.getfield();
     console.log(this.$route.params.id);
       this.getDoc();
       this.getCollect();
@@ -586,7 +588,7 @@ export default {
       }
       else {
         this.hasLogin = true;
-        this.headSrc = "http://10.251.253.212:8082" + JSON.parse(sessionStorage.getItem("userL")).avatar;
+        this.headSrc = "http://10.251.253.212" + JSON.parse(sessionStorage.getItem("userL")).avatar;
         console.log(JSON.parse(sessionStorage.getItem("userL")).avatar);
         this.getCollection();
       }
