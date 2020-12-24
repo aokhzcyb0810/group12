@@ -184,10 +184,10 @@ export default {
       offsetWidth: 0,
       colWidth: 0,
       fixed: false,
-      scholarname: "学者名a",
+      scholarname: "",
       scholarurl: require("../assets/logo.png"),
-      work: "北京奶糖大学",
-      researchfield: "计算机",
+      work: "",
+      researchfield: "",
       scholarid: 1,
       hasLogin: false,
       formVisible: false,
@@ -195,24 +195,9 @@ export default {
       showSubmit: false,
       canCollect: true,
       canCancel: true,
-      papertitle: ' 文章标题',
+      papertitle: '',
       xuekeliebiao:[],
-      paperdata: [{
-        key:'摘要',
-        value:'一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要'
-      },
-      {
-        key:'作者',
-        value:'tem_author'
-      },
-      {
-        key:'关键词',
-        value:'tem_keywords'
-      },
-      {
-        key:'发表时间',
-        value:'tem_date'
-      }],
+      paperdata: [],
       retrieve:'',
       select:'',
       searchForm:{
@@ -222,20 +207,7 @@ export default {
         key: '',
         time: ''
       },
-      commentItem: [
-        {
-          profileUrl: require("../assets/logo.png"),
-          userName: "YuanCZ",
-          content: "你用两个脑子思考？",
-          dateTime: "2020-8-13",
-        },
-        {
-          profileUrl: require("../assets/logo.png"),
-          userName: "宋友",
-          content: "你真幸运",
-          dateTime: "2020-8-14",
-        },
-      ],
+      commentItem: [],
       Form: [
         {
           content: "",
@@ -247,13 +219,7 @@ export default {
       collectForm:{
         collect: 1
       },
-      options: [{
-        key: 1,
-        value: '收藏夹1'
-      }, {
-        key: 2,
-        value: '收藏夹2'
-      }],
+      options: [],
     };
   },
   methods: {
@@ -261,7 +227,7 @@ export default {
             const res=await this.$axios({
              //  type:'params',
                method:'get',
-               url:'/field', 
+               url:'/field',
             }).catch(err=>{console.log(err)})
             var list=[]
             list[0]='全部学科'
@@ -305,7 +271,7 @@ export default {
     },
     getDoc() {
       var _this = this;
-      axios.get("http://127.0.0.1:8081/paper/get/" + _this.$route.params.id)
+      axios.get("http://10.251.253.212:8081/paper/get/" + _this.$route.params.id)
               .then(function (response) {
                 if (response.data.status === 200) {
                   while (_this.paperdata.length > 0) {
@@ -330,7 +296,7 @@ export default {
         this.canCancel = false;
       } else {
         var _this = this;
-        axios.get("http://127.0.0.1:8081/collection/status?paper=" + _this.$route.params.id + "&user=" + JSON.parse(sessionStorage.getItem("userL")).id)
+        axios.get("http://10.251.253.212:8081/collection/status?paper=" + _this.$route.params.id + "&user=" + JSON.parse(sessionStorage.getItem("userL")).id)
                 .then(function (response) {
                   if (response.data.status === 200) {
                     if (response.data.data === 0) {
@@ -353,7 +319,7 @@ export default {
           var _this = this;
           var userL = JSON.parse(sessionStorage.getItem("userL"));
           axios
-                  .post("http://127.0.0.1:8081/comment", {
+                  .post("http://10.251.253.212:8081/comment", {
                     content: _this.Form.content,
                     commentator: userL.id,
                     paperId: _this.$route.params.id
@@ -380,7 +346,7 @@ export default {
     },
     collect(){
       var _this = this;
-      axios.post("http://127.0.0.1:8081/collect?Did=" + _this.collectForm.collect+ "&paper=" + _this.$route.params.id + "&user=" + JSON.parse(sessionStorage.getItem("userL")).id)
+      axios.post("http://10.251.253.212:8081/collect?Did=" + _this.collectForm.collect+ "&paper=" + _this.$route.params.id + "&user=" + JSON.parse(sessionStorage.getItem("userL")).id)
               .then(function (response) {
                 if (response.data.status === 200) {
                   _this.$message({
@@ -399,7 +365,7 @@ export default {
     },
     getCollection(){
       var _this = this;
-      axios.post("http://127.0.0.1:8081/getCollection?user=" + JSON.parse(sessionStorage.getItem("userL")).id)
+      axios.post("http://10.251.253.212:8081/getCollection?user=" + JSON.parse(sessionStorage.getItem("userL")).id)
               .then(function (response) {
                 if (response.data.status === 200) {
                   _this.options = response.data.data;
@@ -411,7 +377,7 @@ export default {
     },
     cancelCollect(){
       var _this = this;
-      axios.post("http://127.0.0.1:8081//collection/cancelinpaper?paper=" + _this.$route.params.id + "&user=" + JSON.parse(sessionStorage.getItem("userL")).id)
+      axios.post("http://10.251.253.212:8081//collection/cancelinpaper?paper=" + _this.$route.params.id + "&user=" + JSON.parse(sessionStorage.getItem("userL")).id)
               .then(function (response) {
                 if (response.data.status === 200) {
                   _this.$message({
@@ -429,7 +395,7 @@ export default {
     },
     getComment(){
       var _this = this;
-      axios.post("http://127.0.0.1:8081/paper/comment/" + _this.$route.params.id)
+      axios.post("http://10.251.253.212:8081/paper/comment/" + _this.$route.params.id)
               .then(function (response) {
                 if (response.data.status === 200 || response.data.status === 400) {
                   _this.commentItem = response.data.data;
@@ -456,11 +422,12 @@ export default {
       return year+"年"+month+"月"+date+"日"+hour+":"+minute+":"+second;
     },
     goRead(){
-      window.location.href= this.httpUrl;
+      //window.location.href= this.httpUrl;
+      window.open(this.httpUrl);
     },
     getAuthor(){
       var _this = this;
-      axios.get("http://127.0.0.1:8081/paper/author/" + _this.$route.params.id)
+      axios.get("http://10.251.253.212:8081/paper/author/" + _this.$route.params.id)
               .then(function (response) {
                 if (response.data.status === 200) {
                   _this.scholarid = response.data.data.id;
@@ -492,7 +459,7 @@ export default {
     },
     follow(){
       var _this = this;
-      axios.post("http://127.0.0.1:8081/follow/insertFollow", {
+      axios.post("http://10.251.253.212:8081/follow/insertFollow", {
           user: JSON.parse(sessionStorage.getItem("userL")).id,
           researcher: _this.scholarid
       })
@@ -517,7 +484,7 @@ export default {
           this.canCancelFollow = false;
         } else {
           var _this = this;
-          axios.post("http://127.0.0.1:8081/follow/getStatus?user=" + JSON.parse(sessionStorage.getItem("userL")).id + "&researcher=" + _this.scholarid)
+          axios.post("http://10.251.253.212:8081/follow/getStatus?user=" + JSON.parse(sessionStorage.getItem("userL")).id + "&researcher=" + _this.scholarid)
                   .then(function (response) {
                     if (response.data.status === 200) {
                       console.log("用户id：" + JSON.parse(sessionStorage.getItem("userL")).id);
@@ -540,7 +507,7 @@ export default {
     },
     cancelFollow(){
       var _this = this;
-      axios.post("http://127.0.0.1:8081/follow/cancel?user=" + JSON.parse(sessionStorage.getItem("userL")).id + "&researcher=" + _this.scholarid)
+      axios.post("http://10.251.253.212:8081/follow/cancel?user=" + JSON.parse(sessionStorage.getItem("userL")).id + "&researcher=" + _this.scholarid)
               .then(function (response) {
                 if (response.data.status === 200) {
                   _this.$message({

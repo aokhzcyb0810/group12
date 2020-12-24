@@ -87,39 +87,8 @@
                     select: '',  //所选择的领域
                 },
                 formVisible: false,
-                hotArticle: [
-                    {
-                        paperID: 1,
-                        title: '我是文章标题',
-                        author: '我是文章作者',
-                        date: '我是创作时间',
-                        heat: '111'
-                    },
-                    {
-                        paperID: 1,
-                        title: '我是大笨笨',
-                        author: 'nzm',
-                        date: '2020-12-5',
-                        heat: '222'
-                    },
-                    {
-                        paperID: 1,
-                        title: '如何学习OS',
-                        author: 'YuanCZ',
-                        date: '2020-9-4',
-                        heat: '10086'
-                    },
-                ],
-                hotSpot: [
-                    "闪耀暖暖",
-                    "原力",
-                    "奥利给",
-                    "武德",
-                    "摸鱼",
-                    "乌兹永远滴神",
-                    "凑数tag",
-                    "试试换行效果"
-                ]
+                hotArticle: [],
+                hotSpot: []
             }
         },
     methods:{
