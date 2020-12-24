@@ -172,10 +172,10 @@
             viewScholar(index){
 
                 this.$router.replace(
-                    {path:'/scholar',
-                        query:{
-                            id:this.scholar_list[index].id
-                        }
+                    {path:'/academic_home/'+this.scholar_list[index].id,
+                        // query:{
+                        //     id:this.scholar_list[index].id
+                        // }
                     })
                 
             }
