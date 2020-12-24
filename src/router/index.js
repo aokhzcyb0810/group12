@@ -21,7 +21,7 @@ import cerMessage from "../views/message/cerMessage.vue";
 import recMessage from "../views/message/recMessage.vue";
 import sysMessage from "../views/message/sysMessage.vue";
 import sendMessage from "../views/message/sendMessage.vue";
-import supplierAllBack from  "../components/supplierAllBack.vue"
+//import supplierAllBack from  "../components/supplierAllBack.vue"
 
 const originalPush = VueRouter.prototype.push
 
@@ -45,10 +45,6 @@ const routes = [
     {
         path:"/scholar",
         component:Scholar
-    },
-    {
-        path:"/supplierAllBack",
-        component:supplierAllBack
     },
     {
         path: '/personalinfo',

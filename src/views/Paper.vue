@@ -191,7 +191,7 @@ export default {
       scholarid: 1,
       hasLogin: false,
       formVisible: false,
-      headSrc: require("../assets/logo.png"),
+      headSrc: "http://10.253.251.212:8082" + JSON.parse(sessionStorage.getItem("userL")).avatar,
       showSubmit: false,
       canCollect: true,
       canCancel: true,
@@ -402,7 +402,7 @@ export default {
                   console.log("拿到评论了");
                   for(var i = 0; i < _this.commentItem.length; i ++){
                     var src = _this.commentItem[i].profileUrl;
-                    _this.commentItem[i].profileUrl = "http://10.251.253.212" + src;
+                    _this.commentItem[i].profileUrl = "http://10.251.253.212:8082" + src;
                   }
                 }
               })
