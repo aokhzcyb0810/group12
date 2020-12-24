@@ -225,9 +225,9 @@
                 return 0
             },
             handleAvatarSuccess(res, file) {
-                sessionStorage.setItem("userL".avatar, res.avatar);
-                //JSON.parse(sessionStorage.getItem("userL")).avatar = res.avatar
-                //this.imageUrl = URL.createObjectURL(file.raw);
+                let user = JSON.parse(sessionStorage.getItem("userL"))
+                user.avatar = res.avatar
+                sessionStorage.setItem("userL", JSON.stringify(user));
             },
             beforeAvatarUpload(file) {
                 const isJPG = file.type === 'image/jpeg';
