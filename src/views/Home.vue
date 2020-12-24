@@ -109,7 +109,7 @@
             }).catch(err=>{console.log(err)})
             var list=[]
             list[0]='全部学科'
-            for(var i=0;i<1000;i++){
+            for(var i=0;i<res.data.data.length;i++){
             list[i+1]=res.data.data[i]
             }
             this.xuekeliebiao=list

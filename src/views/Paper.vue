@@ -191,7 +191,7 @@ export default {
       scholarid: 1,
       hasLogin: false,
       formVisible: false,
-      headSrc: "http://10.253.251.212:8082" + JSON.parse(sessionStorage.getItem("userL")).avatar,
+      headSrc: "http://10.251.253.212:8082" + JSON.parse(sessionStorage.getItem("userL")).avatar,
       showSubmit: false,
       canCollect: true,
       canCancel: true,
@@ -231,7 +231,7 @@ export default {
             }).catch(err=>{console.log(err)})
             var list=[]
             list[0]='全部学科'
-            for(var i=0;i<1000;i++){
+            for(var i=0;i<res.data.data.length;i++){
             list[i+1]=res.data.data[i]
             }
             this.xuekeliebiao=list

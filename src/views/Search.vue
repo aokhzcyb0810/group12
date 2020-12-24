@@ -144,8 +144,8 @@ import NavBar from "../homepage/NavBar";
     // shijianpaixu(){
     //   var temp
     //   console.log("sdas")
-    //   for (var i=0; i<this.nowlist.length-1; i++) 
-    //     for (var j=0; j<this.nowlist.length-1-i; j++) { 
+    //   for (var i=0; i<this.nowlist.length-1; i++)
+    //     for (var j=0; j<this.nowlist.length-1-i; j++) {
     //         if (this.nowlist[j].year > this.nowlist[j+1].year) {
     //             temp = this.nowlist[j];
     //             this.nowlist[j] = this.nowlist[j+1];
@@ -179,11 +179,11 @@ import NavBar from "../homepage/NavBar";
        const res=await this.$axios({
              //  type:'params',
                method:'get',
-               url:'/field', 
+               url:'/field',
             }).catch(err=>{console.log(err)})
             var list=[]
             list[0]='全部学科'
-            for(var i=0;i<1000;i++){
+            for(var i=0;i<res.data.data.length;i++){
             list[i+1]=res.data.data[i]
             }
             this.xuekeliebiao=list
@@ -271,7 +271,7 @@ import NavBar from "../homepage/NavBar";
       const res=await this.$axios({
              //  type:'params',
                method:'get',
-               url:'/fuzzysearch?key='+self.input3, 
+               url:'/fuzzysearch?key='+self.input3,
                data:{
                  keyword:self.input3
                  }
@@ -299,7 +299,7 @@ import NavBar from "../homepage/NavBar";
         const res=await this.$axios({
              //  type:'params',
                method:'get',
-               url:'/search/keyword?field='+self.select+'&key='+self.input3, 
+               url:'/search/keyword?field='+self.select+'&key='+self.input3,
                data:{
                  filed:self.select,
                  keyword:self.input3
@@ -416,7 +416,7 @@ import NavBar from "../homepage/NavBar";
   html,body{
     width: 100%;
             height: 100%;
-            margin: 0; 
+            margin: 0;
             padding: 0;
   }
   .choose{
@@ -490,7 +490,7 @@ import NavBar from "../homepage/NavBar";
     color:rgb(102, 89, 84);
     // overflow:hidden;
     // text-overflow:ellipsis;
-    // white-space: nowrap; 
+    // white-space: nowrap;
   }
   .neirong12{
     float:right;
