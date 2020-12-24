@@ -201,11 +201,11 @@
             },
             viewPaper(index){
                 this.$router.replace(
-                    {path:'/paper',
-                        params:{
-                            id: this.paper_list[index].Paper
-                            //     id:this.$route.query.id
-                        }
+                    {path:'/paper/'+this.paper_list[index].Paper,
+                        // params:{
+                        //     id: this.paper_list[index].Paper
+                        //     //     id:this.$route.query.id
+                        // }
                     })
             },
             itemClickc(){
