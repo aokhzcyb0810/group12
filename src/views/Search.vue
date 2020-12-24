@@ -486,8 +486,9 @@ import NavBar from "../homepage/NavBar";
   .jianjie{
     font-size: 15px;
     word-break:break-all;
-    height:65px;
+    //height:80px;
     color:rgb(102, 89, 84);
+    margin-bottom: 5px;
     // overflow:hidden;
     // text-overflow:ellipsis;
     // white-space: nowrap;

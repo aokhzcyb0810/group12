@@ -53,7 +53,7 @@
           <el-form :model="Form" :rules="rule" ref="Form">
             <el-row style="margin-top: 10px;">
               <el-col :span="2">
-                <img :src="headSrc" class="commentHead" />
+                <img :src="showAvatar" class="commentHead" />
               </el-col>
               <el-col :span="22">
                 <el-form-item prop="content">
@@ -221,6 +221,11 @@ export default {
       },
       options: [],
     };
+  },
+  computed: {
+    showAvatar(){
+      return "http://10.251.253.212:8082" + JSON.parse(sessionStorage.getItem("userL")).avatar
+    }
   },
   methods: {
     async getfield(){
