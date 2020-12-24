@@ -147,12 +147,7 @@
             },
             personalSpace(){
                 var userL = JSON.parse(sessionStorage.getItem("userL"));
-                if (userL.role === 0){
-                    this.$router.push('/managerInfo');
-                }
-                else {
                     this.$router.push('/personalInfo');
-                }
             },
             toMessage(){
                 this.$router.push('/message');
