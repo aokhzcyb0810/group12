@@ -22,10 +22,10 @@
                         style="width: 1050px">
                     <el-table-column
                             fixed
-                            prop="avatar"
+                            prop=""
                             label=""
                             width="70">
-                        <el-avatar :size="35" src="'http://10.251.253.212:8082' +avatar" class="avatar"></el-avatar>
+                        
                     </el-table-column>
                     <el-table-column
                             fixed
