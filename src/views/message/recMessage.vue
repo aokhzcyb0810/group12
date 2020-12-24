@@ -1,27 +1,26 @@
 <template>
-  <el-container>
-    <el-header>
-      <div>
-        <NavBar :headSrc="headUrl"></NavBar>
-      </div>
-    </el-header>
+  <div>
+    <NavBar></NavBar>
     <el-container>
-      <send-button></send-button>
-      <el-aside width="15%">
-        <!-- <mes-side-bar @unReadMes="handleUnReadMes" @allMes="handleAllMes"></mes-side-bar> -->
-        <mes-side-bar currentindex="2"></mes-side-bar>
-      </el-aside>
-      <el-main style="width: 80%">
-        <h2 class="h2color">已收到的私信</h2>
-        <!-- 获取的消息列表 -->
-        <mes-list :mess="NowMess" :userID="userID" :currentIndex="2"></mes-list>
-        <div style="margin-left: 41%; margin-top: 8%" v-show="this.isNULL">
-          <div><img src="../../assets/空.png" style=" width: 110px"></div>
+      <el-container>
+        <send-button></send-button>
+        <el-aside width="15%">
+          <!-- <mes-side-bar @unReadMes="handleUnReadMes" @allMes="handleAllMes"></mes-side-bar> -->
+          <mes-side-bar currentindex="2"></mes-side-bar>
+        </el-aside>
+        <el-main style="width: 80%">
+          <h2 class="h2color">已收到的私信</h2>
+          <!-- 获取的消息列表 -->
+          <mes-list :mess="NowMess" :userID="userID" :currentIndex="2"></mes-list>
+          <div style="margin-left: 41%; margin-top: 8%" v-show="this.isNULL">
+            <div><img src="../../assets/空.png" style=" width: 110px"></div>
 
-        </div>
-      </el-main>
+          </div>
+        </el-main>
+      </el-container>
     </el-container>
-  </el-container>
+  </div>
+
 </template>
 
 <script>

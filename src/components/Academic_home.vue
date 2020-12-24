@@ -115,7 +115,11 @@
             prop="title"
             label="题目"
             @contextmenu.prevent=""
-          ></el-table-column>
+          >
+          <template slot-scope="scope">
+                <el-link @click="viewpaper(scope.$index)">{{scope.row.title}}</el-link>
+            </template>
+          </el-table-column>
           <el-table-column
             prop="year"
             label="发表时间"
@@ -1036,6 +1040,11 @@
                 }
                 this.$axios.post('/api/user/edit', postData).catch(err=>{console.log(err)})
                 this.get_user_info()
+            },
+            viewpaper(index){
+              this.$router.replace(
+                    {path:'/paper/'+this.doc_table[index].id,
+            })
             }
 
 

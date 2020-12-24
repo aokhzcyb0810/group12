@@ -103,7 +103,11 @@
             prop="title"
             label="题目"
             @contextmenu.prevent=""
-          ></el-table-column>
+          >
+          <template slot-scope="scope">
+                <el-link @click="viewpaper(scope.$index)">{{scope.row.title}}</el-link>
+           </template>
+          </el-table-column>
           <el-table-column
             prop="year"
             label="发表时间"
@@ -843,6 +847,11 @@
 
                 return 0
             },
+            viewpaper(index){
+              this.$router.replace(
+                    {path:'/paper/'+this.doc_table[index].id,
+            })
+            }
      /*       Submit(){
                 var that= this
                 this.editing=false;
@@ -858,8 +867,7 @@
                     type:"success"
                 })
                 this.get_user_info()
-            }
-
+            },
 */
 
         },
