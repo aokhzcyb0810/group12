@@ -170,7 +170,7 @@ export default {
 .mes-text {
   font-size: 16px;
   position: absolute;
-  left: 150px;
+  left: 12%;
   padding-left: 100px;
   padding-top: 10px;
   padding-top: 10px;
