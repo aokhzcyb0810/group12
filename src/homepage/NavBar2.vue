@@ -126,7 +126,7 @@
             },
             quit(){
                 var _this=this;
-                axios.get("http://127.0.0.1:8081/user/logout")
+                axios.get("http://10.251.253.212:8081/user/logout")
                     .then(function (response) {
                         sessionStorage.removeItem("userL");
                         console.log(_this.$route.path);

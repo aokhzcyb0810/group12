@@ -11,7 +11,7 @@ Vue.prototype.$echarts=echarts
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios
 axios.defaults.timeout=10000;
-axios.defaults.baseURL="http://127.0.0.1:8081"
+axios.defaults.baseURL="http://10.251.253.212:8081"
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
 
 new Vue({

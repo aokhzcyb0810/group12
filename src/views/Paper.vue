@@ -18,7 +18,7 @@
                                <el-select v-model="searchForm.select" slot="prepend" filterable placeholder="请选择学科">
                                    <el-option :label="item" :value="item"  v-for="item in xuekeliebiao" :key="item" @click.native="xuanzexueke(item)" style="height:40px;overflow:auto">{{item}}</el-option>
                                </el-select>
-                                  <i slot="suffix" class="el-input__icon el-icon-search search-button" style="cursor: pointer;" @click.capture="tosearch"></i>
+                            <i slot="suffix" class="el-input__icon el-icon-search search-button" style="cursor: pointer;" @click.capture="tosearch"></i>
               </el-input>
             </el-col>
           </el-row>
@@ -163,7 +163,7 @@
         </div>
       </div>
     </el-dialog>
-  <el-backtop></el-backtop>
+  <el-backtop target=".page-component__scroll .el-scrollbar__wrap"></el-backtop>
   </div>
 
 </template>
@@ -196,6 +196,7 @@ export default {
       canCollect: true,
       canCancel: true,
       papertitle: ' 文章标题',
+      xuekeliebiao:[],
       paperdata: [{
         key:'摘要',
         value:'一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要一大堆摘要'
@@ -244,7 +245,7 @@ export default {
         content: [{ required: true, message: "请输入评论", trigger: ["blur"] }],
       },
       collectForm:{
-        collect: '',
+        collect: 1
       },
       options: [{
         key: 1,
@@ -260,7 +261,7 @@ export default {
             const res=await this.$axios({
              //  type:'params',
                method:'get',
-               url:'/field',
+               url:'/field', 
             }).catch(err=>{console.log(err)})
             var list=[]
             list[0]='全部学科'
@@ -435,7 +436,7 @@ export default {
                   console.log("拿到评论了");
                   for(var i = 0; i < _this.commentItem.length; i ++){
                     var src = _this.commentItem[i].profileUrl;
-                    _this.commentItem[i].profileUrl = "http://10.251.253.212:8082" + src;
+                    _this.commentItem[i].profileUrl = "http://10.251.253.212" + src;
                   }
                 }
               })
@@ -575,6 +576,7 @@ export default {
     window.removeEventListener("scroll", this.initHeight);
   },
     created() {
+      this.getfield();
     console.log(this.$route.params.id);
       this.getDoc();
       this.getCollect();
@@ -586,7 +588,7 @@ export default {
       }
       else {
         this.hasLogin = true;
-        this.headSrc = "http://10.251.253.212:8082" + JSON.parse(sessionStorage.getItem("userL")).avatar;
+        this.headSrc = "http://10.251.253.212" + JSON.parse(sessionStorage.getItem("userL")).avatar;
         console.log(JSON.parse(sessionStorage.getItem("userL")).avatar);
         this.getCollection();
       }

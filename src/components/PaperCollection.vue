@@ -9,7 +9,7 @@
                 <el-container>
                     <!-- 侧边栏 -->
                     <el-aside width="200px" style="background-color: #81b3f9">
-                        <el-avatar :size="90" style="margin-left: 30%;margin-top: 10%">
+                        <el-avatar :size="90" style="margin-left: 30%;margin-top: 10%" :src="showAvatar" class="avatar">
 
                         </el-avatar>
                         <div>
@@ -138,6 +138,11 @@
                 paper_list:[]
             }
         },
+        computed: {
+            showAvatar(){
+                return "http://10.251.253.212:8082" + JSON.parse(sessionStorage.getItem("userL")).avatar
+            }
+        },
         created(){
             this.showpaperinfo()
         },
@@ -196,11 +201,11 @@
             },
             viewPaper(index){
                 this.$router.replace(
-                    {path:'/paper',
-                        params:{
-                            id: this.paper_list[index].Paper
-                            //     id:this.$route.query.id
-                        }
+                    {path:'/paper/'+this.paper_list[index].Paper,
+                        // params:{
+                        //     id: this.paper_list[index].Paper
+                        //     //     id:this.$route.query.id
+                        // }
                     })
             },
             itemClickc(){

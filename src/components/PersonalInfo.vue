@@ -9,7 +9,7 @@
                 <el-container>
                     <!-- 侧边栏 -->
                     <el-aside width="200px" style="background-color: #81b3f9">
-                        <el-avatar :size="90" style="margin-left: 30%;margin-top: 10%" src="showAvatar" class="avatar">
+                        <el-avatar :size="90" style="margin-left: 30%;margin-top: 10%" :src="showAvatar" class="avatar">
 
                         </el-avatar>
                         <div>
