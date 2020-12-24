@@ -1,9 +1,9 @@
 <template>
     <div>
         <div>
+            <NavBar></NavBar>
             <el-container>
                 <!-- 头部 -->
-                <el-header style="background-color: darkblue"><Top></Top></el-header>
                 <!-- 主体 -->
                 <el-container>
                     <!-- 侧边栏 -->
@@ -54,9 +54,11 @@
 <script>
     import Top from '../components/Top.vue'
     import ElAvatar from "../../node_modules/element-ui/packages/avatar/src/main.vue";
+    import NavBar from "../homepage/NavBar";
     export default {
         name:"ManagerInfo",
         components:{
+            NavBar,
             ElAvatar,
             Top
         },
