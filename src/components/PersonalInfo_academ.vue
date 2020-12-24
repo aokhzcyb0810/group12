@@ -52,6 +52,7 @@
                                 </el-form-item>
                             </el-form>
                             -->
+                            <h3 v-show="form.role==1">你还未进行学者认证</h3>
                   <div style="margin-left:5%;">
                   <el-card class="box-card">
                    <div style="float: left;height:250px; margin-top: 10%; margin-left: 5%; margin-bottom: 10%;">
@@ -80,7 +81,8 @@
               </div>                           
                             
                             <div style="text-align: center;margin-top: 3%">
-                                <h4 v-show="form.role==1">你还未进行学者认证，<el-link type="primary" style="font-size: 16px" @click="toIdentify">点击这里</el-link>进行认证</h4>
+                       <!--         <h4 v-show="form.role==1">你还未进行学者认证，<el-link type="primary" style="font-size: 16px" @click="toIdentify">点击这里</el-link>进行认证</h4>-->
+                        
                             </div>
                            
                                       <div style="margin-top:10%;margin-left:5%">
@@ -194,12 +196,17 @@
 
 
             <el-dialog title="学者认证" :visible.sync="dialogFormVisible3"><!--发送私信-->
-                <el-form :model="identifyinfo">
+                <el-form >
+                    <!--
                     <el-form-item label="申请用户id">
                         <el-input style="width: 45%; margin-left: 2%" v-model="identifyinfo.id" autocomplete="off"></el-input>
                     </el-form-item>
+                    -->
                     <el-form-item label="身份认证信息">
-                        <el-input type="email" style="width: 65%" v-model="identifyinfo.identifyemail" autocomplete="off" placeholder="请填写邮箱"></el-input>
+                        <el-input type="email" 
+                        style="width: 65%"
+                         v-model="apply_email" 
+                         autocomplete="off" placeholder="请填写邮箱"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -236,7 +243,7 @@
         },
         data() {
             return {
-                
+                apply_email:'',
                 imageUrl: '',//头像
                 isuser:false,
                 isScholar:false,//是否是认证学者，是则为true
@@ -528,6 +535,10 @@
                         _this.get_acad_info();
                         
                     }
+                    if(_this.form.role===1)
+                    {
+                        alert("你还未进行学者认证！")
+                    }
                     })
                     .catch(function (error) {
                         console.log(error)
@@ -800,14 +811,37 @@
                 this.dialogFormVisible2 = false;
             },
             submitIdentify() {
-                this.$axios({//将发送内容返回
-                    method:'post',
-                    url:'',
-                    data:{
+                
+               var _this=this;
+                _this.userL = JSON.parse(sessionStorage.getItem("userL"));
+                _this.userid = _this.userL.id
+                //axios.post('/message/sys?user=" + id)
 
-                    }
-                }).catch(err=>{console.log(err)})
-                this.dialogFormVisible3 = false;
+                axios.post("/apply/send?feedback="+_this.apply_email+"&researcher="+_this.$route.params.id+"&user="+_this.userid
+    /*           {
+                    user:_this.userid,
+                    researcher:_this.$route.params.id,
+                    feedback:_this.apply_email
+
+                }*/
+                )
+                    .then(function (response) {
+                  if (response.data.status === 200) {
+                  _this.$message({
+                    message: "申请成功",
+                    type: "success",
+
+                  });
+                  _this.dialogFormVisible3 = false;
+                        console.log(response.data)
+                  }
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+
+
+                return 0
             },
      /*       Submit(){
                 var that= this

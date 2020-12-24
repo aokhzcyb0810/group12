@@ -32,7 +32,7 @@
                                 <i class="el-icon-info" style="color: white"></i>
                                 <span slot="title">  个人信息</span>
                             </el-menu-item>
-                            <el-menu-item index="/home/recycle" @click="itemClicks_academ" >
+                            <el-menu-item index="/home/recycle" v-show="form.role==2" @click="itemClicks_academ" >
                                 <i class="el-icon-trophy" style="color: white"></i>
                                 <span slot="title">  学者信息</span>
                             </el-menu-item>
@@ -52,6 +52,7 @@
     import Top from '../components/Top.vue'
     import ElAvatar from "../../node_modules/element-ui/packages/avatar/src/main.vue";
     import NavBar from "../homepage/NavBar";
+        import axios from "axios";
     export default {
         name:"PersonalInfo",
         components:{
@@ -65,9 +66,28 @@
             }
         },
         created(){
-            this.showteamlist()
+          //  this.showteamlist();
+            this.get_user_info();
         },
         methods:{
+             get_user_info () {
+                var _this=this;
+                _this.userL = JSON.parse(sessionStorage.getItem("userL"));
+                _this.userid = _this.userL.id
+                //axios.post('/message/sys?user=" + id)
+              //  alert(_this.userL.id)
+                axios.post("/user/getUser?id=" + _this.userid)
+                    .then(function (response) {
+                        console.log(response.data)
+                        _this.form = response.data
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+
+
+                return 0
+            },
             /*async showteamlist(){
                 const res= await this.$axios.get('/teamlist').catch(err=>{console.log(err)})
                 this.menulist=res.data
@@ -115,6 +135,7 @@
         },
         data(){
             return{
+                form:''
 
             }
         },
