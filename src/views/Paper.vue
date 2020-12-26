@@ -5,15 +5,7 @@
       <div class="body-form">
         <el-form :model="searchForm" label-position="right">
           <el-row>
-            <el-col :span="4">
-              <el-form-item>
-                <el-radio-group v-model="searchForm.radio">
-                  <el-radio label="1" style="margin-bottom: 5px; color: white; font-size: 8px">学术资源检索</el-radio>
-                  <el-radio label="2" style="color: white;font-size: 8px">科研工作者检索</el-radio>
-                </el-radio-group>
-              </el-form-item>
-            </el-col>
-            <el-col :span="16">
+            <el-col :span="24" style="text-align: center">
              <el-input placeholder="请输入内容" v-model="searchForm.text" class="searchinput input-with-select" style="border-radius: 5px">
                                <el-select v-model="searchForm.select" slot="prepend" filterable placeholder="请选择学科">
                                    <el-option :label="item" :value="item"  v-for="item in xuekeliebiao" :key="item" @click.native="xuanzexueke(item)" style="height:40px;overflow:auto">{{item}}</el-option>
@@ -287,6 +279,7 @@ export default {
                   _this.paperdata.push({key: '作者', value: response.data.data.authorShow});
                   _this.paperdata.push({key: '关键词', value: response.data.data.keywordShow});
                   _this.paperdata.push({key: '发表时间', value: response.data.data.year});
+                  _this.paperdata.push({key: '引用量', value: response.data.data.citation});
                   _this.httpUrl = response.data.data.url;
                   console.log(_this.httpUrl);
                 }

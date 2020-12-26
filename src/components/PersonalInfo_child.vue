@@ -19,7 +19,7 @@
                 <el-col :span="4">
                     <div>
                          <el-button type="primary" v-show="isScholar" size="mini" style="float: right" @click="sendMessage">发送私信</el-button>
-                                     
+
                     </div>
                 </el-col>
 
@@ -230,7 +230,6 @@
                 sessionStorage.setItem("userL", JSON.stringify(user));
                 this.$router.replace(
                     {path:'/'
-
                     })
             },
             beforeAvatarUpload(file) {
